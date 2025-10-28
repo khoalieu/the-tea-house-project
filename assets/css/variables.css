@@ -8,7 +8,7 @@
     /* Biến khoảng cách (Spacing System) */
     --space-xs: 4px;
     --space-sm: 8px;
-    : 16px;
+    --space-md: 16px;
     --space-lg: 24px;
     --space-xl: 32px;
     --space-xxl: 48px;
