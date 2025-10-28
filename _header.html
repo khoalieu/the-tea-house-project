@@ -1,1 +1,101 @@
-﻿
+﻿<div id="container">
+  <header>
+    <div class="top-bar">
+    <div class="container">
+        <div class="spacer">
+                  <p class="top-bar-message">🔥 FREESHIP cho đơn hàng từ 200.000đ</p>
+        </div>
+
+    </div>
+    </div>
+    <nav id="main-nav">
+        <div class ="container">
+            <div class="nav-left">
+                <img src="assets/images/Tea-Logo-Graphics-1-12.jpg" alt="The Tea House Project Logo" class="logo" a>
+            </div>
+            <div class="nav-center">
+                <ul class="nav-links">
+                    <li><a href="index.html">Trang Chủ</a></li>
+                    <li><a href="products.html">Sản Phẩm</a></li>
+                    <li><a href="about.html">Về Chúng Tôi</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="contact.html">Liên Hệ</a></li>
+                </ul>
+            </div>
+            <div class="nav-right">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-solid fa-user"></i>
+                <i class="fa-solid fa-cart-shopping"></i>
+        </div>
+        </div>
+        
+
+    </nav>
+  </header>
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    .nav-left .logo {
+        height: 40px;
+        position: relative;
+        left: 200px;
+    }
+    .top-bar {
+        display: flex;
+        position: relative;
+        height: 20px;
+        width: 100%;
+        margin-top: 0;
+        background-color: rgb(16 126 132);
+        justify-content: center;
+        align-items: center;
+    }
+    .top-bar-message {
+        color: white;
+        font-family: var(--font-primary);
+        font-size: 7px;
+        border-bottom: 1px solid rgb(16 126 132);
+    }
+    #main-nav .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+        padding: 10px 20px;
+        height: 50px;
+        background-color: #fff;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    #main-nav li {
+        list-style-type: none;
+        display: inline;
+    }
+    .nav-links li {
+        margin: 0 15px;
+
+    }
+    .nav-links a {
+        text-decoration: none;
+        color: #333;
+        font-family: var(--font-primary);
+        font-size: 14px;
+    }
+    .nav-links a:after {
+        content: ' \25BE';
+        font-size: 12px;
+        max-width: 4px;
+    }
+    .nav-links a:hover::after {
+        transform: rotate(180deg);
+    }
+    .nav-right i {
+        margin: 0 10px;
+        cursor: pointer;
+        color: #333;
+    }
+
+  </style>
+</div>
