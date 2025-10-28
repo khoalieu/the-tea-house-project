@@ -76,4 +76,12 @@ BẢNG MÀU HỆ THỐNG (System Color Tokens)
 
 | `--color-failure`                   | `#b55f5f`              | Màu trạng thái lỗi (Failure) 
 
-    | `--color-alert`                     | `#ff6f00`              | Màu cảnh báo chung (Alert / Warning)  
+    | `--color-alert`                     | `#ff6f00`              | Màu cảnh báo chung (Alert / Warning)
+
+| `--space-xs` | `4px` | Rất nhỏ: Khoảng cách giữa icon và chữ bên cạnh. |
+| `--space-sm` | `8px` | Nhỏ: Padding bên trong các tag nhỏ, khoảng cách giữa các mục trong một danh sách phụ. |
+| `--space-md` | `16px` | Trung bình (Mặc định): Padding dọc và ngang của các nút bấm (button), khoảng cách giữa các đoạn văn bản (`<p>`). Đây là giá trị được dùng nhiều nhất. |
+| `--space-lg` | `24px` | Lớn: Padding bên trong các thành phần lớn như thẻ sản phẩm (ProductCard), thẻ bài viết blog (BlogPostCard). |
+| `--space-xl` | `32px` | Rất lớn: Khoảng cách bên dưới các tiêu đề (`<h2>`, `<h3>`) để tách biệt chúng với nội dung bên dưới. |
+| `--space-xxl` | `48px` | Cực lớn: Khoảng cách giữa các section lớn trên một trang (ví dụ: giữa section "Sản phẩm nổi bật" và section "Về chúng tôi"). |
+| `--space-xxxl` | `64px` | Rất cực lớn: Khoảng cách lớn nhất, dùng để tạo ra sự tách biệt rõ ràng giữa các khối nội dung hoàn toàn khác nhau. |
