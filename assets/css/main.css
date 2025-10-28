@@ -11,7 +11,7 @@
 /* 2. Tải các kiểu dáng HTML cơ bản (h1, p, body...)
 */
 @import 'base.css';
-
+@import 'layout.css';
 /* 3. (Sau này) Tải các thành phần tái sử dụng
      (ví dụ: .button, .product-card)
 */
