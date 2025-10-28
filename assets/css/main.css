@@ -1,46 +1,22 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Montserrat:wght@400&display=swap');
-:root {
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 16px;
-  --space-lg: 24px;
-  --space-xl: 32px;
-  --space-xxl: 48px;
-  --space-xxxl: 64px;
+﻿/* assets/css/main.css */
+/* Tệp này CHỈ DÙNG để gộp các tệp CSS khác lại.
+  Thứ tự import rất quan trọng.
+*/
 
-  --font-primary: 'Lora', serif;
-  --font-secondary: 'Montserrat', sans-serif; 
-}
-h1, h2, h3, h4 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  margin-top: 0;
-  margin-bottom: var(--space-md);
-}
-h1 {
-  font-size: 2.5rem;
-  line-height: 1.2;
-}
+/* 1. Tải các biến (variables) trước tiên 
+     để các tệp khác có thể sử dụng.
+*/
+@import 'variables.css';
 
-h2 {
-  font-size: 2rem;
-  line-height: 1.2;
-}
+/* 2. Tải các kiểu dáng HTML cơ bản (h1, p, body...)
+*/
+@import 'base.css';
 
-h3 {
-  font-size: 1.563rem;
-  line-height: 1.3;
-}
+/* 3. (Sau này) Tải các thành phần tái sử dụng
+     (ví dụ: .button, .product-card)
+*/
+/* @import 'components.css'; */
 
-h4 {
-  font-size: 1.25rem;
-  line-height: 1.3;
-}
-p {
-  margin-top: 0;
-  margin-bottom: var(--space-md);
-}
-small,.small-text {
-  font-size: 0.875rem;
-  line-height: 1.4;
-}
+/* 4. (Sau này) Tải bố cục chính (header, footer, .container)
+*/
+/* @import 'layout.css'; */
