@@ -30,4 +30,4 @@
 
 | `--color-failure`                   | `#b55f5f`              | Màu trạng thái lỗi (Failure) 
 
-| `--color-alert`                     | `#ff6f00`              | Màu cảnh báo chung (Alert / Warning)
+    | `--color-alert`                     | `#ff6f00`              | Màu cảnh báo chung (Alert / Warning)  
