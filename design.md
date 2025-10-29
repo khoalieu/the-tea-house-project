@@ -66,17 +66,21 @@ BẢNG MÀU HỆ THỐNG (System Color Tokens)
 
 | `--button-second-text`              | `#107e84`              | Màu chữ của nút phụ
 
-| `--color-danger`                    | `#933c3c`              | Màu cảnh báo(Destructive) 
+| `--color-danger`                    | `#c74949`              | Màu cảnh báo(Destructive) 
 
 | `--button-danger-text`              | `#ffffff`              | Màu chữ trên nút cảnh báo 
 
 | `--color-accent`                    | `#107e84`              | Màu nhấn cho icon, border, link 
 
-| `--color-success`                   | `#096809`              | Màu trạng thái thành công (Success) 
+| `--color-success`                   | `#4b804b`              | Màu trạng thái thành công (Success) 
 
-| `--color-failure`                   | `#933c3c`              | Màu trạng thái lỗi (Failure) 
+| `--color-failure`                   | `#c74949`              | Màu trạng thái lỗi (Failure) 
 
-| `--color-alert`                     | `#934001`              | Màu cảnh báo chung (Alert / Warning)
+| `--color-alert`                     | `#aa622a`              | Màu cảnh báo chung (Alert / Warning)
+
+`--color-primary-light`  : color-mix(in srgb, var(--color-primary) 70%, white 30%)  -> sáng hơn màu gốc 
+`--color-primary-dark`   : color-mix(in srgb, var(--color-primary) 85%, black 15%)  -> đậm hơn màu gốc
+=> dùng khi hover , active , border , shadow , background 
 
 
 | `--space-xs` | `4px` | Rất nhỏ: Khoảng cách giữa icon và chữ bên cạnh. |
