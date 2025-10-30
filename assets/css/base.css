@@ -3,11 +3,18 @@
 /* Thiết lập cơ bản cho thẻ body,
   áp dụng font chữ mặc định
 */
+html {
+    height: 100%;
+}
+
 body {
     font-family: var(--font-secondary); /* Dùng Montserrat */
     margin: 0;
     padding: 0;
-    /* (Thêm các reset khác nếu cần) */
+    color: #191919;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 100% chiều cao màn hình */
 }
 
 h1, h2, h3, h4 {
@@ -46,4 +53,8 @@ p {
 small, .small-text {
     font-size: 0.875rem;
     line-height: 1.4;
+}
+
+main {
+    flex-grow: 1;
 }

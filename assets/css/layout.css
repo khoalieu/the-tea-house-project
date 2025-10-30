@@ -1,0 +1,110 @@
+.site-footer {
+
+    background: #0b8287; /* (Sau này đổi thành var) */
+    color: #fff;         /* (Sau này đổi thành var) */
+
+    padding: 48px 160px;
+
+    position: relative;
+}
+
+.footer-container {
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 1px solid #fff;
+    padding-bottom: 24px;
+    position: relative;
+}
+
+.footer-content-left {
+    display: flex;
+    gap: 32px;
+
+}
+.footer-newsletter-description{
+    font-size: 13px;
+}
+
+.footer-mascot {
+    align-self: flex-end;
+}
+
+.footer-mascot img {
+    width: 150px;
+    height: auto;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.footer-nav-list a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 13px;
+    line-height: 2.9;
+}
+
+.footer-legal-list {
+    display: flex;
+    gap: 16px;
+}
+
+.footer-legal-link, .footer-locale-link {
+    text-decoration: none;
+    color: #fff;
+}
+
+.footer-social-list {
+    display: flex;
+    padding: 2px 0;
+    gap: 16px;
+}
+
+.footer-social-link {
+    color: #fff;
+    font-size: 13px;
+}
+
+.footer-subnav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 24px;
+    font-size: 13px;
+}
+.footer-form-group {
+    display: flex;
+
+    /* THÊM VÀO:
+      Tạo khoảng cách 8px
+      giữa input và button
+    */
+    gap: 8px; /* (Sau này đổi thành var(--space-sm)) */
+}
+
+
+.footer-newsletter-form .form-input {
+    border: none;
+    padding: 10px 16px;
+
+
+    border-radius: 999px;
+
+    font-family: var(--font-secondary);
+}
+
+
+.footer-newsletter-form .button {
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 700;
+    padding: 10px 16px;
+
+    border-radius: 999px;
+
+    font-family: var(--font-secondary);
+}
