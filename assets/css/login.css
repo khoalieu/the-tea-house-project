@@ -1,0 +1,113 @@
+/* Container chính */
+.login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 160px);
+    margin: 0 var(--space-xxl);
+    background: #ffffff;
+    font-family: var(--font-secondary);
+}
+
+/* Hộp đăng nhập */
+.login-box {
+    background: #ffffff;
+    padding: var(--space-xl);
+    border-radius: var(--space-md);
+    box-shadow: 20px 8px 24px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 420px;
+}
+
+/* Tiêu đề */
+.login-title {
+    font-family: var(--font-primary);
+    font-size: 2rem;
+    text-align: center;
+    color: var(--color-text);
+    background: var(--color-primary);
+    margin: calc(-1 * var(--space-xl)) calc(-1 * var(--space-xl)) var(--space-lg);
+    padding: var(--space-md) 0;
+    border-radius: var(--space-md) var(--space-md) 0 0;
+}
+
+/* Mỗi dòng form */
+.login-form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+/* Label */
+.login-label {
+    width: 120px;
+    font-size: 0.95rem;
+    color: var(--color-text);
+    text-align: left;
+    white-space: nowrap;
+}
+
+/* Input */
+.login-input {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid #ccc;
+    border-radius: var(--space-sm);
+    font-family: var(--font-secondary);
+    font-size: 1rem;
+    outline: none;
+    width: 100%;
+}
+.login-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(74,163,255,.2);
+}
+
+/* Nút đăng nhập */
+.login-button-wrap {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: var(--space-md);
+}
+
+.login-button {
+    display: inline-block;
+    padding: 12px 40px;
+    border: none;
+    border-radius: 8px;
+    background: var(--color-primary);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.25s ease;
+}
+
+.login-button:hover {
+    background: color-mix(in srgb, var(--color-primary) 80%, white 20%);
+    transform: scale(1.05);
+}
+
+/* Liên kết cuối trang (Đăng ký / Quên mật khẩu) */
+.login-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-xl);
+    margin-top: var(--space-lg);
+    font-size: 0.95rem;
+}
+
+.login-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.25s ease;
+}
+.login-link:hover {
+    text-decoration: underline;
+}
