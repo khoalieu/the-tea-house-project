@@ -1,8 +1,7 @@
 /* base.css */
 /* --- CÀI ĐẶT CHUNG (GLOBAL) --- */
 
-/* Lấy font từ file variables.css */
-@import 'variables.css';
+
 
 body {
     /* Dùng font-family từ file variables.css nếu có,
@@ -31,4 +30,16 @@ body {
 a {
     text-decoration: none;
     color: inherit;
+}
+
+html {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+main {
+    flex-grow: 1; /* Đẩy footer xuống */
 }
