@@ -43,25 +43,28 @@
 </nav>
 
 <section class="hero-banner">
-
-    <div class="hero-slide fade" style="background-image: url('assets/images/tra-thao-moc-hero-banner.jpg');">
-        <div class="hero-content">
-            <h1>Trà Thảo Mộc Tinh Tế</h1>
-            <p>100% tự nhiên, thanh lọc cơ thể và thư giãn tâm trí.</p>
-            <a href="#" class="cta-button">Khám Phá Trà</a>
+    <div class="slideshow-container">
+        <div class="hero-slide fade" style="background-image: url('assets/images/tra-thao-moc-hero-banner.jpg');">
+            <div class="hero-content">
+                <h1>Trà Thảo Mộc Tinh Tế</h1>
+                <p>100% tự nhiên, thanh lọc cơ thể và thư giãn tâm trí.</p>
+                <a href="#" class="cta-button">Khám Phá Trà</a>
+            </div>
         </div>
-    </div>
 
-    <div class="hero-slide fade" style="background-image: url('assets/images/san-pham-tra-gung-mat-ong.jpg')">
-        <div class="hero-content">
-            <h1>Sáng Tạo Trà Sữa DIY</h1>
-            <p>Trổ tài pha chế tại nhà với nguyên liệu chất lượng cao.</p>
-            <a href="#" class="cta-button">Mua Nguyên Liệu</a>
+        <div class="hero-slide fade" style="background-image: url('assets/images/san-pham-tra-gung-mat-ong.jpg')">
+            <div class="hero-content">
+                <h1>Sáng Tạo Trà Sữa DIY</h1>
+                <p>Trổ tài pha chế tại nhà với nguyên liệu chất lượng cao.</p>
+                <a href="#" class="cta-button">Mua Nguyên Liệu</a>
+            </div>
         </div>
+        <a class="prev" onclick="plusSlider(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlider(1)">&#10095;</a>
     </div>
-    <a class="prev" onclick="plusSlider(-1)">&#10094;</a>
-    <a class="next" onclick="plusSlider(1)">&#10095;</a>
-    <div style="text-align:center">
+    <br>
+
+    <div class="slider-dots">
         <span class="dot" onclick="currentSlider(1)"></span>
         <span class="dot" onclick="currentSlider(2)"></span>
     </div>
@@ -177,72 +180,30 @@
     </div>
 </footer>
 <script>
-let slideIndex = 1;
-let slideTimer;
+    let slideIndex = 1;
+    showSlider(slideIndex);
 
-document.addEventListener('DOMContentLoaded', () => {
-  initSlider();
-});
-
-function initSlider() {
-  const slides = document.querySelectorAll('.hero-slide');
-  const dots = document.querySelectorAll('.dot');
-
-  if (!slides.length) return;
-  showSlider(slideIndex);
-  startAuto();
-
-  // optional: add keyboard arrows
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') changeSlider(-1);
-    if (e.key === 'ArrowRight') changeSlider(1);
-  });
-
-  // pause on hover
-  const hero = document.querySelector('.hero-banner');
-  if (hero) {
-    hero.addEventListener('mouseenter', () => clearInterval(slideTimer));
-    hero.addEventListener('mouseleave', () => startAuto());
-  }
-}
-
-function changeSlider(n) {
-  showSlider(slideIndex += n);
-  resetAuto();
-}
-
-function currentSlider(n) {
-  showSlider(slideIndex = n);
-  resetAuto();
-}
-
-function showSlider(n) {
-  const slides = document.querySelectorAll('.hero-slide');
-  const dots = document.querySelectorAll('.dot');
-  const total = slides.length;
-  if (total === 0) return;
-
-  if (n > total) slideIndex = 1;
-  if (n < 1) slideIndex = total;
-
-  slides.forEach((s, i) => {
-    s.classList.toggle('active', i === slideIndex - 1);
-  });
-
-  dots.forEach((d, i) => {
-    d.classList.toggle('active', i === slideIndex - 1);
-  });
-}
-
-function startAuto() {
-  clearInterval(slideTimer);
-  slideTimer = setInterval(() => changeSlider(1), 4000);
-}
-
-function resetAuto() {
-  clearInterval(slideTimer);
-  startAuto();
-}
+    function plusSlider(n) {
+        showSlider(slideIndex += n);
+    }
+    function currentSlider(n) {
+        showSlider(slideIndex = n);
+    }
+    function showSlider(n) {
+        let i;
+        let slides = document.getElementsByClassName("hero-slide");
+        let dots = document.getElementsByClassName("dot");
+        if (n > slides.length) {slideIndex = 1}
+        if (n < 1) {slideIndex = slides.length}
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex-1].style.display = "block";
+        dots[slideIndex-1].className += " active";
+    }
 </script>
 </body>
 </html>
