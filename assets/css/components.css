@@ -12,8 +12,7 @@
     display: inline-block;
 }
 .cta-button:hover {
-    /* Hàm color-mix này rất hay, nhưng nếu lỗi,
-       bạn có thể thay bằng màu #43a047 */
+    background: #43a047;
     background: color-mix(in srgb, var(--color-primary, #4CAF50) 80%, white 20%);
 }
 
