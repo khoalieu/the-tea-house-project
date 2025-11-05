@@ -1,221 +1,75 @@
-/* ========================================================================== 
-   LAYOUT CSS - Header, Navigation, Footer
-   ========================================================================== */
+/* layout.css */
+/* --- PHẦN 1: HEADER (Thanh tiện ích) --- */
+.utility-header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+}
 
-/* ==========================================================================
-   HEADER STYLES
-   ========================================================================== */
+.utility-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-header {
+.utility-header .logo a {
+    font-size: 24px;
+    font-weight: 700;
+    text-decoration: none;
+    /* Dùng màu chủ đạo từ biến nếu có */
+    color: var(--color-primary, #4CAF50);
+}
+
+.utility-header .search-bar input {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.utility-header .user-icons {
+    display: flex;
+    gap: 15px;
+}
+
+/* --- PHẦN 2: MAIN NAVIGATION (Menu chính) --- */
+.main-nav {
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.main-nav ul {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-/* Top Bar */
-.top-bar {
+    list-style: none;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding-top: 20px;
-    height: 30px;
-    width: 100%;
-    background-color: rgb(16 126 132);
 }
 
-.top-bar-message {
-    color: white;
-    font-family: var(--font-primary);
+.main-nav ul li a {
+    display: block;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    text-transform: uppercase;
     font-size: 14px;
-    border-bottom: 1px solid white;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
 }
 
-/* Navigation */
-.nav-left .logo {
-    height: 40px;
-    position: relative;
-    left: 200px;
+.main-nav ul li a:hover,
+.main-nav ul li a.active {
+    color: var(--color-primary, #4CAF50);
+    border-bottom-color: var(--color-primary, #4CAF50);
 }
 
-#main-nav .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
-    padding: 10px 20px;
-    height: 50px;
-    background-color: #fff;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-#main-nav li {
-    list-style-type: none;
-    display: inline;
-}
-
-.nav-links li {
-    margin: 0 15px;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #333;
-    font-family: var(--font-primary);
-    font-size: 14px;
-}
-
-.nav-links a:after {
-    content: ' \25BE';
-    font-size: 12px;
-    max-width: 4px;
-}
-
-.nav-links a:hover::after {
-    transform: rotate(180deg);
-}
-
-.nav-right i {
-    margin: 0 10px;
-    cursor: pointer;
-    color: #333;
-}
-
-/* ==========================================================================
-   RESPONSIVE HEADER
-   ========================================================================== */
-
-@media (max-width: 768px) {
-    .nav-left .logo {
-        left: 0;
-        height: 35px;
-    }
-    
-    #main-nav .container {
-        flex-direction: column;
-        height: auto;
-        padding: 15px 20px;
-    }
-    
-    .nav-links li {
-        margin: 5px 10px;
-    }
-    
-    .nav-right i {
-        margin: 0 8px;
-    }
-}
-
-/* ==========================================================================
-   FOOTER STYLES
-   ========================================================================== */
-
-.site-footer {
-
-    background: #0b8287; /* (Sau này đổi thành var) */
-    color: #fff;         /* (Sau này đổi thành var) */
-
-    padding: 48px 160px;
-
-    position: relative;
-}
-
-.footer-container {
-    display: flex;
-    align-items: flex-start;
-    border-bottom: 1px solid #fff;
-    padding-bottom: 24px;
-    position: relative;
-}
-
-.footer-content-left {
-    display: flex;
-    gap: 32px;
-
-}
-.footer-newsletter-description{
-    font-size: 13px;
-}
-
-.footer-mascot {
-    align-self: flex-end;
-}
-
-.footer-mascot img {
-    width: 150px;
-    height: auto;
-}
-
-ul {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-.footer-nav-list a {
-    text-decoration: none;
-    color: #fff;
-    font-size: 13px;
-    line-height: 2.9;
-}
-
-.footer-legal-list {
-    display: flex;
-    gap: 16px;
-}
-
-.footer-legal-link, .footer-locale-link {
-    text-decoration: none;
-    color: #fff;
-}
-
-.footer-social-list {
-    display: flex;
-    padding: 2px 0;
-    gap: 16px;
-}
-
-.footer-social-link {
-    color: #fff;
-    font-size: 13px;
-}
-
-.footer-subnav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 24px;
-    font-size: 13px;
-}
-.footer-form-group {
-    display: flex;
-
-    /* THÊM VÀO:
-      Tạo khoảng cách 8px
-      giữa input và button
-    */
-    gap: 8px; /* (Sau này đổi thành var(--space-sm)) */
-}
-
-
-.footer-newsletter-form .form-input {
-    border: none;
-    padding: 10px 16px;
-
-
-    border-radius: 999px;
-
-    font-family: var(--font-secondary);
-}
-
-
-.footer-newsletter-form .button {
-    background: transparent;
-    border: 1px solid #fff;
-    color: #fff;
-    cursor: pointer;
-    font-weight: 700;
-    padding: 10px 16px;
-
-    border-radius: 999px;
-
-    font-family: var(--font-secondary);
+/* --- PHẦN 8: FOOTER --- */
+.main-footer {
+    background: #333;
+    color: #aaa;
+    padding: 40px 0;
+    text-align: center;
+    margin-top: 50px;
 }
