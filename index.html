@@ -44,7 +44,7 @@
 
 <section class="hero-banner">
     <div class="slideshow-container">
-        <div class="hero-slide fade" style="background-image: url('assets/images/tra-thao-moc-hero-banner.jpg');">
+        <div class="hero-slide fade active" style="background-image: url('assets/images/tra-thao-moc-hero-banner.jpg');">
             <div class="hero-content">
                 <h1>Trà Thảo Mộc Tinh Tế</h1>
                 <p>100% tự nhiên, thanh lọc cơ thể và thư giãn tâm trí.</p>
@@ -59,25 +59,21 @@
                 <a href="#" class="cta-button">Mua Nguyên Liệu</a>
             </div>
         </div>
-        <a class="prev" onclick="plusSlider(-1)">&#10094;</a>
-        <a class="next" onclick="plusSlider(1)">&#10095;</a>
     </div>
-    <br>
 
     <div class="slider-dots">
-        <span class="dot" onclick="currentSlider(1)"></span>
+        <span class="dot active" onclick="currentSlider(1)"></span>
         <span class="dot" onclick="currentSlider(2)"></span>
     </div>
-
 </section>
 
 <section class="category-split">
     <div class="container">
-        <div class="category-box" style="background-image: url('assets/images/tra-thao-moc2.webp');">
+        <div class="category-box" style="background-image: url('assets/images/tra-thao-moc.webp');">
             <h2>TRÀ THẢO MỘC & SỨC KHỎE</h2>
             <a href="#" class="cta-button-outline">Xem Tất Cả</a>
         </div>
-        <div class="category-box" style="background-image: url('assets/images/Nguyen-lieu-tra-sua.webp');">
+        <div class="category-box" style="background-image: url('assets/images/san-pham-tran-chau-den-4.jpg');">
             <h2>NGUYÊN LIỆU TRÀ SỮA DIY</h2>
             <a href="#" class="cta-button-outline">Trổ Tài Pha Chế</a>
         </div>
@@ -86,28 +82,28 @@
 
 <section class="product-showcase">
     <div class="container">
-        <h2>BÁN CHẠY: TRÀ THẢO MỘC</h2>
+        <h2>BEST SELLER - TRÀ THƠM CHẤT LƯỢNG</h2>
         <div class="product-grid">
             <div class="product-card">
-                <img src="https://placehold.co/300x300/cddc39/white?text=Trà+Hoa+Cúc" alt="Trà Hoa Cúc">
+                <img src="assets/images/san-pham-tra-hoa-cuc-2.jpg" alt="Trà Hoa Cúc">
                 <h3>Trà Hoa Cúc Sấy Khô</h3>
                 <p class="price">120.000 VNĐ</p>
                 <a href="#" class="cta-button">Thêm vào giỏ</a>
             </div>
             <div class="product-card">
-                <img src="https://placehold.co/300x300/cddc39/white?text=Trà+Gừng" alt="Trà Gừng">
+                <img src="assets/images/san-pham-tra-gung-mat-ong-1.jpg" alt="Trà Gừng">
                 <h3>Trà Gừng Mật Ong</h3>
                 <p class="price">95.000 VNĐ</p>
                 <a href="#" class="cta-button">Thêm vào giỏ</a>
             </div>
             <div class="product-card">
-                <img src="https://placehold.co/300x300/cddc39/white?text=Trà+Atiso" alt="Trà Atiso">
+                <img src="assets/images/san-pham-tra-atiso-3.jpg" alt="Trà Atiso">
                 <h3>Trà Atiso Túi Lọc</h3>
                 <p class="price">70.000 VNĐ</p>
                 <a href="#" class="cta-button">Thêm vào giỏ</a>
             </div>
             <div class="product-card">
-                <img src="https://placehold.co/300x300/cddc39/white?text=Trà+Bạc+Hà" alt="Trà Bạc Hà">
+                <img src="assets/images/tra-hoa-bac-ha-gotafarm-8.webp" alt="Trà Bạc Hà">
                 <h3>Trà Bạc Hà</h3>
                 <p class="price">80.000 VNĐ</p>
                 <a href="#" class="cta-button">Thêm vào giỏ</a>
@@ -180,43 +176,43 @@
     </div>
 </footer>
 <script>
-    let slideIndex = 1;
-    showSlider(slideIndex);
+    // let slideIndex = 1;
+    // showSlider(slideIndex);
 
-    function plusSlider(n) {
-        showSlider(slideIndex += n);
-    }
-    function currentSlider(n) {
-        showSlider(slideIndex = n);
-    }
-    function showSlider(n) {
-        let i;
-        let slides = document.getElementsByClassName("hero-slide");
-        let dots = document.getElementsByClassName("dot");
-        if (n > slides.length) {slideIndex = 1}
-        if (n < 1) {slideIndex = slides.length}
-        for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
-        }
-        for (i = 0; i < dots.length; i++) {
-            dots[i].className = dots[i].className.replace(" active", "");
-        }
-        slides[slideIndex-1].style.display = "block";
-        dots[slideIndex-1].className += " active";
-    }
-    let slideIndexAuto = 0;
-    function showSlide() {
-        let i;
-        let slides = document.getElementsByClassName("hero-slide");
-        for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
-        }
-        slideIndexAuto++;
-        if (slideIndexAuto > slides.length) {slideIndexAuto = 1}
-        slides[slideIndexAuto-1].style.display = "block";
-        setTimeout(showSlide, 5000);
-    }
-    showSlide();
+    // function plusSlider(n) {
+    //     showSlider(slideIndex += n);
+    // }
+    // function currentSlider(n) {
+    //     showSlider(slideIndex = n);
+    // }
+    // function showSlider(n) {
+    //     let i;
+    //     let slides = document.getElementsByClassName("hero-slide");
+    //     let dots = document.getElementsByClassName("dot");
+    //     if (n > slides.length) {slideIndex = 1}
+    //     if (n < 1) {slideIndex = slides.length}
+    //     for (i = 0; i < slides.length; i++) {
+    //         slides[i].style.display = "none";
+    //     }
+    //     for (i = 0; i < dots.length; i++) {
+    //         dots[i].className = dots[i].className.replace(" active", "");
+    //     }
+    //     slides[slideIndex-1].style.display = "block";
+    //     dots[slideIndex-1].className += " active";
+    // }
+    // let slideIndexAuto = 0;
+    // function showSlide() {
+    //     let i;
+    //     let slides = document.getElementsByClassName("hero-slide");
+    //     for (i = 0; i < slides.length; i++) {
+    //         slides[i].style.display = "none";
+    //     }
+    //     slideIndexAuto++;
+    //     if (slideIndexAuto > slides.length) {slideIndexAuto = 1}
+    //     slides[slideIndexAuto-1].style.display = "block";
+    //     setTimeout(showSlide, 5000);
+    // }
+    // showSlide();
 </script>
 </body>
 </html>
