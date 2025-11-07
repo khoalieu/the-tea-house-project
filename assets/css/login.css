@@ -38,7 +38,6 @@ body {
   display: block;
 }
 
-/* ========== CONTENT ========== */
 .login-content {
   padding: 36px;
 }
@@ -84,7 +83,7 @@ body {
   position: relative;
 }
 
-/* Input theo class hoặc id */
+/* Input */
 .input-username,
 .input-password,
 .input-email,
@@ -161,11 +160,12 @@ button {
   padding: 12px;
   font-size: 1rem;
   cursor: pointer;
-  transition: 0.15s;
+  transition: transform 0.2s ease;
 }
 
 .btn:hover {
   filter: brightness(0.95);
+  transform: calc(1.2);
 }
 /*signup*/
 .signup {
