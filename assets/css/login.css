@@ -183,3 +183,13 @@ button {
 .signup a:hover {
   text-decoration: underline;
 }
+
+/**/
+@media (max-width: 480px) {
+  .login-content {
+    padding: 24px;
+  }
+  .login-content h2 {
+    font-size: 1.4rem;
+  }
+}

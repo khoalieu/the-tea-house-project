@@ -1,22 +1,19 @@
-﻿/* assets/css/main.css */
-/* Tệp này CHỈ DÙNG để gộp các tệp CSS khác lại.
-  Thứ tự import rất quan trọng.
-*/
+﻿/* main.css - File chủ gộp tất cả CSS */
 
-/* 1. Tải các biến (variables) trước tiên 
-     để các tệp khác có thể sử dụng.
-*/
+/* 1. Biến (Luôn luôn đầu tiên) */
 @import 'variables.css';
 
-/* 2. Tải các kiểu dáng HTML cơ bản (h1, p, body...)
-*/
+/* 2. Base (Reset, body, .container...) */
 @import 'base.css';
 
-/* 3. (Sau này) Tải các thành phần tái sử dụng
-     (ví dụ: .button, .product-card)
-*/
-/* @import 'components.css'; */
+/* 3. Layout (Header, Footer, Nav...) */
+@import 'layout.css';
 
-/* 4. (Sau này) Tải bố cục chính (header, footer, .container)
-*/
-/* @import 'layout.css'; */
+/* 4. Components (Các thẻ tái sử dụng: .product-card, .button...) */
+@import 'components.css';
+
+/* 5. Pages (Kiểu riêng cho từng trang: .hero-banner, .product-detail...) */
+@import 'pages.css';
+
+/* 6. Kiểu trang Login (nếu có) */
+@import 'login.css';

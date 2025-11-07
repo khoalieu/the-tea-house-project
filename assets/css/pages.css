@@ -1,0 +1,307 @@
+/* pages.css */
+
+/* --- TRANG CHỦ (Homepage) --- */
+.hero-banner {
+    height: 60vh;
+    min-height: 400px;
+    position: relative;
+    overflow: hidden;
+    background: #eee;
+}
+.hero-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    z-index: 1;
+}
+.hero-slide.active {
+    opacity: 1;
+    z-index: 2;
+}
+.hero-slide::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.3);
+    z-index: -1;
+}
+.hero-content {
+    color: #fff;
+    position: relative;
+    z-index: 3;
+}
+.hero-content h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+    color: #fff;
+    font-weight: 700;
+}
+.hero-content p {
+    font-size: 20px;
+    margin-bottom: 30px;
+    color: #fff;
+    font-weight: 300;
+}
+
+.category-split {
+    padding: 60px 0;
+}
+.category-split .container {
+    display: flex;
+    gap: 30px;
+}
+.category-box {
+    flex: 1;
+    height: 350px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+.category-box:hover {
+    transform: scale(1.03);
+}
+.category-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent 60%);
+    z-index: -1;
+    transition: background 0.3s ease;
+}
+.category-box:hover::before {
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 50%);
+}
+.category-box h2 {
+    color: #fff;
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.product-showcase {
+    padding: 60px 0;
+}
+.product-showcase.bg-light {
+    background: #fff;
+}
+.product-showcase h2 {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 40px;
+    font-weight: 700;
+}
+
+.blog-preview {
+    padding: 60px 0;
+}
+.blog-preview h2 {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 40px;
+    font-weight: 700;
+}
+
+
+/* --- TRANG CHI TIẾT SẢN PHẨM (Product Detail Page) --- */
+.product-detail-layout {
+    display: flex;
+    gap: 40px;
+    background: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+}
+.product-gallery {
+    flex: 1;
+}
+.product-gallery .main-image img {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+.product-gallery .thumbnail-images {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.product-gallery .thumbnail-images img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 2px solid #eee;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+.product-gallery .thumbnail-images img:hover,
+.product-gallery .thumbnail-images img.active {
+    border-color: var(--color-primary, #4CAF50);
+}
+.product-info {
+    flex: 1;
+    position: relative;
+}
+.product-info .sale-tag { /* Style cho tag ở trang chi tiết */
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 14px;
+    padding: 8px 12px;
+}
+.product-info h1 {
+    font-size: 32px;
+    margin-top: 50px;
+    margin-bottom: 15px;
+}
+.product-info .price-block {
+    margin-bottom: 20px;
+}
+.product-info .new-price {
+    font-size: 28px;
+    font-weight: 700;
+    color: #e53935;
+    margin-right: 15px;
+}
+.product-info .old-price {
+    font-size: 20px;
+    color: #999;
+    text-decoration: line-through;
+}
+.product-info .short-description {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #555;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+.quantity-selector {
+    margin-bottom: 20px;
+}
+.quantity-selector label {
+    font-weight: 500;
+    margin-right: 10px;
+}
+.quantity-selector input {
+    width: 70px;
+    padding: 8px;
+    font-size: 16px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.add-to-cart-btn {
+    padding: 15px 30px;
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+}
+
+.product-description-tabs {
+    margin-top: 40px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+}
+.tab-headers {
+    display: flex;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 20px;
+}
+.tab-link {
+    background: none;
+    border: none;
+    padding: 15px 25px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #777;
+    position: relative;
+    top: 2px;
+    border-bottom: 2px solid transparent;
+}
+.tab-link.active,
+.tab-link:hover {
+    color: var(--color-primary, #4CAF50);
+    border-bottom-color: var(--color-primary, #4CAF50);
+}
+.tab-content {
+    display: none;
+    line-height: 1.7;
+}
+.tab-content.active {
+    display: block;
+}
+
+.product-related {
+    margin-top: 40px;
+}
+.product-related h2 {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 40px;
+    font-weight: 700;
+}
+
+/* --- RESPONSIVE (Tạm thời gom vào đây) --- */
+@media (max-width: 992px) {
+    .product-detail-layout {
+        flex-direction: column;
+    }
+}
+@media (max-width: 768px) {
+    .category-split .container {
+        flex-direction: column;
+    }
+    .utility-header .container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .utility-header .search-bar input {
+        width: 100%;
+    }
+    .main-nav ul {
+        justify-content: flex-start;
+        overflow-x: auto;
+    }
+    .hero-content h1 {
+        font-size: 32px;
+    }
+    .hero-content p {
+        font-size: 16px;
+    }
+    .tab-headers {
+        flex-direction: column;
+    }
+    .tab-link {
+        border-bottom: 1px solid #eee;
+        width: 100%;
+        text-align: left;
+    }
+    .tab-link.active,
+    .tab-link:hover {
+        border-bottom-color: var(--color-primary, #4CAF50);
+    }
+}

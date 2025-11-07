@@ -3,19 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang Chủ - The Tea House Project</title>
-
+    <title>Trà Thảo Mộc & Trà Sữa DIY</title>
     <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<header id="header-placeholder"></header>
+<header class="utility-header">
+    <div class="container">
+        <div class="utility-header__left">
+            <div class="logo">
+                <a href="/">LOGO CỦA BẠN</a>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Bạn muốn tìm gì...">
+            </div>
+        </div>
+        <div class="utility-header__right">
+            <div class="user-icons">
+                <span>(Icon Liên Hệ)</span>
+                <span>(Icon Tài Khoản)</span>
+            </div>
+        </div>
+    </div>
+</header>
 
-<main>
-</main>
+<nav class="main-nav">
+    <div class="container">
+        <ul>
+            <li><a href="index.html" class="active">TRANG CHỦ</a></li>
+            <li><a href="san-pham.html">SẢN PHẨM</a></li>
+            <li><a href="blog.html">CÔNG THỨC & BLOG</a></li>
+            <li><a href="ve-chung-toi.html">VỀ CHÚNG TÔI</a></li>
+            <li><a href="khuyen-mai.html">KHUYẾN MÃI</a></li>
+        </ul>
+    </div>
+</nav>
 
-<footer id="footer-placeholder"></footer>
+<section class="hero-banner">
 
-<script src="assets/js/main.js" defer></script>
+    <div class="hero-slide active" style="background-image: url('https://placehold.co/1920x600/a5d6a7/white?text=Ảnh+Trà+Thảo+Mộc');">
+        <div class="hero-content">
+            <h1>Trà Thảo Mộc Tinh Tế</h1>
+            <p>100% tự nhiên, thanh lọc cơ thể và thư giãn tâm trí.</p>
+            <a href="#" class="cta-button">Khám Phá Trà</a>
+        </div>
+    </div>
+
+    <div class="hero-slide" style="background-image: url('https://placehold.co/1920x600/ffb74d/white?text=Ảnh+Trà+Sữa+DIY');">
+        <div class="hero-content">
+            <h1>Sáng Tạo Trà Sữa DIY</h1>
+            <p>Trổ tài pha chế tại nhà với nguyên liệu chất lượng cao.</p>
+            <a href="#" class="cta-button">Mua Nguyên Liệu</a>
+        </div>
+    </div>
+
+</section>
+
+<section class="category-split">
+    <div class="container">
+        <div class="category-box" style="background-image: url('assets/images/hinh-tra-thao-moc.jpg');">
+            <h2>TRÀ THẢO MỘC & SỨC KHỎE</h2>
+            <a href="#" class="cta-button-outline">Xem Tất Cả</a>
+        </div>
+        <div class="category-box" style="background-image: url('assets/images/Nguyen-lieu-tra-sua.webp');">
+            <h2>NGUYÊN LIỆU TRÀ SỮA DIY</h2>
+            <a href="#" class="cta-button-outline">Trổ Tài Pha Chế</a>
+        </div>
+    </div>
+</section>
+
+<section class="product-showcase">
+    <div class="container">
+        <h2>BÁN CHẠY: TRÀ THẢO MỘC</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="https://placehold.co/300x300/cddc39/white?text=Trà+Hoa+Cúc" alt="Trà Hoa Cúc">
+                <h3>Trà Hoa Cúc Sấy Khô</h3>
+                <p class="price">120.000 VNĐ</p>
+                <a href="#" class="cta-button">Thêm vào giỏ</a>
+            </div>
+            <div class="product-card">
+                <img src="https://placehold.co/300x300/cddc39/white?text=Trà+Gừng" alt="Trà Gừng">
+                <h3>Trà Gừng Mật Ong</h3>
+                <p class="price">95.000 VNĐ</p>
+                <a href="#" class="cta-button">Thêm vào giỏ</a>
+            </div>
+            <div class="product-card">
+                <img src="https://placehold.co/300x300/cddc39/white?text=Trà+Atiso" alt="Trà Atiso">
+                <h3>Trà Atiso Túi Lọc</h3>
+                <p class="price">70.000 VNĐ</p>
+                <a href="#" class="cta-button">Thêm vào giỏ</a>
+            </div>
+            <div class="product-card">
+                <img src="https://placehold.co/300x300/cddc39/white?text=Trà+Bạc+Hà" alt="Trà Bạc Hà">
+                <h3>Trà Bạc Hà</h3>
+                <p class="price">80.000 VNĐ</p>
+                <a href="#" class="cta-button">Thêm vào giỏ</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="product-showcase bg-light">
+    <div class="container">
+        <h2>BÁN CHẠY: NGUYÊN LIỆU TRÀ SỮA</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="https://placehold.co/300x300/795548/white?text=Trân+Châu" alt="Trân Châu">
+                <h3>Trân Châu Đường Đen</h3>
+                <p class="price">80.000 VNĐ</p>
+                <a href="#" class="cta-button">Thêm vào giỏ</a>
+            </div>
+            <div class="product-card">
+                <img src="https://placehold.co/300x300/795548/white?text=Bột+Sữa" alt="Bột Sữa">
+                <h3>Bột Sữa Béo (Gói 1kg)</h3>
+                <p class="price">110.000 VNĐ</p>
+                <a href="#" class="cta-button">Thêm vào giỏ</a>
+            </div>
+            <div class="product-card">
+                <img src="https://placehold.co/300x300/795548/white?text=Hồng+Trà" alt="Hồng Trà">
+                <h3>Hồng Trà (Pha Trà Sữa)</h3>
+                <p class="price">65.000 VNĐ</p>
+                <a href="#" class="cta-button">Thêm vào giỏ</a>
+            </div>
+            <div class="product-card">
+                <img src="https://placehold.co/300x300/795548/white?text=Kit+Trà+Sữa" alt="Kit Trà Sữa">
+                <h3>Kit Tự Làm Trà Sữa</h3>
+                <p class="price">150.000 VNĐ</p>
+                <a href="#" class="cta-button">Thêm vào giỏ</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="blog-preview">
+    <div class="container">
+        <h2>CÔNG THỨC & BLOG</h2>
+        <div class="blog-grid">
+            <div class="blog-card">
+                <img src="https://placehold.co/400x250/00bcd4/white?text=Blog+1" alt="Blog 1">
+                <h3>Hướng dẫn pha trà sữa tại nhà</h3>
+                <p>Chỉ với 5 bước đơn giản, bạn đã có ngay ly trà sữa... (cho nhóm trà sữa)</p>
+                <a href="#">Đọc Thêm</a>
+            </div>
+            <div class="blog-card">
+                <img src="https://placehold.co/400x250/4caf50/white?text=Blog+2" alt="Blog 2">
+                <h3>5 Lợi ích của trà hoa cúc</h3>
+                <p>Trà hoa cúc không chỉ giúp ngủ ngon mà còn... (cho nhóm thảo mộc)</p>
+                <a href="#">Đọc Thêm</a>
+            </div>
+            <div class="blog-card">
+                <img src="https://placehold.co/400x250/8d6e63/white?text=Blog+3" alt="Blog 3">
+                <h3>Phân biệt Hồng Trà và Lục Trà</h3>
+                <p>Loại trà nào sẽ phù hợp với khẩu vị của bạn? (Dành cho cả hai nhóm)</p>
+                <a href="#">Đọc Thêm</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="main-footer">
+    <div class="container">
+        <p>&copy; 2025 Đồ Án Lập Trình Web - Nhóm Của Bạn. Đã đăng ký bản quyền.</p>
+    </div>
+</footer>
 </body>
 </html>

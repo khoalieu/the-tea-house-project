@@ -1,49 +1,45 @@
-/* assets/css/base.css */
+/* base.css */
+/* --- CÀI ĐẶT CHUNG (GLOBAL) --- */
 
-/* Thiết lập cơ bản cho thẻ body,
-  áp dụng font chữ mặc định
-*/
+
+
 body {
-    font-family: var(--font-secondary); /* Dùng Montserrat */
+    /* Dùng font-family từ file variables.css nếu có,
+       nếu không thì dùng Roboto làm dự phòng */
+    font-family: var(--font-secondary, 'Roboto', sans-serif);
     margin: 0;
     padding: 0;
-    /* (Thêm các reset khác nếu cần) */
+    background-color: #f9f9f9;
+    color: var(--color-text, #333); /* Dùng màu từ biến */
+    line-height: 1.6;
 }
 
-h1, h2, h3, h4 {
-    font-family: var(--font-primary); /* Dùng Lora */
-    font-weight: 700;
-    margin-top: 0;
-    margin-bottom: var(--space-md); /* Dùng biến khoảng cách */
+* {
+    box-sizing: border-box;
 }
 
-h1 {
-    font-size: 2.5rem;
-    line-height: 1.2;
+/* Lớp .container này rất quan trọng, giữ nó ở base */
+.container {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
-h2 {
-    font-size: 2rem;
-    line-height: 1.2;
+a {
+    text-decoration: none;
+    color: inherit;
 }
 
-h3 {
-    font-size: 1.563rem;
-    line-height: 1.3;
+html {
+    height: 100%;
 }
-
-h4 {
-    font-size: 1.25rem;
-    line-height: 1.3;
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
-
-p {
-    margin-top: 0;
-    margin-bottom: var(--space-md); /* Dùng biến khoảng cách */
-    line-height: 1.5; /* Lấy từ design.md */
-}
-
-small, .small-text {
-    font-size: 0.875rem;
-    line-height: 1.4;
+main {
+    flex-grow: 1; /* Đẩy footer xuống */
 }
