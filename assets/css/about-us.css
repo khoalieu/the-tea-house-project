@@ -1,0 +1,139 @@
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+}
+
+
+
+.about-hero,
+.about-section,
+.about-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px; 
+}
+
+/*DIV1*/
+.about-hero {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+}
+.about-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter : brightness(60%) blur 2px;
+}
+.about-hero-text {
+  background: rgba(0 ,0 ,0 , 0.4) ;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+  padding: 0 150px;
+  line-height: 1.8;
+  z-index: 2;
+  font-size: 22px;
+  font-family:'Dancing Script', cursive;
+ ;
+}
+
+/*div 2 */
+.about-section {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+/* Hàng chứa ảnh và text */
+.about-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+/* ảnh */
+.about-image img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* text */
+.about-text {
+  flex: 1;
+  line-height: 1.8;
+}
+
+.full-height {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 420px;
+  text-align: center;
+  }
+.full-height .about-text {
+  max-width: 520px;
+}
+
+/* DIV 3 */
+.feature-row {
+  display: flex;
+  justify-content: space-between;
+  margin : 60px 60px;
+  text-align: center;
+}
+.feature {
+  width: 23%;
+}
+.feature img {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 12px;
+}
+.feature h4 {
+  font-size: 16px;
+  margin: 0;
+}
+.about-quote {
+  text-align: center;
+}
+.about-quote h2 {
+  font-family:'Dancing Script', cursive;
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+.about-quote p {
+  font-style: italic;
+  font-family:'Dancing Script', cursive;
+  color: #555;
+  line-height: 1.8;
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 24px;
+}
+
+/* ----- RESPONSIVE ----- */
+@media (max-width: 900px) {
+  .about-row {
+    flex-direction: column;
+  }
+  .about-row:nth-child(even) {
+    flex-direction: column;
+  }
+  .about-image img {
+    height: auto;
+  }
+  .feature {
+    width: 48%;
+    margin-bottom: 20px;
+  }
+}
