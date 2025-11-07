@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng Nhập</title>
+    <link rel="stylesheet" href="assets/css/login.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-box">
+
+            <div class="login-image">
+                <img src="assets/images/image-tra-in-login" alt="Background">
+            </div>
+
+            <div class="login-content">
+                <h2>Đăng Nhập</h2>
+
+            <!-- Mạng xã hội -->
+                <div class="social-login">
+                    <a href="#" class="social fb"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="social gg"><i class="fa-brands fa-google"></i></a>
+                </div>
+
+                <form>
+                    <!-- username -->
+                    <div class="form-row">
+                        <input 
+                            id="username"
+                            class="input-username"
+                            type="text"
+                            name="username"
+                            placeholder="Tên đăng nhập"
+                            required>
+                    </div>
+
+                    <!-- password -->
+                    <div class="form-row password-field">
+                        <input 
+                            id="password"
+                            class="input-password"
+                            type="password"
+                            name="password"
+                            placeholder="Mật khẩu"
+                            required>
+                        <div class="eye-icon" id="toggleEye">
+                            <i class="fa-regular fa-eye"></i>
+                        </div>
+                    </div>
+
+
+                    <div class="form-options">
+                        <div class="remember">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Ghi nhớ tôi</label>
+                        </div>
+                        <a href="#">Quên mật khẩu?</a>
+                    </div>
+
+                    <div class="form-row">
+                        <button type="submit" class="btn">Đăng nhập</button>
+                    </div>
+
+                    <div class="signup">
+                        Chưa có tài khoản? <a href="signup.html">Đăng ký</a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+  <!-- Script ẩn hiện mật khẩu -->
+    <script>
+        const toggleEye = document.getElementById("toggleEye");
+        const password = document.getElementById("password");
+
+        toggleEye.addEventListener("click", () => {
+            const isHidden = password.type === "password";
+            password.type = isHidden ? "text" : "password";
+
+            const icon = toggleEye.querySelector("i");
+            icon.classList.toggle("fa-eye-slash", isHidden);
+            icon.classList.toggle("fa-eye", !isHidden);
+        });
+    </script>
+</body>
+</html>
