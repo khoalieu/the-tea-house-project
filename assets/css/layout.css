@@ -5,58 +5,39 @@
     border-bottom: 1px solid #eee;
     padding: 15px 0;
 }
-
-.utility-header .container {
+.top-bar {
+    background-color: #4CAF50;
+}
+.top-bar .container .top-bar__left {
+    float:left;
+}
+.top-bar .container .top-bar__right {
+    float:right;
+}
+.utility-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-
-.utility-header .logo a {
-    font-size: 24px;
-    font-weight: 700;
-    text-decoration: none;
-    /* Dùng màu chủ đạo từ biến nếu có */
-    color: var(--color-primary, #4CAF50);
+.utility-header .header-left {
+    float: left;
 }
-
-.utility-header .search-bar input {
-    width: 300px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
+.utility-header .header-right {
+    float: right;
 }
-
-.utility-header .user-icons {
-    display: flex;
-    gap: 15px;
-}
-
-/* --- PHẦN 2: MAIN NAVIGATION (Menu chính) --- */
-.main-nav {
-    background: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.main-nav ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+.main-nav .container ul{
     display: flex;
     justify-content: center;
+    list-style:none;
+    margin: 0;
+    padding: 0;
+    gap:32px;
 }
-
-.main-nav ul li a {
-    display: block;
-    padding: 15px 20px;
-    text-decoration: none;
-    color: #555;
+.main-nav .container ul li a{
+    font-size: 16px;
     font-weight: 500;
-    text-transform: uppercase;
-    font-size: 14px;
-    border-bottom: 2px solid transparent;
-    transition: all 0.3s ease;
+    padding: 15px 0;
+    display: block;
 }
 
 .main-nav ul li a:hover,

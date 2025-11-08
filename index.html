@@ -8,39 +8,64 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-
+<div class="top-bar">
+        <div class="container">
+            <div class="top-bar__left">
+                <span>
+                    <i class="fa-solid fa-envelope"></i> cskh@tiemtraannhien.site
+                </span>
+                <span>
+                    <i class="fa-solid fa-phone"></i> 0888 531 015
+                </span>
+            </div>
+            <div class="top-bar__right">
+                <i class="fa-brands fa-facebook"></i>
+                <i class="fa-brands fa-instagram"></i>
+                <i class="fa-brands fa-twitter"></i>
+            </div>
+        </div>
+</div>
 <header class="utility-header">
-    <div class="container">
-        <div class="utility-header__left">
-            <div class="logo">
-                <a href="/">LOGO CỦA BẠN</a>
+    <div class="header-left">
+        <nav class="main-nav">
+            <div class="container">
+                <ul>
+                    <li>
+                        <div class="logo">
+                            <a href="index.html">
+                                <img src="assets/images/logo-chinh.jpg" alt="Tea Shop Logo">
+                            </a>
+                    </li>
+                    <li><a href="index.html" class="active">TRANG CHỦ</a></li>
+                    <li><a href="san-pham.html">SẢN PHẨM</a></li>
+                    <li><a href="blog.html">CÔNG THỨC & BLOG</a></li>
+                    <li><a href="ve-chung-toi.html">VỀ CHÚNG TÔI</a></li>
+                    <li><a href="khuyen-mai.html">KHUYẾN MÃI</a></li>
+                </ul>
             </div>
-            <div class="search-bar">
-                <input type="text" placeholder="Bạn muốn tìm gì...">
-            </div>
-        </div>
-        <div class="utility-header__right">
-            <div class="user-icons">
-                <span>(Icon Liên Hệ)</span>
-                <span>(Icon Tài Khoản)</span>
+        </nav>
+    </div>
+    <div class="header-right">
+        <div class="container">
+            <div class="header-right__content">
+                <div class="search-bar">
+                    <input type="text" placeholder="Bạn muốn tìm gì...">
+                </div>
+                <span class="cart-text">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Giỏ Hàng (0)</span>
+                </span>
+                <span class="user-icons">
+                    <i class="fa-solid fa-user"></i>
+                </span>
             </div>
         </div>
     </div>
-</header>
 
-<nav class="main-nav">
-    <div class="container">
-        <ul>
-            <li><a href="index.html" class="active">TRANG CHỦ</a></li>
-            <li><a href="san-pham.html">SẢN PHẨM</a></li>
-            <li><a href="blog.html">CÔNG THỨC & BLOG</a></li>
-            <li><a href="ve-chung-toi.html">VỀ CHÚNG TÔI</a></li>
-            <li><a href="khuyen-mai.html">KHUYẾN MÃI</a></li>
-        </ul>
-    </div>
-</nav>
+</header>
 
 <section class="hero-banner">
     <div class="slideshow-container">
