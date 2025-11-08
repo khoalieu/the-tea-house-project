@@ -15,7 +15,6 @@
 /* 5. Pages (Kiểu riêng cho từng trang: .hero-banner, .product-detail...) */
 @import 'pages.css';
 
-/* 6. Kiểu trang Login (nếu có) */
-@import 'login.css';
+/* 6. Kiểu trang Login va singin */
+/* @import 'login.css'; */
 
-@import 'about-us.css';

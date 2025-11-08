@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Đăng Ký</title>
-  <link rel="stylesheet" href="assets/css/login.css" />
+  <!-- <link rel="stylesheet" href="assets/css/login.css" /> -->
+   <link rel="stylesheet" href="assets/css/main.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 </head>
 <body>
@@ -49,6 +50,19 @@
               aria-label="Email"
               required>
           </div>
+          <!-- Phone -->
+          <div class="form-row">
+            <input
+              id="phone"
+              class="input-phone"
+              type="tel"
+              name="phone"
+              placeholder="Số điện thoại"
+              pattern="[0-9]{10}"
+              required>
+          </div>
+
+
 
           <!-- Password -->
           <div class="form-row password-field">
@@ -80,11 +94,25 @@
             </div>
           </div>
 
+          <div class="form-row avatar-row">
+            <label class="avatar-text" for="avatarInput">Avatar</label>
+
+            <div class="avatar-box" id="avatarBox" role="button" aria-label="Chọn ảnh đại diện">
+              <img id="avatarPreview" src="assets/images/useravata.png" alt="Ảnh đại diện">
+            </div>
+
+            <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+          </div>
+
+
+
+
+
           <!-- Điều khoản (tùy chọn) -->
           <div class="form-options">
             <div class="remember">
               <input type="checkbox" id="agree" required>
-              <label for="agree">Tôi đồng ý với điều khoản sử dụng</label>
+              <label for="agree">Tôi đồng ý với điều khoản </label>
             </div>
             <a href="#">Xem điều khoản</a>
           </div>
@@ -96,7 +124,8 @@
 
           <!-- Link về đăng nhập -->
           <div class="signup">
-            Đã có tài khoản? <a href="login.html">Đăng nhập</a>
+            Đã có tài khoản?
+            <a href="login.html">Đăng nhập</a>
           </div>
         </form>
       </div>
@@ -121,5 +150,24 @@
     attachToggle("toggleEyePwd", "password");
     attachToggle("toggleEyeConfirm", "confirmPassword");
   </script>
+  <script>
+  const avatarInput = document.getElementById('avatarInput');
+  const avatarPreview = document.getElementById('avatarPreview');
+  const avatarBox = document.getElementById('avatarBox');
+
+  // Chỉ 1 nguồn mở hộp thoại: click vào box
+  avatarBox.addEventListener('click', () => avatarInput.click());
+
+  // Chỉ 1 handler change để cập nhật ảnh
+  function handleAvatarChange(e){
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => { avatarPreview.src = ev.target.result; };
+    reader.readAsDataURL(file);
+  }
+  avatarInput.addEventListener('change', handleAvatarChange);
+</script>
+
 </body>
 </html>
