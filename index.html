@@ -44,7 +44,7 @@
 
 <section class="hero-banner">
     <div class="slideshow-container">
-        <div class="hero-slide fade active" style="background-image: url('assets/images/tra-thao-moc-hero-banner.jpg');">
+        <div class="hero-slide fade active" style="background-image: url('assets/images/tr-thao-moc-herobanner.jpg');">
             <div class="hero-content">
                 <h1>Trà Thảo Mộc Tinh Tế</h1>
                 <p>100% tự nhiên, thanh lọc cơ thể và thư giãn tâm trí.</p>
@@ -52,17 +52,19 @@
             </div>
         </div>
 
-        <div class="hero-slide fade" style="background-image: url('assets/images/san-pham-tra-gung-mat-ong.jpg')">
+        <div class="hero-slide fade" style="background-image: url('assets/images/nguyen-lieu-pha-tra-herobanner.jpg')">
             <div class="hero-content">
-                <h1>Sáng Tạo Trà Sữa DIY</h1>
+                <h1>Nguyên liệu pha trà chất lượng cao</h1>
                 <p>Trổ tài pha chế tại nhà với nguyên liệu chất lượng cao.</p>
                 <a href="#" class="cta-button">Mua Nguyên Liệu</a>
             </div>
         </div>
+        <a class="prev" onclick="plusSlider(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlider(1)">&#10095;</a>
     </div>
 
     <div class="slider-dots">
-        <span class="dot active" onclick="currentSlider(1)"></span>
+        <span class="dot " onclick="currentSlider(1)"></span>
         <span class="dot" onclick="currentSlider(2)"></span>
     </div>
 </section>
@@ -176,43 +178,78 @@
     </div>
 </footer>
 <script>
-    // let slideIndex = 1;
-    // showSlider(slideIndex);
+let slideIndex = 1;
+let isTransitioning = false;
 
-    // function plusSlider(n) {
-    //     showSlider(slideIndex += n);
-    // }
-    // function currentSlider(n) {
-    //     showSlider(slideIndex = n);
-    // }
-    // function showSlider(n) {
-    //     let i;
-    //     let slides = document.getElementsByClassName("hero-slide");
-    //     let dots = document.getElementsByClassName("dot");
-    //     if (n > slides.length) {slideIndex = 1}
-    //     if (n < 1) {slideIndex = slides.length}
-    //     for (i = 0; i < slides.length; i++) {
-    //         slides[i].style.display = "none";
-    //     }
-    //     for (i = 0; i < dots.length; i++) {
-    //         dots[i].className = dots[i].className.replace(" active", "");
-    //     }
-    //     slides[slideIndex-1].style.display = "block";
-    //     dots[slideIndex-1].className += " active";
-    // }
-    // let slideIndexAuto = 0;
-    // function showSlide() {
-    //     let i;
-    //     let slides = document.getElementsByClassName("hero-slide");
-    //     for (i = 0; i < slides.length; i++) {
-    //         slides[i].style.display = "none";
-    //     }
-    //     slideIndexAuto++;
-    //     if (slideIndexAuto > slides.length) {slideIndexAuto = 1}
-    //     slides[slideIndexAuto-1].style.display = "block";
-    //     setTimeout(showSlide, 5000);
-    // }
-    // showSlide();
+document.addEventListener('DOMContentLoaded', function() {
+    showSlider(slideIndex);
+    startAutoSlide();
+});
+
+function plusSlider(n) {
+    if (!isTransitioning) {
+        clearTimeout(autoTimer);
+        showSlider(slideIndex += n);
+        startAutoSlide();
+    }
+}
+
+function currentSlider(n) {
+    if (!isTransitioning) {
+        clearTimeout(autoTimer);
+        showSlider(slideIndex = n);
+        startAutoSlide();
+    }
+}
+
+function showSlider(n) {
+    const slides = document.getElementsByClassName("hero-slide");
+    const dots = document.getElementsByClassName("dot");
+    
+    if (slides.length === 0 || isTransitioning) return;
+    
+    isTransitioning = true;
+    
+    if (n > slides.length) { slideIndex = 1; }
+    if (n < 1) { slideIndex = slides.length; }
+    
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "flex";
+        slides[i].style.opacity = "0";
+        slides[i].classList.remove("active");
+    }
+    
+    for (let i = 0; i < dots.length; i++) {
+        dots[i].classList.remove("active");
+    }
+    
+    setTimeout(() => {
+        if (slides[slideIndex - 1]) {
+            slides[slideIndex - 1].style.opacity = "1";
+            slides[slideIndex - 1].classList.add("active");
+        }
+        if (dots[slideIndex - 1]) {
+            dots[slideIndex - 1].classList.add("active");
+        }
+    }, 50);
+    
+    setTimeout(() => {
+        isTransitioning = false;
+        for (let i = 0; i < slides.length; i++) {
+            if (i !== slideIndex - 1) {
+                slides[i].style.display = "none";
+            }
+        }
+    }, 1500);
+}
+
+let autoTimer;
+function startAutoSlide() {
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(() => {
+        plusSlider(1);
+    }, 8000); 
+}
 </script>
 </body>
 </html>
