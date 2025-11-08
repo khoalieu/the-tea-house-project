@@ -390,3 +390,25 @@
         border-bottom-color: var(--color-primary, #4CAF50);
     }
 }
+/* --- Bổ sung cho TRANG SẢN PHẨM (Shop Page) --- */
+
+.product-group {
+    margin-bottom: 40px; /* Khoảng cách giữa các nhóm sản phẩm */
+}
+
+.group-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--color-primary); /* Đường gạch chân màu chủ đạo */
+    padding-bottom: 10px;
+}
+/* Thêm đoạn này vào file pages.css */
+
+/* Style cho giá bình thường (không sale) ở trang chi tiết */
+.product-info .price {
+    font-size: 28px;        /* Lấy kích thước của .new-price */
+    font-weight: 700;       /* Lấy độ đậm của .new-price */
+    color: var(--color-text, #333); /* Dùng màu chữ chính (không phải màu sale) */
+    display: block;
+}
