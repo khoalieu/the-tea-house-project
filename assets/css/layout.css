@@ -44,9 +44,6 @@
     top: 0;
     z-index: 100;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.utility-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -62,7 +59,7 @@
 }
 
 /* Logo Styles */
-.header-left .logo img {
+.main-nav .logo img {
     height: 45px;
     width: auto;
     max-width: 120px;
@@ -111,15 +108,6 @@
     border-bottom: 2px solid var(--color-primary, #4CAF50);
 }
 
-/* --- PHẦN 8: FOOTER --- */
-.main-footer {
-    background: #333;
-    color: #aaa;
-    padding: 40px 0;
-    text-align: center;
-    margin-top: 50px;
-}
-
 /* --- PHẦN 2B: DROPDOWN MENU --- */
 
 
@@ -130,12 +118,11 @@
 /* Dropdown Menu Styles */
 .has-dropdown .dropdown-menu {
     display: flex;
-    flex-direction: row; /* ✅ Hiển thị ngang */
     position: absolute;
     top: 100%;
     left: 0;
     background: white;
-    min-width: 400px; /* ✅ Tăng width để chứa items ngang */
+    min-width: 200px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     border-radius: 4px;
     opacity: 0;
@@ -143,9 +130,10 @@
     transform: translateY(-10px);
     transition: all 0.3s ease;
     z-index: 1000;
-    padding: 15px 20px; /* ✅ Tăng padding */
+    list-style: none;
+    padding: 10px 0;
     margin: 0;
-    gap: 30px; /* ✅ Khoảng cách giữa các cột */
+    gap: 30px;
 }
 
 .has-dropdown:hover .dropdown-menu {
@@ -154,9 +142,33 @@
     transform: translateY(0);
 }
 
-/* Mỗi dropdown-column chiếm đều nhau */
+.dropdown-menu li {
+    border-bottom: 1px solid #f0f0f0;
+    margin: 0;
+}
+
+.dropdown-menu li:last-child {
+    border-bottom: none;
+}
+
+.dropdown-menu li a {
+    padding: 12px 20px;
+    font-size: 13px;
+    text-transform: none;
+    font-weight: 400;
+    border-bottom: none !important;
+    display: block;
+    gap: 0;
+    color: #555;
+}
+
+.dropdown-menu li a:hover {
+    background: #f8f9fa;
+    color: #4CAF50;
+}
+
+/* Thêm CSS cho dropdown-column từ HTML */
 .dropdown-column {
-    flex: 1; /* ✅ Chiếm đều không gian */
     padding: 0;
 }
 
@@ -164,83 +176,150 @@
     font-size: 16px;
     font-weight: 700;
     color: #4CAF50;
-    margin: 0 0 15px 0; /* ✅ Tăng margin bottom */
-    padding: 0;
-    border-bottom: 2px solid #f0f0f0; /* ✅ Thêm border dưới */
-    padding-bottom: 8px;
+    margin: 0 0 10px 0;
+    padding: 0 20px;
+    white-space: nowrap;
 }
 
-/* Sửa ul để items hiển thị dọc trong mỗi cột */
 .dropdown-column ul {
-    list-style: none !important;
+    list-style: none;
     padding: 0;
     margin: 0;
-    display: flex; /* ✅ Sử dụng flex */
-    flex-direction: column; /* ✅ Items dọc trong mỗi cột */
-    gap: 5px; /* ✅ Khoảng cách giữa items */
-}
-
-.dropdown-column ul li {
-    margin: 0;
-    border-bottom: none; /* ✅ Bỏ border bottom */
+    display: block !important; /* Đảm bảo items xuống hàng */
 }
 
 .dropdown-column ul li a {
-    padding: 8px 0; /* ✅ Giảm padding */
+    padding: 8px 20px;
     font-size: 14px;
     font-weight: 400;
     text-transform: none;
     color: #555;
     border-bottom: none !important;
-    display: block;
-    transition: all 0.3s ease;
-    border-radius: 4px;
 }
 
 .dropdown-column ul li a:hover {
     color: #4CAF50;
     background: #f8f9fa;
-    padding-left: 10px; /* ✅ Hiệu ứng indent khi hover */
     border-bottom: none !important;
 }
 
-/* Thêm đường kẻ ngăn cách giữa các cột */
-.dropdown-column:not(:last-child)::after {
-    content: '';
+/* Header Right Styles */
+.header-right .container {
+    padding: 0;
+}
+
+.header-right__content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-right: 20px;
+}
+
+/* Search Bar */
+.search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input {
+    width: 250px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 13px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.search-bar input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+.search-bar i {
     position: absolute;
-    right: -15px;
-    top: 10px;
-    bottom: 10px;
-    width: 1px;
-    background: #e0e0e0;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    pointer-events: none; 
 }
 
-/* Bỏ các style cũ không cần thiết */
-.dropdown-menu li {
-    /* Bỏ hết CSS cũ */
+/* Cart và User Icons */
+.cart-text,
+.user-icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
-.dropdown-menu li:last-child {
-    /* Bỏ hết CSS cũ */
+.cart-text:hover,
+.user-icons:hover {
+    border-color: #4CAF50;
+    color: #4CAF50;
 }
 
-.dropdown-menu li a {
-    /* Bỏ hết CSS cũ - để CSS mới của .dropdown-column ul li a override */
+.cart-text i,
+.user-icons i {
+    font-size: 16px;
 }
-
-/* Responsive cho mobile */
-@media (max-width: 768px) {
-    .has-dropdown .dropdown-menu {
-        flex-direction: column; /* ✅ Stack dọc trên mobile */
-        min-width: 250px;
-        gap: 20px;
-    }
-    
-    .dropdown-column:not(:last-child)::after {
-        display: none; /* ✅ Ẩn separator trên mobile */
-    }
+/* --- PHẦN 3: FOOTER --- */
+.main-footer {
+    background: #333;
+    color: #aaa;
+    padding: 40px 0;
+    text-align: center;
+    margin-top: 50px;
 }
+.main-footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.main-footer .container .footer-section {
+    flex: 1;
+    margin: 0 15px;
+}
+.main-footer .container .left-footer p {
+    font-size: 16px;
+    line-height: 1.7;
+    text-align: justify;
+}
+.main-footer .container .center-footer ul,
+.main-footer .container .right-footer ul {
+    list-style: none;
+    padding: 0;
+}
+.contact-info .address,
+.contact-info .phone,
+.contact-info .email {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px; 
+}
+.contact-info p {
+    margin: 0;
+    color: #ddd;
+    font-size: 15px;
+    line-height: 1.6;
 
+}
+.contact-info i {
+    font-size: 18px;
+    color: var(--color-primary);
+    width: 20px;
+}
+/* Responsive Design */
 @media (max-width: 1024px) {
     .header-right__content .search-bar input {
         width: 180px;
