@@ -129,11 +129,13 @@
 
 /* Dropdown Menu Styles */
 .has-dropdown .dropdown-menu {
+    display: flex;
+    flex-direction: row; /* ✅ Hiển thị ngang */
     position: absolute;
     top: 100%;
     left: 0;
     background: white;
-    min-width: 200px;
+    min-width: 400px; /* ✅ Tăng width để chứa items ngang */
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     border-radius: 4px;
     opacity: 0;
@@ -141,9 +143,9 @@
     transform: translateY(-10px);
     transition: all 0.3s ease;
     z-index: 1000;
-    list-style: none;
-    padding: 10px 0;
+    padding: 15px 20px; /* ✅ Tăng padding */
     margin: 0;
+    gap: 30px; /* ✅ Khoảng cách giữa các cột */
 }
 
 .has-dropdown:hover .dropdown-menu {
@@ -152,33 +154,9 @@
     transform: translateY(0);
 }
 
-.dropdown-menu li {
-    border-bottom: 1px solid #f0f0f0;
-    margin: 0;
-}
-
-.dropdown-menu li:last-child {
-    border-bottom: none;
-}
-
-.dropdown-menu li a {
-    padding: 12px 20px;
-    font-size: 13px;
-    text-transform: none;
-    font-weight: 400;
-    border-bottom: none !important;
-    display: block;
-    gap: 0;
-    color: #555;
-}
-
-.dropdown-menu li a:hover {
-    background: #f8f9fa;
-    color: #4CAF50;
-}
-
-/* Thêm CSS cho dropdown-column từ HTML */
+/* Mỗi dropdown-column chiếm đều nhau */
 .dropdown-column {
+    flex: 1; /* ✅ Chiếm đều không gian */
     padding: 0;
 }
 
@@ -186,95 +164,83 @@
     font-size: 16px;
     font-weight: 700;
     color: #4CAF50;
-    margin: 0 0 10px 0;
-    padding: 0 20px;
+    margin: 0 0 15px 0; /* ✅ Tăng margin bottom */
+    padding: 0;
+    border-bottom: 2px solid #f0f0f0; /* ✅ Thêm border dưới */
+    padding-bottom: 8px;
 }
 
+/* Sửa ul để items hiển thị dọc trong mỗi cột */
 .dropdown-column ul {
-    list-style: none;
+    list-style: none !important;
     padding: 0;
     margin: 0;
-    display: block; /* Đảm bảo items xuống hàng */
+    display: flex; /* ✅ Sử dụng flex */
+    flex-direction: column; /* ✅ Items dọc trong mỗi cột */
+    gap: 5px; /* ✅ Khoảng cách giữa items */
+}
+
+.dropdown-column ul li {
+    margin: 0;
+    border-bottom: none; /* ✅ Bỏ border bottom */
 }
 
 .dropdown-column ul li a {
-    padding: 8px 20px;
+    padding: 8px 0; /* ✅ Giảm padding */
     font-size: 14px;
     font-weight: 400;
     text-transform: none;
     color: #555;
     border-bottom: none !important;
+    display: block;
+    transition: all 0.3s ease;
+    border-radius: 4px;
 }
 
 .dropdown-column ul li a:hover {
     color: #4CAF50;
     background: #f8f9fa;
+    padding-left: 10px; /* ✅ Hiệu ứng indent khi hover */
     border-bottom: none !important;
 }
 
-/* Header Right Styles */
-.header-right .container {
-    padding: 0;
+/* Thêm đường kẻ ngăn cách giữa các cột */
+.dropdown-column:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: -15px;
+    top: 10px;
+    bottom: 10px;
+    width: 1px;
+    background: #e0e0e0;
 }
 
-.header-right__content {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding-right: 20px;
+/* Bỏ các style cũ không cần thiết */
+.dropdown-menu li {
+    /* Bỏ hết CSS cũ */
 }
 
-/* Search Bar */
-.search-bar {
-    position: relative;
-    display: flex;
-    align-items: center;
+.dropdown-menu li:last-child {
+    /* Bỏ hết CSS cũ */
 }
 
-.search-bar input {
-    width: 220px;
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 13px;
-    outline: none;
-    transition: all 0.3s ease;
+.dropdown-menu li a {
+    /* Bỏ hết CSS cũ - để CSS mới của .dropdown-column ul li a override */
 }
 
-.search-bar input:focus {
-    border-color: #4CAF50;
-    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .has-dropdown .dropdown-menu {
+        flex-direction: column; /* ✅ Stack dọc trên mobile */
+        min-width: 250px;
+        gap: 20px;
+    }
+    
+    .dropdown-column:not(:last-child)::after {
+        display: none; /* ✅ Ẩn separator trên mobile */
+    }
 }
 
-/* Cart và User Icons */
-.cart-text,
-.user-icons {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    color: #333;
-    font-weight: 600;
-    font-size: 13px;
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.cart-text:hover,
-.user-icons:hover {
-    border-color: #4CAF50;
-    color: #4CAF50;
-}
-
-.cart-text i,
-.user-icons i {
-    font-size: 16px;
-}
-
-/* Responsive Design */
 @media (max-width: 1024px) {
     .header-right__content .search-bar input {
         width: 180px;
