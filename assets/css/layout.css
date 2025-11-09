@@ -1,7 +1,7 @@
 /* layout.css */
 /* --- PHẦN 1: TOP BAR --- */
 .top-bar {
-    background-color: #4CAF50;
+    background-color: #107e84;
     color: white;
     font-size: 12px;
     padding: 8px 0;
@@ -54,7 +54,7 @@
 
 .utility-header .header-left {
     flex: 1;
-    margin-left: 20px;
+    margin-left: 370px;
 }
 
 .utility-header .header-right {
