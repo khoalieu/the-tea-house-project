@@ -128,7 +128,7 @@
 }
 
 /* Dropdown Menu Styles */
-.dropdown .dropdown-menu {
+.has-dropdown .dropdown-menu {
     position: absolute;
     top: 100%;
     left: 0;
@@ -146,7 +146,7 @@
     margin: 0;
 }
 
-.dropdown:hover .dropdown-menu {
+.has-dropdown:hover .dropdown-menu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -177,37 +177,39 @@
     color: #4CAF50;
 }
 
-/* 5. Style cho nội dung bên trong (Tiêu đề, link) */
+/* Thêm CSS cho dropdown-column từ HTML */
+.dropdown-column {
+    padding: 0;
+}
+
 .dropdown-column h3 {
     font-size: 16px;
     font-weight: 700;
-    color: var(--color-primary); /* Dùng màu chủ đạo */
-    margin-top: 0;
-    margin-bottom: 10px;
+    color: #4CAF50;
+    margin: 0 0 10px 0;
+    padding: 0 20px;
 }
-
-/* SỬA ĐOẠN NÀY TRONG layout.css */
 
 .dropdown-column ul {
     list-style: none;
-    padding: 0; /* Fix lỗi: Xóa lề trái (lỗi lùi vào trong) */
+    padding: 0;
     margin: 0;
-    display: block; /* Fix lỗi: Ghi đè 'display: flex', đưa sản phẩm về từng hàng */
+    display: block; /* Đảm bảo items xuống hàng */
 }
 
-/* Ghi đè lại style của link nav chính */
 .dropdown-column ul li a {
-    padding: 8px 0; /* Padding khác với nav chính */
+    padding: 8px 20px;
     font-size: 14px;
-    font-weight: 400; /* Chữ mỏng hơn */
-    text-transform: none; /* KHÔNG VIẾT HOA */
+    font-weight: 400;
+    text-transform: none;
     color: #555;
-    border-bottom: none !important; /* Quan trọng: Xóa gạch chân */
+    border-bottom: none !important;
 }
 
 .dropdown-column ul li a:hover {
-    color: var(--color-primary);
-    border-bottom: none !important; /* Sửa 'import' thành 'important' */
+    color: #4CAF50;
+    background: #f8f9fa;
+    border-bottom: none !important;
 }
 
 /* Header Right Styles */
