@@ -29,7 +29,28 @@
     <div class="container">
         <ul>
             <li><a href="index.html">TRANG CHỦ</a></li>
-            <li><a href="san-pham.html" class="active">SẢN PHẨM</a></li>
+
+            <li class="has-dropdown">
+                <a href="san-pham.html">SẢN PHẨM</a>
+
+                <div class="dropdown-menu">
+                    <div class="dropdown-column">
+                        <h3>Trà Thảo Mộc</h3>
+                        <ul>
+                            <li><a href="san-pham.html?category=tra-thao-moc">Trà Hoa Cúc</a></li>
+                            <li><a href="san-pham.html?category=tra-thao-moc">Trà Gừng</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown-column">
+                        <h3>Nguyên Liệu Trà Sữa</h3>
+                        <ul>
+                            <li><a href="san-pham.html?category=nguyen-lieu-tra-sua">Trân Châu</a></li>
+                            <li><a href="san-pham.html?category=nguyen-lieu-tra-sua">Bột Sữa</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+
             <li><a href="blog.html">CÔNG THỨC & BLOG</a></li>
             <li><a href="ve-chung-toi.html">VỀ CHÚNG TÔI</a></li>
             <li><a href="khuyen-mai.html">KHUYẾN MÃI</a></li>
@@ -49,12 +70,26 @@
             <aside class="shop-sidebar">
                 <div class="filter-group">
                     <h3>Danh Mục Sản Phẩm</h3>
-                    <ul>
-                        <li><a href="#">Trà Thảo Mộc (12)</a></li>
-                        <li><a href="#">Nguyên Liệu Trà Sữa (8)</a></li>
-                        <li><a href="#">Trà Nền Pha Chế (5)</a></li>
-                        <li><a href="#">Bột Pha Chế (4)</a></li>
-                        <li><a href="#">Topping & Trân Châu (4)</a></li>
+                    <ul class="category-filter-list">
+
+                        <li class="category-parent all-products active">
+                            <a href="san-pham.html">Tất Cả Sản Phẩm</a>
+                        </li>
+
+                        <li class="category-parent">
+                            <a href="san-pham.html?category=tra-thao-moc">Trà Thảo Mộc (12)</a>
+                        </li>
+
+                        <li class="category-parent">
+                            <a href="san-pham.html?category=nguyen-lieu-tra-sua">Nguyên Liệu Trà Sữa (17)</a>
+
+                            <ul class="category-child-list">
+                                <li><a href="#">Trà Nền Pha Chế (5)</a></li>
+                                <li><a href="#">Bột Pha Chế (4)</a></li>
+                                <li><a href="#">Topping & Trân Châu (4)</a></li>
+                                <li><a href="#">Khác... (4)</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
                 <div class="filter-group">
@@ -66,30 +101,69 @@
 
             <div class="shop-grid-wrapper">
                 <div class="sort-bar">
-                    <label for="sort-by">Sắp xếp theo:</label>
-                    <select id="sort-by">
-                        <option value="default">Mặc định</option>
-                        <option value="price-asc">Giá: Tăng dần</option>
-                        <option value="price-desc">Giá: Giảm dần</option>
-                        <option value="newest">Mới nhất</option>
-                    </select>
                 </div>
 
-                <div class="product-grid">
-                    <div class="product-card">...</div>
-                    <div class="product-card">...</div>
-                    <div class="product-card">...</div>
-                    <div class="product-card">...</div>
-                    <div class="product-card">...</div>
-                    <div class="product-card">...</div>
-                </div>
+                <section class="product-group">
+                    <h2 class="group-title">Trà Thảo Mộc</h2>
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <img src="assets/images/san-pham-tra-lai.jpg" alt="Lục Trà Lài">
+                            <h3>Lục Trà Lài</h3>
+                            <p class="price">
+                                182.000 VNĐ
+                            </p>
+                            <a href="chi-tiet-san-pham-tra-lai.html" class="cta-button">Xem Chi Tiết</a>
+                        </div>
+                        <div class="product-card">
+                            <img src="assets/images/san-pham-hong-tra.jpg" alt="Hồng Trà Shan Tuyết">
+                            <h3>Hồng Trà Shan Tuyết</h3>
+                            <p class="price">
+                                97.000 VNĐ
+                            </p>
+                            <a href="chi-tiet-san-pham-hong-tra.html" class="cta-button">Xem Chi Tiết</a>
+                        </div>
+                        <div class="product-card">
+                            <img src="assets/images/san-pham-tra-bac-ha.jpg" alt="Trà Bạc Hà">
+                            <h3>Trà Bạc Hà</h3>
+                            <p class="price">
+                                80.000 VNĐ
+                            </p>
+                            <a href="chi-tiet-san-pham-tra-bac-ha.html" class="cta-button">Xem Chi Tiết</a>
+                        </div>
+                    </div>
+                </section>
 
-                <div class="pagination">
-                    <a href="#" class="active">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">&raquo;</a>
-                </div>
+                <section class="product-group">
+                    <h2 class="group-title">Nguyên Liệu Trà Sữa</h2>
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <img src="assets/images/san-pham-bot-milk-foam.jpg" alt="Bột Milk Foam">
+                            <h3>Bột Milk Foam</h3>
+                            <p class="price">
+                                89.000 VNĐ
+                            </p>
+                            <a href="chi-tiet-san-pham-bot-milk-foam-trung-muoi.html" class="cta-button">Xem Chi Tiết</a>
+                        </div>
+                        <div class="product-card">
+                            <span class="sale-tag">-10%</span>
+                            <img src ="assets/images/san-pham-tran-chau-den-1.jpg" alt="Sản Phẩm Sale">
+                            <h3>Trân Châu Đường Đen</h3>
+                            <p class="price">
+                                <span class="new-price">45.000 VNĐ</span> <span class="old-price">50.000 VNĐ</span> </p>
+                            <a href="chi-tiet-san-pham-tran-chau-den.html" class="cta-button">Xem Chi Tiết</a>
+                        </div>
+                        <div class="product-card">
+                            <img src="assets/images/san-pham-bot-sua-beo.jpg" alt="Bột Sữa Béo">
+                            <h3>Bột Sữa Béo</h3>
+                            <p class="price">
+                                70.000 VNĐ
+                            </p>
+                            <a href="chi-tiet-san-pham-bot-sua-beo.html" class="cta-button">Xem Chi Tiết</a>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="pagination">...</div>
             </div>
         </div>
     </section>

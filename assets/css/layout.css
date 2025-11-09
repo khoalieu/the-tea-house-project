@@ -73,3 +73,79 @@
     text-align: center;
     margin-top: 50px;
 }
+
+/* --- PHẦN 2B: DROPDOWN MENU --- */
+
+
+.main-nav ul li.has-dropdown {
+    position: relative;
+}
+
+/* 2. Style cho menu con (cái hộp .dropdown-menu) */
+.dropdown-menu {
+    /* (a) Vị trí & Bố cục */
+    position: absolute;
+    top: 100%; /* Hiển thị ngay bên dưới thẻ <li> cha */
+    left: 0;
+    z-index: 10;
+    display: flex; /* Dùng flexbox để chia cột */
+    gap: 24px; /* Khoảng cách giữa 2 cột */
+
+    /* (b) Giao diện */
+    width: 500px; /* Chiều rộng của cả hộp dropdown */
+    background: #fff;
+    padding: 24px;
+    border-radius: 0 0 8px 8px; /* Bo 2 góc dưới */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+
+    /* (c) Trạng thái ẩn (Mặc định) */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px); /* Hiệu ứng trượt nhẹ lên */
+    transition: all 0.3s ease;
+}
+
+/* 3. Style cho các cột bên trong menu con */
+.dropdown-column {
+    flex: 1; /* Chia không gian cho các cột (2 cột thì mỗi cột 50%) */
+}
+
+/* 4. Trạng thái hiện (Khi hover vào .has-dropdown) */
+.main-nav ul li.has-dropdown:hover > .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* 5. Style cho nội dung bên trong (Tiêu đề, link) */
+.dropdown-column h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-primary); /* Dùng màu chủ đạo */
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+/* SỬA ĐOẠN NÀY TRONG layout.css */
+
+.dropdown-column ul {
+    list-style: none;
+    padding: 0; /* Fix lỗi: Xóa lề trái (lỗi lùi vào trong) */
+    margin: 0;
+    display: block; /* Fix lỗi: Ghi đè 'display: flex', đưa sản phẩm về từng hàng */
+}
+
+/* Ghi đè lại style của link nav chính */
+.dropdown-column ul li a {
+    padding: 8px 0; /* Padding khác với nav chính */
+    font-size: 14px;
+    font-weight: 400; /* Chữ mỏng hơn */
+    text-transform: none; /* KHÔNG VIẾT HOA */
+    color: #555;
+    border-bottom: none !important; /* Quan trọng: Xóa gạch chân */
+}
+
+.dropdown-column ul li a:hover {
+    color: var(--color-primary);
+    border-bottom: none !important; /* Sửa 'import' thành 'important' */
+}
