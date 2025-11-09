@@ -44,6 +44,9 @@
     top: 0;
     z-index: 100;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.utility-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -59,7 +62,7 @@
 }
 
 /* Logo Styles */
-.main-nav .logo img {
+.header-left .logo img {
     height: 45px;
     width: auto;
     max-width: 120px;
@@ -307,17 +310,9 @@
     gap: 12px;
     margin-bottom: 16px; 
 }
-.contact-info p {
-    margin: 0;
-    color: #ddd;
-    font-size: 15px;
-    line-height: 1.6;
-
-}
-.contact-info i {
-    font-size: 18px;
-    color: var(--color-primary);
-    width: 20px;
+.main-footer .container .center-footer .contact-info {
+    display: flex;
+    flex-direction: row;
 }
 /* Responsive Design */
 @media (max-width: 1024px) {
