@@ -15,7 +15,7 @@
         <div class="container">
             <div class="top-bar__left">
                 <span>
-                    <i class="fa-solid fa-envelope"></i> cskh@tiemtraannhien.site
+                    <i class="fa-solid fa-envelope"></i> contact@moctra.com
                 </span>
                 <span>
                     <i class="fa-solid fa-phone"></i> 0888 531 015
@@ -242,7 +242,7 @@
                 </div>
                 <div class="phone">
                     <i class="fa-solid fa-phone"></i>
-                    <p>0123 456 789</p>
+                    <p>0888 531 015</p>
                 </div>
                 <div class="email">
                     <i class="fa-solid fa-envelope"></i>
@@ -261,6 +261,21 @@
         </div>
     </div>
 </footer>
+    <div class="footer-bottom">
+        <div class="container">
+            <div class="footer-bottom-left">
+                <p>&copy; 2024 Mộc Trà. All rights reserved.</p>
+            </div>
+            <div class="footer-bottom-right">
+                <i class="fa-brands fa-facebook"></i>
+                <i class="fa-brands fa-instagram"></i>
+                <i class="fa-brands fa-youtube"></i>
+            </div>
+        </div>
+    </div>
+<button id="backToTop" class="back-to-top" title="Lên đầu trang">
+    <i class="fa-solid fa-chevron-up"></i>
+</button>
 <script>
 let slideIndex = 1;
 let isTransitioning = false;
@@ -334,6 +349,22 @@ function startAutoSlide() {
         plusSlider(1);
     }, 8000); 
 }
+// back to top button 
+window.addEventListener('scroll', function() {
+    const backToTopButton = document.getElementById('backToTop');
+    if (window.pageYOffset > 300) {
+        backToTopButton.classList.add('show');
+    } else {
+        backToTopButton.classList.remove('show');
+    }
+});
+
+document.getElementById('backToTop').addEventListener('click', function() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
 </script>
 </body>
 </html>
