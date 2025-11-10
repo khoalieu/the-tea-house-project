@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trà Sữa Nguyên Liệu | Về Chúng Tôi</title>
 
-    <meta name="description" content="Trà Sữa Nguyên Liệu của tiệm: lựa chọn nguyên liệu sạch và nghệ thuật pha chế cân bằng giữa truyền thống và hiện đại." />
+    <meta name="description" content="Trà Sữa Nguyên Liệu" />
     <link rel="canonical" href="https://example.com/tra-sua-nguyen-lieu.html" />
 
     <link rel="stylesheet" href="assets/css/main.css" />
@@ -31,7 +31,7 @@
     <nav class="main-nav" aria-label="Điều hướng chính">
         <div class="container">
             <ul>
-                <li><a href="/">TRANG CHỦ</a></li>
+                <li><a href="./index.html">TRANG CHỦ</a></li>
                 <li><a href="san-pham.html">SẢN PHẨM</a></li>
                 <li><a href="blog.html">CÔNG THỨC &amp; BLOG</a></li>
                 <li><a href="ve-chung-toi.html">VỀ CHÚNG TÔI</a></li>
@@ -42,22 +42,16 @@
 
     <!-- Hero -->
     <section class="about-hero full-height" aria-label="Ảnh hero Trà sữa nguyên liệu">
-        <img src="assets/images/hero-tra-sua.jpg" alt="Không gian trà sữa nguyên liệu" loading="eager" />
+        <img src="assets/images/hero-tra-sua.png" alt="Không gian trà sữa nguyên liệu" loading="eager" />
         <div class="about-hero-text">
             <p>
-                Hài hoà trà nền và sữa tươi,
-                Vị êm mượt, hậu ngọt thanh – chuẩn vị tự nhiên.
+               Em thích trà sữa, anh cũng vậy,
+                Hai ta chung ly, chuyện nhỏ mà hay.
+                    Ngọt như ánh mắt em hôm ấy,
+                Thêm chút trân châu — tim lỡ vơi đầy.
             </p>
         </div>
     </section>
-
-    <!-- Breadcrumb -->
-    <div class="breadcrumb">
-        <div class="container">
-            <a href="/">Trang chủ</a> / <a href="ve-chung-toi.html">Về chúng tôi</a> / <span>Trà sữa nguyên liệu</span>
-        </div>
-    </div>
-
     <main>
         <!-- Sub-nav (2 mục) -->
         <div class="subnav">
@@ -85,7 +79,7 @@
             <div class="container">
                 <div class="two-col reverse">
                     <div class="col media">
-                        <img src="assets/images/step-lua-chon-sua.jpg" alt="Lựa chọn nguyên liệu cho trà sữa" loading="lazy" />
+                        <img src="assets/images/step-lua-chon-sua.png" alt="Lựa chọn nguyên liệu cho trà sữa" loading="lazy" />
                     </div>
                     <div class="col text">
                         <h2>Lựa chọn nguyên liệu</h2>
@@ -133,13 +127,13 @@
                         <p class="note">Mẹo: Dùng nước mềm và sữa tươi béo vừa giúp hương trà không bị “che”.</p>
                     </div>
                     <div class="col media">
-                        <img src="assets/images/step-pha-che-sua.jpg" alt="Nghệ thuật pha chế trà sữa" loading="lazy" />
+                        <img src="assets/images/step-pha-che-sua.png" alt="Nghệ thuật pha chế trà sữa" loading="lazy" />
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- CTA sang Trà Thảo Mộc -->
+        <!-- cta sang Trà Thảo Mộc -->
         <section class="section-cta">
             <div class="container">
                 <div class="cta-box">
@@ -159,33 +153,8 @@
     </footer>
 
     <!-- JS: cuộn mượt & highlight mục đang xem -->
-    <script>
-    // Cuộn mượt
-    document.querySelectorAll('.subnav a[href^="#"]').forEach(a => {
-        a.addEventListener('click', e => {
-            e.preventDefault();
-            const id = a.getAttribute('href');
-            const el = document.querySelector(id);
-            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-    });
-
-    // Tô đậm mục theo vùng đang xem
-    const sections = [...document.querySelectorAll('.section-block')];
-    const links = [...document.querySelectorAll('.subnav-link')];
-    const map = Object.fromEntries(links.map(l => [l.getAttribute('href'), l]));
-
-    const onScroll = () => {
-        let current = null;
-        const y = window.scrollY + 120;
-        sections.forEach(s => {
-            if (s.offsetTop <= y) current = '#' + s.id;
-        });
-        links.forEach(l => l.classList.remove('active'));
-        if (current && map[current]) map[current].classList.add('active');
-    };
-    document.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+    <script src="assets/js/main.js">
+   
     </script>
 </body>
 </html>
