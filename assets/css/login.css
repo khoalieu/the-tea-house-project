@@ -1,113 +1,223 @@
-/* Container chính */
-.login {
+/* login.css */
+.login-page {
+    padding: var(--space-xxl, 48px) 0;
+    font-family: var(--font-secondary, 'Roboto', sans-serif);
+    background: transparent; /* giữ nền theo base.css */
+}
+
+/* Khung ngoài – canh giữa theo .container của base.css*/
+.login-page .login-box {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    overflow: hidden;
+    width: 480px;
+    max-width: 95%;
+    margin: 0 auto;
+}
+
+/* Ảnh đầu */
+.login-page .login-image img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+/* title */
+.login-page .login-content {
+    padding: var(--space-xxl, 32px);
+}
+
+.login-page .login-content h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0 0 var(--space-md, 16px);
+    color: var(--color-text, #191919);
+    font-family: var(--font-primary, 'Lora', serif);
+}
+
+/* Social */
+.login-page .social-login {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.login-page .social {
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: calc(100vh - 160px);
-    margin: 0 var(--space-xxl);
-    background: #ffffff;
-    font-family: var(--font-secondary);
+    color: #fff;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: 0.2s;
+}
+.login-page .social.fb { background: #3b5998; }
+.login-page .social.gg { background: #db4437; }
+.login-page .social:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
 }
 
-/* Hộp đăng nhập */
-.login-box {
-    background: #ffffff;
-    padding: var(--space-xl);
-    border-radius: var(--space-md);
-    box-shadow: 20px 8px 24px rgba(0,0,0,0.1);
+/* Form */
+.login-page .form-row {
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.login-page input {
     width: 100%;
-    max-width: 420px;
+    padding: 12px 14px;
+    border: 1px solid var(--color-border, #dcdfe5);
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    color: var(--color-text, #191919);
+    background: #fff;
 }
 
-/* Tiêu đề */
-.login-title {
-    font-family: var(--font-primary);
-    font-size: 2rem;
+.login-page input::placeholder {
+   color: #9aa0a6;
+}
+
+.login-page input:focus {
+    border-color: var(--color-primary, #107e84);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary, #107e84) 20%, transparent);
+}
+
+/* Eye icon */
+.login-page .password-field { 
+    position: relative; 
+}
+
+.login-page .eye-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #2b2f36;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: color 0.25s ease;
+}
+.login-page .eye-icon:hover {
+    color: var(--color-primary, #107e84);
+}
+
+/* remember*/
+.form-options {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-options label {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.form-options:hover label {
+  color: var(--color-primary, #107e84);
+}
+
+
+/* button */
+.login-page .btn {
+    width: 100%;
+    background: var(--color-primary, #107e84);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+.login-page .btn:hover {
+    filter: brightness(0.96);
+    transform: scale(1.02);
+}
+
+/* Tạo link đăng ký */
+.login-page .signup {
+    margin-top: 12px;
     text-align: center;
-    color: var(--color-text);
-    background: var(--color-primary);
-    margin: calc(-1 * var(--space-xl)) calc(-1 * var(--space-xl)) var(--space-lg);
-    padding: var(--space-md) 0;
-    border-radius: var(--space-md) var(--space-md) 0 0;
+    font-size: 0.95rem;
+    color: #334155;
+}
+.login-page .signup a {
+    color: var(--color-primary, #107e84);
+    text-decoration: none;
+}
+.login-page .signup a:hover {
+    text-decoration: underline;
 }
 
-/* Mỗi dòng form */
-.login-form {
+/* Responsive */
+@media (max-width: 480px) {
+    .login-page { padding: 32px 0; }
+    .login-page .login-content { padding: 24px; }
+    .login-page .login-content h2 { font-size: 1.4rem; }
+}
+
+/* Phần avatar (ảnh đại diện) */
+.login-page .avatar-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 25px;
-    width: 100%;
+    gap: 16px;
+    margin-bottom: var(--space-lg, 24px);
 }
 
-/* Label */
-.login-label {
-    width: 120px;
-    font-size: 0.95rem;
-    color: var(--color-text);
-    text-align: left;
-    white-space: nowrap;
-}
-
-/* Input */
-.login-input {
-    flex: 1;
-    padding: var(--space-sm) var(--space-md);
-    border: 1px solid #ccc;
-    border-radius: var(--space-sm);
-    font-family: var(--font-secondary);
-    font-size: 1rem;
-    outline: none;
-    width: 100%;
-}
-.login-input:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(74,163,255,.2);
-}
-
-/* Nút đăng nhập */
-.login-button-wrap {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-top: var(--space-md);
-}
-
-.login-button {
-    display: inline-block;
-    padding: 12px 40px;
-    border: none;
-    border-radius: 8px;
-    background: var(--color-primary);
-    color: #ffffff;
+/* Text bên trái */
+.login-page .avatar-text {
+    font-family: var(--font-primary, 'Lora', serif);
     font-weight: 600;
-    font-size: 1rem;
+    color: var(--color-primary, #107e84);
+    font-size: 1.5rem;
+    white-space: nowrap; 
+}
+
+/* immage */
+.login-page .avatar-box {
+    width: 96px;
+    height: 96px;
+    border: 2px solid var(--color-primary, #107e84);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
     cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.25s ease;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.login-page .avatar-box:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--color-primary, #107e84) 70%, white 30%);
 }
 
-.login-button:hover {
-    background: color-mix(in srgb, var(--color-primary) 80%, white 20%);
-    transform: scale(1.05);
+
+.login-page .avatar-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
-/* Liên kết cuối trang (Đăng ký / Quên mật khẩu) */
-.login-links {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-xl);
-    margin-top: var(--space-lg);
-    font-size: 0.95rem;
+
+.login-page #avatarInput {
+    display: none;
 }
 
-.login-link {
-    color: var(--color-primary);
-    text-decoration: none;
-    transition: color 0.25s ease;
-}
-.login-link:hover {
-    text-decoration: underline;
+/* Khi màn hình nhỏ thì xếp dọc */
+@media (max-width: 420px) {
+  .login-page .avatar-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
