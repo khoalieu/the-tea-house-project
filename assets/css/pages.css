@@ -306,153 +306,7 @@
         border-bottom-color: var(--color-primary, #4CAF50);
     }
 }
-    /* css cho trang về chúng tôi  */
-.about-hero,
-.about-section,
-.about-bottom {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 40px; 
-}
 
-    /*DIV1*/
- .about-hero {
-    position: relative;
-    width: 100%;
-    height: 700px;
-    overflow: hidden; 
- }
-.about-hero img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter : brightness(60%) blur 2px;
-}
-.about-hero-text {
-    background: rgba(0 ,0 ,0 , 0.3) ;
-    position: absolute;
-    inset: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: #ffffff;
-    line-height: 1.8;
-    z-index: 2;
-    
-}
-
-.about-hero-text p {
-    color: #fff;
-    font-family: "Dancing Script", cursive;
-    font-size: 32px;
-    line-height: 1.8;
-    letter-spacing: 0.3px;
-    white-space: pre-line; /* giữ xuống dòng tự nhiên */
-    text-shadow: 1px 2px 4px rgba(0,0,0,0.6);
-    animation: fadeIn 2.5s ease;
-    margin: 0;
-    }
-
-    /*div 2 */
-.about-section {
-    display: flex;
-    flex-direction: column;
-    gap: 60px;
-}
-
-    /* Hàng chứa ảnh và text */
-.about-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
-}
-
-    /* ảnh */
-.about-image img {
-    width: 100%;
-    height: 420px;
-    object-fit: cover;
-    border-radius: 8px;
-    }
-
-    /* text */
-.about-text {
-    flex: 1;
-    line-height: 1.8;
-}
-
-.full-height {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 420px;
-    text-align: center;
-}
-.full-height .about-text {
-    max-width: 80%;
-    font-family: "Dancing Script", cursive;
-    font-size : 1.5rem;
-}
-.full-height .about-text h2 {
-    font-family: var(--font-secondary);
-}
-
-
-    /* DIV 3 */
-.feature-row {
-    display: flex;
-    justify-content: space-between;
-    margin : 60px 60px;
-    text-align: center;
-}
-.feature {
-    width: 23%;
-}
-    .feature img {
-    width: 64px;
-    height: 64px;
-    margin-bottom: 12px;
-}
-    .feature h4 {
-    font-size: 16px;
-    margin: 0;
-}
-.about-quote {
-    text-align: center;
-}
-.about-quote h2 {
-    font-family:'Dancing Script', cursive;
-    font-size: 36px;
-    margin-bottom: 12px;
-}
-    .about-quote p {
-    font-style: italic;
-    font-family:'Dancing Script', cursive;
-    color: #555;
-    line-height: 1.8;
-    max-width: 800px;
-    margin: 0 auto;
-    font-size: 24px;
-}
-
-    /* ----- RESPONSIVE ----- */
-    @media (max-width: 900px) {
-    .about-row {
-        flex-direction: column;
-    }
-    .about-row:nth-child(even) {
-        flex-direction: column;
-    }
-    .about-image img {
-        height: auto;
-    }
-.feature {
-        width: 48%;
-        margin-bottom: 20px;
-}
-    }
 
 /* login.css */
 .login-page {
@@ -461,7 +315,7 @@
     background: transparent; /* giữ nền theo base.css */
 }
 
-/* Khung ngoài – canh giữa theo .container của base.css nếu cần bọc thêm */
+/* Khung ngoài – canh giữa theo .container của base.css*/
 .login-page .login-box {
     background: #fff;
     border-radius: 14px;
@@ -469,7 +323,7 @@
     overflow: hidden;
     width: 480px;
     max-width: 95%;
-    margin: 0 auto; /* canh giữa */
+    margin: 0 auto;
 }
 
 /* Ảnh đầu */
@@ -480,7 +334,7 @@
     display: block;
 }
 
-/* Nội dung */
+/* title */
 .login-page .login-content {
     padding: var(--space-xxl, 32px);
 }
@@ -565,42 +419,22 @@
     color: var(--color-primary, #107e84);
 }
 
-/* Tuỳ chọn */
-.login-page .form-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 8px 0 16px;
-    font-size: 0.95rem;
-}
-.login-page .remember {
-    display: inline-flex;      
-    align-items: center;     
-    gap: 6px;                   
+/* remember*/
+.form-options {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.login-page .remember input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    accent-color: var(--color-primary, #107e84); 
+.form-options label {
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
-.login-page .remember label {
-    margin: 0;
-    font-size: 0.95rem;
-    cursor: pointer;
-    color: var(--color-text, #191919);
+.form-options:hover label {
+  color: var(--color-primary, #107e84);
 }
 
-
-.login-page .form-options a {
-    text-decoration: none;
-    color: var(--color-primary, #107e84);
-}
-.login-page .form-options a:hover {
-    text-decoration: underline;
-}
 
 /* button */
 .login-page .btn {
@@ -698,17 +532,178 @@
   }
 }
 
-
-/* trà thảo mộc */
-
-/* Breadcrumb */
-.breadcrumb {
-    background: #f7f7f8;
-    padding: 10px 0;
-    font-size: 0.95rem;
+    /* css cho trang về chúng tôi  */
+.about-hero,
+.about-section,
+.about-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px; 
 }
-.breadcrumb a { color: var(--color-text, #191919); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
+
+    /*DIV1 image + text nằm trên*/
+ .about-hero {
+    position: relative;
+    width: 100%;
+    height: 700px;
+    overflow: hidden; 
+ }
+.about-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter : brightness(60%) blur 2px;
+}
+.about-hero-text {
+    background: rgba(0 ,0 ,0 , 0.3) ;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #ffffff;
+    line-height: 1.8;
+    z-index: 2;
+    
+}
+
+.about-hero-text p {
+    color: #fff;
+    font-family: "Dancing Script", cursive;
+    font-size: 32px;
+    line-height: 1.8;
+    letter-spacing: 0.3px;
+    white-space: pre-line; /* giữ xuống dòng*/
+    text-shadow: 1px 2px 4px rgba(0,0,0,0.6);
+    animation: fadeIn 2.5s ease;
+    margin: 0;
+    }
+
+    /*div 2 */
+.about-section {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+    /* Hàng chứa ảnh và text */
+.about-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+    /* ảnh */
+.about-image img {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 8px;
+    }
+
+    /* text */
+.about-text {
+    flex: 1;
+    line-height: 1.8;
+}
+
+.full-height {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 420px;
+    text-align: center;
+}
+.full-height .about-text {
+    max-width: 80%;
+    font-family: "Dancing Script", cursive;
+    font-size : 1.5rem;
+}
+.full-height .about-text h2 {
+    font-family: var(--font-secondary);
+}
+
+
+    /* DIV 3 */
+.feature-row {
+    display: flex;
+    justify-content: space-between;
+    margin : 60px 60px;
+    text-align: center;
+}
+.feature {
+    width: 23%;
+}
+.feature img {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 12px;
+}
+.feature h4 {
+    font-size: 16px;
+    margin: 0;
+}
+.about-quote {
+    text-align: center;
+}
+.about-quote h2 {
+    font-family:'Dancing Script', cursive;
+    font-size: 36px;
+    margin-bottom: 12px;
+}
+    .about-quote p {
+    font-style: italic;
+    font-family:'Dancing Script', cursive;
+    color: #555;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 24px;
+}
+
+    /* ----- RESPONSIVE ----- */
+    @media (max-width: 900px) {
+    .about-row {
+        flex-direction: column;
+    }
+    .about-row:nth-child(even) {
+        flex-direction: column;
+    }
+    .about-image img {
+        height: auto;
+    }
+.feature {
+        width: 48%;
+        margin-bottom: 20px;
+    }
+}
+
+    /*Hero co giianx*/
+.about-hero { 
+    height: clamp(320px, 55vh, 700px); 
+}
+
+@media (max-width: 900px) {
+    .about-row { 
+        flex-direction: column; gap: 20px; 
+    }
+    .about-image img { 
+        height: auto; 
+    }
+    .full-height { 
+        height: auto; padding: 24px 0;
+     }
+}
+
+.about-hero, .about-section, .about-bottom {
+         position: relative; z-index: 0; 
+}
+
+
+
+/* about + tra-thao-moc + tra-sua-nguyen-lieu */
 
 /* Sub-nav */
 .subnav {
@@ -733,17 +728,20 @@
     transition: 0.2s;
     white-space: nowrap;
 }
-.subnav a:hover { border-color: #ddd; }
+.subnav a:hover { 
+    border-color: var(--color-primary);
+    background-color: color-mix(in srgb, var(--color-primary, #107e84) 70%, #ffffff);
+}
 .subnav a.active {
     color: var(--color-primary, #107e84);
-    border-color: color-mix(in srgb, var(--color-primary, #107e84) 40%, #ffffff);
-    background: color-mix(in srgb, var(--color-primary, #107e84) 8%, #ffffff);
+    border-color: color-mix(in srgb, var(--color-primary, #107e84) 70%, #ffffff);
+    background: color-mix(in srgb, var(--color-primary, #107e84) 18%, #ffffff);
 }
 
 /* Section chung */
 .section-intro { padding: 40px 0 10px; }
 .section-intro h1 { margin-bottom: 10px; }
-.section-intro .lead { color: #555; line-height: 1.8; }
+.section-intro .lead { color: var(--color-text); line-height: 1.8; }
 
 .section-block { padding: 50px 0; background: #fff; }
 .section-block.alt { background: #fafafa; }
@@ -756,7 +754,7 @@
 }
 .two-col.reverse { grid-template-columns: 1fr 1.2fr; }
 .two-col .col.media img {
-    width: 100%; height: 420px; object-fit: cover; border-radius: 10px; border: 1px solid #eee;
+    width: 100%; height: 420px; object-fit: cover; border-radius: 10px; border: 1px solid #ffffff;
 }
 .two-col .col.text h2 { margin-bottom: 12px; }
 .two-col .col.text p { color: #555; line-height: 1.8; }
@@ -790,8 +788,10 @@
     font-style: italic;
 }
 
-/* CTA box */
-.section-cta { padding: 40px 0; }
+/* chuyển trang about box */
+.section-cta { 
+    padding: 40px 0;
+}
 .section-cta .cta-box {
     border: 1px solid #e6e8eb;
     border-radius: 14px;
@@ -803,13 +803,15 @@
 .btn.btn-primary {
     display: inline-block;
     background: var(--color-primary, #107e84);
-    color: #fff;
+    color: #ffffff;
     padding: 12px 18px;
     border-radius: 10px;
     text-decoration: none;
-    transition: transform .15s ease, filter .15s ease;
+    transition: transform 0.2s ease, filter 0.2s ease;
 }
-.btn.btn-primary:hover { transform: translateY(-1px); filter: brightness(0.96); }
+.btn.btn-primary:hover { transform: translateY(-1px);
+     filter: brightness(0.96); 
+    }
 
 /* Responsive */
 @media (max-width: 992px) {

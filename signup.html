@@ -9,165 +9,171 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 </head>
 <body>
-  <div class="login-page">
-    <div class="login-box">
+    <header class="utility-header">
+    <div class="container">
+        <div class="utility-header__left">
+            <div class="logo">
+                <a href="/">LOGO CỦA BẠN</a>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Bạn muốn tìm gì...">
+            </div>
+        </div>
+        <div class="utility-header__right">
+            <div class="user-icons">
+                <span>(Icon Liên Hệ)</span>
+                <span>(Icon Tài Khoản)</span>
+            </div>
+        </div>
+    </div>
+    </header>
 
-      <!-- Ảnh đầu trang -->
-      <div class="login-image">
-        <img src="assets/images/image-tra-in-login" alt="Background">
-      </div>
+    <nav class="main-nav">
+    <div class="container">
+        <ul>
+            <li><a href="index.html" class="active">TRANG CHỦ</a></li>
+            <li><a href="san-pham.html">SẢN PHẨM</a></li>
+            <li><a href="blog.html">CÔNG THỨC & BLOG</a></li>
+            <li><a href="ve-chung-toi.html">VỀ CHÚNG TÔI</a></li>
+            <li><a href="khuyen-mai.html">KHUYẾN MÃI</a></li>
+        </ul>
+    </div>
+    </nav>
 
-      <div class="login-content">
-        <h2>Đăng Ký</h2>
+    <div class="login-page">
+        <div class="login-box">
 
-        <!-- Mạng xã hội -->
-        <div class="social-login">
-          <a href="#" class="social fb"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" class="social gg"><i class="fa-brands fa-google"></i></a>
+        <!-- Ảnh đầu trang -->
+        <div class="login-image">
+            <img src="assets/images/image-tra-in-login" alt="Background">
         </div>
 
-        <form action="#" method="post" autocomplete="on">
-          <!-- Username -->
-          <div class="form-row">
-            <input
-              id="username"
-              class="input-username"
-              type="text"
-              name="username"
-              placeholder="Tên đăng nhập"
-              aria-label="Tên đăng nhập"
-              required>
-          </div>
+        <div class="login-content">
+            <h2>Đăng Ký</h2>
 
-          <!-- Email -->
-          <div class="form-row">
-            <input
-              id="email"
-              class="input-email"
-              type="email"
-              name="email"
-              placeholder="Email"
-              aria-label="Email"
-              required>
-          </div>
-          <!-- Phone -->
-          <div class="form-row">
-            <input
-              id="phone"
-              class="input-phone"
-              type="tel"
-              name="phone"
-              placeholder="Số điện thoại"
-              pattern="[0-9]{10}"
-              required>
-          </div>
-
-
-
-          <!-- Password -->
-          <div class="form-row password-field">
-            <input
-              id="password"
-              class="input-password"
-              type="password"
-              name="password"
-              placeholder="Mật khẩu"
-              aria-label="Mật khẩu"
-              required>
-            <div class="eye-icon" id="toggleEyePwd">
-              <i class="fa-regular fa-eye"></i>
-            </div>
-          </div>
-
-          <!-- Confirm Password -->
-          <div class="form-row password-field">
-            <input
-              id="confirmPassword"
-              class="input-confirm"
-              type="password"
-              name="confirmPassword"
-              placeholder="Xác nhận mật khẩu"
-              aria-label="Xác nhận mật khẩu"
-              required>
-            <div class="eye-icon" id="toggleEyeConfirm">
-              <i class="fa-regular fa-eye"></i>
-            </div>
-          </div>
-
-          <div class="form-row avatar-row">
-            <label class="avatar-text" for="avatarInput">Avatar</label>
-
-            <div class="avatar-box" id="avatarBox" role="button" aria-label="Chọn ảnh đại diện">
-              <img id="avatarPreview" src="assets/images/useravata.png" alt="Ảnh đại diện">
+            <!-- Mạng xã hội -->
+            <div class="social-login">
+            <a href="#" class="social fb"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="social gg"><i class="fa-brands fa-google"></i></a>
             </div>
 
-            <input type="file" id="avatarInput" accept="image/*" style="display:none;">
-          </div>
+            <form action="#" method="post" enctype="multipart/form-data" autocomplete="on">
+                  <!-- Username -->
+                <div class="form-row">
+                    <input
+                        id="signup-username"
+                        class="input-username"
+                        type="text"
+                        name="username"
+                        placeholder="Tên đăng nhập"
+                        aria-label="Tên đăng nhập"
+                        required>
+                </div>
+
+                <!-- Email -->
+                <div class="form-row">
+                    <input
+                        id="signup-email"
+                        class="input-email"
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        aria-label="Email"
+                        required>
+                </div>
+                <!-- Phone -->
+                <div class="form-row">
+                    <input
+                        id="signup-phone"
+                        class="input-phone"
+                        type="tel"
+                        name="phone"
+                        placeholder="Số điện thoại"
+                        pattern="[0-9]{10}"
+                        required>
+                </div>
 
 
 
+                <!-- Password -->
+                <div class="form-row password-field">
+                    <input
+                        id="signup-password"
+                        class="input-password"
+                        type="password"
+                        name="password"
+                        placeholder="Mật khẩu"
+                        aria-label="Mật khẩu"
+                        required>
+                    <div class="eye-icon" id="toggleEyePwd">
+                        <i class="fa-regular fa-eye"></i>
+                    </div>
+                </div>
 
+                <!-- Confirm Password -->
+                <div class="form-row password-field">
+                    <input
+                    id="signup-confirmPassword"
+                    class="input-confirm"
+                    type="password"
+                    name="confirmPassword"
+                    placeholder="Xác nhận mật khẩu"
+                    aria-label="Xác nhận mật khẩu"
+                    required>
+                    <div class="eye-icon" id="toggleEyeConfirm">
+                    <i class="fa-regular fa-eye"></i>
+                    </div>
+                </div>
+                <!-- Avatar upload -->
+                <div class="form-row avatar-row">
+                    <label class="avatar-text" for="avatarInput">Avatar</label>
 
-          <!-- Điều khoản (tùy chọn) -->
-          <div class="form-options">
-            <div class="remember">
-              <input type="checkbox" id="agree" required>
-              <label for="agree">Tôi đồng ý với điều khoản </label>
-            </div>
-            <a href="#">Xem điều khoản</a>
-          </div>
+                    <div class="avatar-box" id="signup-avatarBox" role="button" aria-label="Chọn ảnh đại diện">
+                    <img id="signup-avatarPreview" src="assets/images/useravata.png" alt="Ảnh đại diện">
+                    </div>
 
-          <!-- Submit -->
-          <div class="form-row">
-            <button type="submit" class="btn">Đăng ký</button>
-          </div>
+                    <input type="file" id="signup-avatarInput" accept="image/*" style="display:none;">
+                </div>
 
-          <!-- Link về đăng nhập -->
-          <div class="signup">
-            Đã có tài khoản?
-            <a href="login.html">Đăng nhập</a>
-          </div>
-        </form>
-      </div>
+                <!-- Submit -->
+                <div class="form-row">
+                    <button type="submit" class="btn">Đăng ký</button>
+                </div>
 
+                <!-- Link về đăng nhập -->
+                <div class="signup">
+                    Đã có tài khoản?
+                    <a href="login.html">Đăng nhập</a>
+                </div>
+            </form>
+        </div>
+
+        </div>
     </div>
-  </div>
 
-  <!-- Script con mắt cho 2 ô password -->
-  <script>
-    function attachToggle(eyeId, inputId) {
-      const eye = document.getElementById(eyeId);
-      const input = document.getElementById(inputId);
-      eye.addEventListener("click", () => {
-        const isHidden = input.type === "password";
-        input.type = isHidden ? "text" : "password";
-        const icon = eye.querySelector("i");
-        icon.classList.toggle("fa-eye-slash", isHidden);
-        icon.classList.toggle("fa-eye", !isHidden);
-        eye.style.color = isHidden ? "#28a745" : "#6b7280";
-      });
+  
+<script>
+    const avatarInput = document.getElementById('signup-avatarInput');
+    const avatarPreview = document.getElementById('signup-avatarPreview');
+    const avatarBox = document.getElementById('signup-avatarBox');
+
+    avatarBox.addEventListener('click', () => avatarInput.click()); // mở hộp thoại chọn file
+
+    // cập nhật ảnh đại diện khi chọn file
+    function handleAvatarChange(e){
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => { avatarPreview.src = ev.target.result; };
+        reader.readAsDataURL(file);
     }
-    attachToggle("toggleEyePwd", "password");
-    attachToggle("toggleEyeConfirm", "confirmPassword");
-  </script>
-  <script>
-  const avatarInput = document.getElementById('avatarInput');
-  const avatarPreview = document.getElementById('avatarPreview');
-  const avatarBox = document.getElementById('avatarBox');
-
-  // Chỉ 1 nguồn mở hộp thoại: click vào box
-  avatarBox.addEventListener('click', () => avatarInput.click());
-
-  // Chỉ 1 handler change để cập nhật ảnh
-  function handleAvatarChange(e){
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => { avatarPreview.src = ev.target.result; };
-    reader.readAsDataURL(file);
-  }
-  avatarInput.addEventListener('change', handleAvatarChange);
+    avatarInput.addEventListener('change', handleAvatarChange);
 </script>
+<!-- com măt -->
+<script src="assets/js/main.js">
+
+</script>
+
 
 </body>
 </html>

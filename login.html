@@ -9,6 +9,37 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 </head>
 <body>
+        <header class="utility-header">
+    <div class="container">
+        <div class="utility-header__left">
+            <div class="logo">
+                <a href="/">LOGO CỦA BẠN</a>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Bạn muốn tìm gì...">
+            </div>
+        </div>
+        <div class="utility-header__right">
+            <div class="user-icons">
+                <span>(Icon Liên Hệ)</span>
+                <span>(Icon Tài Khoản)</span>
+            </div>
+        </div>
+    </div>
+    </header>
+
+    <nav class="main-nav">
+    <div class="container">
+        <ul>
+            <li><a href="index.html" class="active">TRANG CHỦ</a></li>
+            <li><a href="san-pham.html">SẢN PHẨM</a></li>
+            <li><a href="blog.html">CÔNG THỨC & BLOG</a></li>
+            <li><a href="ve-chung-toi.html">VỀ CHÚNG TÔI</a></li>
+            <li><a href="khuyen-mai.html">KHUYẾN MÃI</a></li>
+        </ul>
+    </div>
+    </nav>
+
     <div class="login-page">
         <div class="login-box">
 
@@ -25,11 +56,11 @@
                     <a href="#" class="social gg"><i class="fa-brands fa-google"></i></a>
                 </div>
 
-                <form>
+                <form action="#" method="post" autocomplete="on">
                     <!-- username -->
                     <div class="form-row">
                         <input 
-                            id="username"
+                            id="login-username"
                             class="input-username"
                             type="text"
                             name="username"
@@ -40,7 +71,7 @@
                     <!-- password -->
                     <div class="form-row password-field">
                         <input 
-                            id="password"
+                            id="login-password"
                             class="input-password"
                             type="password"
                             name="password"
@@ -72,20 +103,10 @@
 
         </div>
     </div>
+    <!-- con mắt  -->
+<script src="assets/js/main.js">
 
-  <!-- Script ẩn hiện mật khẩu -->
-    <script>
-        const toggleEye = document.getElementById("toggleEye");
-        const password = document.getElementById("password");
-
-        toggleEye.addEventListener("click", () => {
-            const isHidden = password.type === "password";
-            password.type = isHidden ? "text" : "password";
-
-            const icon = toggleEye.querySelector("i");
-            icon.classList.toggle("fa-eye-slash", isHidden);
-            icon.classList.toggle("fa-eye", !isHidden);
-        });
-    </script>
+</script>
+ 
 </body>
 </html>
