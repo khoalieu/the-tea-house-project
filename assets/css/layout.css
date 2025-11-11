@@ -198,6 +198,7 @@
     text-transform: none;
     color: #555;
     border-bottom: none !important;
+    white-space: nowrap;
 }
 
 .dropdown-column ul li a:hover {
