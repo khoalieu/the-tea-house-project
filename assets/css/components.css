@@ -102,11 +102,14 @@
     font-size: 20px;
     margin: 20px 20px 10px 20px;
     font-weight: 500;
+
 }
 .blog-card p {
     margin: 0 20px 20px 20px;
     color: #666;
     font-size: 14px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
 }
 .blog-card a {
     margin: 0 20px 20px 20px;
@@ -119,6 +122,25 @@
     text-decoration: underline;
 }
 
+.blog-card .blog-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    margin: 10px 20px 10px 20px;
+
+    font-size: 13px;
+    color: #888;
+}
+.blog-card .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.blog-card .icon-eye,
+.blog-card .icon-calendar {
+    font-size: 14px;
+}
 /* --- THẺ KHUYẾN MÃI (SALE TAG) --- */
 .sale-tag {
     position: absolute;
