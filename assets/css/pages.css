@@ -391,6 +391,7 @@
         border-bottom-color: var(--color-primary, #4CAF50);
     }
 }
+
 /* --- Bổ sung cho TRANG SẢN PHẨM (Shop Page) --- */
 
 .product-group {
@@ -915,4 +916,96 @@
     .two-col .col.media img{ height: 260px; }
     .info-grid{ grid-template-columns: 1fr; }
     .feature{ width: 100%; }
+}
+
+.shop-layout .container {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+.category-filter-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.category-parent {
+    margin-bottom: 8px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #eee;
+    transition: all 0.3s ease;
+}
+.category-parent:hover {
+    border-color: #4CAF50;
+    box-shadow: 0 2px 6px rgba(76, 175, 80, 0.1);
+}
+
+.category-parent.active {
+    background: #4CAF50;
+    border-color: #4CAF50;
+}
+.category-parent > a {
+    display: block;
+    padding: 12px 15px;
+    color: #555;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.category-parent.active > a {
+    color: #fff;
+    font-weight: 600;
+}
+
+.category-parent > a:hover {
+    color: #4CAF50;
+    background: #f0f9f0;
+}
+
+.category-parent.active > a:hover {
+    color: #fff;
+}
+.category-child-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: #f8f9fa;
+    border-top: 1px solid #eee;
+}
+
+.category-child-list li {
+    border-bottom: 1px solid #eee;
+}
+
+.category-child-list li:last-child {
+    border-bottom: none;
+}
+
+.category-child-list li a {
+    display: block;
+    padding: 10px 25px;
+    color: #666;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    transition: all 0.3s ease;
+}
+.shop-grid-wrapper {
+    flex: 1;
+}
+
+.sort-bar {
+    background: #fff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+}
+.category-child-list li a:hover {
+    background: #e8f5e9;
+    color: #4CAF50;
 }
