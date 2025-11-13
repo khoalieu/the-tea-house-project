@@ -107,8 +107,8 @@
 
 .main-nav ul li a:hover,
 .main-nav ul li a.active {
-    color: var(--color-primary, #4CAF50);
-    border-bottom: 2px solid var(--color-primary, #4CAF50);
+    color: var(--color-primary, #107e84);
+    border-bottom: 2px solid var(--color-primary, #107e84);
 }
 
 /* --- PHẦN 2B: DROPDOWN MENU --- */
@@ -167,7 +167,7 @@
 
 .dropdown-menu li a:hover {
     background: #f8f9fa;
-    color: #4CAF50;
+    color: #107e84;
 }
 
 /* Thêm CSS cho dropdown-column từ HTML */
@@ -178,7 +178,7 @@
 .dropdown-column h3 {
     font-size: 16px;
     font-weight: 700;
-    color: #4CAF50;
+    color: #107e84;
     margin: 0 0 10px 0;
     padding: 0 20px;
     white-space: nowrap;
@@ -202,7 +202,7 @@
 }
 
 .dropdown-column ul li a:hover {
-    color: #4CAF50;
+    color: #107e84;
     background: #f8f9fa;
     border-bottom: none !important;
 }
@@ -237,7 +237,7 @@
 }
 
 .search-bar input:focus {
-    border-color: #4CAF50;
+    border-color: #107e84;
     box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 .search-bar i {
@@ -268,8 +268,8 @@
 
 .cart-text:hover,
 .user-icons:hover {
-    border-color: #4CAF50;
-    color: #4CAF50;
+    border-color: #107e84;
+    color: #107e84;
 }
 
 .cart-text i,
@@ -376,7 +376,7 @@
 }
 
 .back-to-top:hover {
-    background: #45a049;
+    background: #107e84;
     transform: translateY(-3px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
 }
