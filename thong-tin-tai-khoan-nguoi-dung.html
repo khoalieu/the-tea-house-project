@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông Tin Người Dùng - Mộc Trà</title>
+    <link rel="stylesheet" href="assets/css/pages.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="user-dashboard-page">
+
+    <div class="container">
+        
+        <aside class="sidebar">
+            
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="avatar-circle">LG</div>
+                    <div class="email">lieuminhkhoa2005@gmail.com</div>
+                </div>
+                
+                <div class="profile-body">
+                    <button class="btn-shopping">Continue Shopping</button>
+                </div>
+            </div>
+
+            <nav class="side-menu">
+                <ul>
+                    <li class="active">
+                        <a href="#"><i class="fa-solid fa-house"></i> Overview</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-regular fa-user"></i> My Account</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-location-dot"></i> Saved Addresses</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-cart-shopping"></i> Recent Orders</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <h2 class="section-title">profile</h2>
+    
+            <form class="profile-form">
+                
+                <div class="form-row">
+                        <div class="input-group">
+                            <input type="text" id="firstname" placeholder=" " required>
+                            <label for="firstname">First Name</label>
+                        </div>
+                        
+                        <div class="input-group">
+                            <input type="text" id="lastname" placeholder=" " required>
+                            <label for="lastname">Last Name</label>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <input type="text" id="dob" placeholder="YYYY/MM/DD">
+                            <label for="dob">Date of Birth (YYYY/MM/DD)</label>
+                        </div>
+                        
+                        <div class="input-group">
+                            <select id="gender">
+                                <option value="" disabled selected hidden></option> <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <label for="gender">Gender</label>
+                            <span class="value-placeholder">Not specified</span> <i class="fa-solid fa-chevron-down select-arrow"></i>
+                        </div>
+                    </div>
+                    
+                </form>
+
+                <h3 class="section-subtitle">Communication</h3>
+                
+                <form class="profile-form">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <input type="email" id="email" value="lieuminhkhoa2005@gmail.com" readonly>
+                            <label for="email">Email*</label>
+                        </div>
+                        
+                        <div class="input-group phone-group">
+                            <div class="phone-prefix">
+                                <span>CA</span> <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <input type="tel" id="phone" placeholder=" ">
+                            <label for="phone">Phone</label>
+                        </div>
+                    </div>
+                </form>
+        </main>
+
+    </div>
+
+</body>
+</html>
