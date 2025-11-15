@@ -13,175 +13,163 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 <body>
-    <div class="admin-container">
-        <!-- Sidebar -->
-        <aside class="admin-sidebar">
-            <div class="sidebar-header">
-                <div class="admin-logo">
-                    <img src="../assets/images/logoweb.png" alt="Mộc Trà">
-                    <h2>Mộc Trà Admin</h2>
-                </div>
+<div class="admin-container">
+    <aside class="admin-sidebar">
+        <div class="sidebar-header">
+            <div class="admin-logo">
+                <img src="../assets/images/logoweb.png" alt="Mộc Trà">
+                <h2>Mộc Trà Admin</h2>
             </div>
-            
-            <nav class="admin-nav">
-                <ul>
-                    <!-- Dashboard -->
-                    <li class="nav-item active">
-                        <a href="index.html">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    
-                    <!-- Sản phẩm -->
-                    <li class="nav-item">
-                        <a href="admin-products.html">
-                            <i class="fas fa-box"></i>
-                            <span>Quản lý Sản phẩm</span>
-                        </a>
-                    </li>
-                    
-                    <!-- Đơn hàng -->
-                    <li class="nav-item">
-                        <a href="admin-orders.html">
-                            <i class="fas fa-shopping-cart"></i>
-                            <span>Đơn hàng</span>
-                            <span class="badge">23</span>
-                        </a>
-                    </li>
-                    
-                    <!-- Khách hàng -->
-                    <li class="nav-item">
-                        <a href="admin-customers.html">
-                            <i class="fas fa-users"></i>
-                            <span>Khách hàng</span>
-                        </a>
-                    </li>
-                    
-                    <!-- Blog -->
-                    <li class="nav-item">
-                        <a href="admin-blog.html">
-                            <i class="fas fa-newspaper"></i>
-                            <span>Quản lý Blog</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-        
-        <!-- Main Content -->
-        <main class="admin-main">
-            <!-- Header -->
-            <header class="admin-header">
-                <div class="header-left">
-                    <h1>Dashboard</h1>
-                </div>
-                
-                <div class="header-right">
-                    <div class="header-search">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Tìm kiếm...">
-                    </div>
-                    
-                    <button class="notification-btn">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                    </button>
-                    
-                    <a href="../index.html" class="view-site-btn" target="_blank">
-                        <i class="fas fa-external-link-alt"></i>
-                        <span>Xem trang web</span>
+        </div>
+
+        <nav class="admin-nav">
+            <ul>
+                <li class="nav-item active">
+                    <a href="index.html">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
                     </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="admin-products.html">
+                        <i class="fas fa-box"></i>
+                        <span>Quản lý Sản phẩm</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="admin-orders.html">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Đơn hàng</span>
+                        <span class="badge">23</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="admin-customers.html">
+                        <i class="fas fa-users"></i>
+                        <span>Khách hàng</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="admin-blog.html">
+                        <i class="fas fa-newspaper"></i>
+                        <span>Quản lý Blog</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-header">
+            <div class="header-left">
+                <h1>Dashboard</h1>
+            </div>
+
+            <div class="header-right">
+                <div class="header-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Tìm kiếm...">
                 </div>
-            </header>
-            
-            <!-- Content -->
-            <div class="admin-content">
-                <!-- Widgets -->
-                <div class="admin-widgets">
-                    <!-- Recent Orders -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3>Đơn hàng gần đây</h3>
-                            <a href="orders.html" class="widget-link">Xem tất cả</a>
-                        </div>
-                        <div class="widget-content">
-                            <div class="item-list">
-                                <div class="list-item">
-                                    <div class="item-info">
-                                        <div class="item-title">#DH001</div>
-                                        <div class="item-subtitle">Nguyễn Văn A</div>
-                                    </div>
-                                    <div class="item-details">
-                                        <div class="item-amount">245,000₫</div>
-                                        <div class="status-badge status-pending">Chờ xác nhận</div>
-                                    </div>
+
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+
+                <a href="../index.html" class="view-site-btn" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span>Xem trang web</span>
+                </a>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            <div class="admin-widgets">
+                <div class="widget">
+                    <div class="widget-header">
+                        <h3>Đơn hàng gần đây</h3>
+                        <a href="orders.html" class="widget-link">Xem tất cả</a>
+                    </div>
+                    <div class="widget-content">
+                        <div class="item-list">
+                            <div class="list-item">
+                                <div class="item-info">
+                                    <div class="item-title">#DH001</div>
+                                    <div class="item-subtitle">Nguyễn Văn A</div>
                                 </div>
-                                
-                                <div class="list-item">
-                                    <div class="item-info">
-                                        <div class="item-title">#DH002</div>
-                                        <div class="item-subtitle">Trần Thị B</div>
-                                    </div>
-                                    <div class="item-details">
-                                        <div class="item-amount">180,000₫</div>
-                                        <div class="status-badge status-confirmed">Đã xác nhận</div>
-                                    </div>
+                                <div class="item-details">
+                                    <div class="item-amount">245,000₫</div>
+                                    <div class="status-badge status-pending">Chờ xử lý</div>
                                 </div>
-                                
-                                <div class="list-item">
-                                    <div class="item-info">
-                                        <div class="item-title">#DH003</div>
-                                        <div class="item-subtitle">Lê Văn C</div>
-                                    </div>
-                                    <div class="item-details">
-                                        <div class="item-amount">320,000₫</div>
-                                        <div class="status-badge status-shipped">Đang giao</div>
-                                    </div>
+                            </div>
+
+                            <div class="list-item">
+                                <div class="item-info">
+                                    <div class="item-title">#DH002</div>
+                                    <div class="item-subtitle">Trần Thị B</div>
                                 </div>
-                                
-                                <div class="list-item">
-                                    <div class="item-info">
-                                        <div class="item-title">#DH004</div>
-                                        <div class="item-subtitle">Phạm Thị D</div>
-                                    </div>
-                                    <div class="item-details">
-                                        <div class="item-amount">150,000₫</div>
-                                        <div class="status-badge status-pending">Chờ xác nhận</div>
-                                    </div>
+                                <div class="item-details">
+                                    <div class="item-amount">180,000₫</div>
+                                    <div class="status-badge status-delivered">Đã hoàn tất</div>
+                                </div>
+                            </div>
+
+                            <div class="list-item">
+                                <div class="item-info">
+                                    <div class="item-title">#DH003</div>
+                                    <div class="item-subtitle">Lê Văn C</div>
+                                </div>
+                                <div class="item-details">
+                                    <div class="item-amount">320,000₫</div>
+                                    <div class="status-badge status-delivered">Đã hoàn tất</div>
+                                </div>
+                            </div>
+
+                            <div class="list-item">
+                                <div class="item-info">
+                                    <div class="item-title">#DH004</div>
+                                    <div class="item-subtitle">Phạm Thị D</div>
+                                </div>
+                                <div class="item-details">
+                                    <div class="item-amount">150,000₫</div>
+                                    <div class="status-badge status-pending">Chờ xử lý</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Quick Actions -->
-                <div class="quick-actions">
-                    <h3>Thao tác nhanh</h3>
-                    <div class="actions-grid">
-                        <a href="admin-products-add.html" class="action-card">
-                            <i class="fas fa-plus"></i>
-                            <span>Thêm sản phẩm mới</span>
-                        </a>
-                        
-                        <a href="admin-orders.html" class="action-card">
-                            <i class="fas fa-list-alt"></i>
-                            <span>Xem đơn hàng</span>
-                        </a>
-                        
-                        <a href="admin-customers.html" class="action-card">
-                            <i class="fas fa-user-plus"></i>
-                            <span>Quản lý khách hàng</span>
-                        </a>
-                        
-                        <a href="admin-blog-add.html" class="action-card">
-                            <i class="fas fa-pen"></i>
-                            <span>Viết bài blog</span>
-                        </a>
-                    </div>
+            </div>
+
+            <div class="quick-actions">
+                <h3>Thao tác nhanh</h3>
+                <div class="actions-grid">
+                    <a href="admin-products-add.html" class="action-card">
+                        <i class="fas fa-plus"></i>
+                        <span>Thêm sản phẩm mới</span>
+                    </a>
+
+                    <a href="admin-orders.html" class="action-card">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Xem đơn hàng</span>
+                    </a>
+
+                    <a href="admin-customers.html" class="action-card">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Quản lý khách hàng</span>
+                    </a>
+
+                    <a href="admin-blog-add.html" class="action-card">
+                        <i class="fas fa-pen"></i>
+                        <span>Viết bài blog</span>
+                    </a>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
+</div>
 </body>
 </html>
