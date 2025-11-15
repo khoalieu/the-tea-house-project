@@ -1702,3 +1702,102 @@
 .continue-shopping-link i {
     margin-right: 5px;
 }
+
+/* --- BỔ SUNG CSS CHO PHẦN BÌNH LUẬN BLOG --- */
+
+.blog-comments-section {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #eee;
+}
+
+.comments-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    font-family: var(--font-primary);
+}
+
+/* --- Style cho Form Gửi Bình Luận --- */
+.comment-form {
+    margin-bottom: 30px;
+}
+
+.comment-form .form-field {
+    margin-bottom: 10px;
+}
+
+.comment-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+/* (Tái sử dụng style từ trang thanh toán) */
+.comment-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 0.96rem;
+    font-family: var(--font-secondary, 'Montserrat', sans-serif);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background: #fff;
+    color: var(--color-text, #191919);
+    resize: vertical;
+    min-height: 100px;
+}
+.comment-form textarea:focus {
+    border-color: var(--color-primary, #107e84);
+    box-shadow: 0 0 0 3px rgba(16, 126, 132, 0.2);
+}
+
+.comment-form .cta-button {
+    font-size: 14px;
+    padding: 10px 20px;
+}
+
+
+/* --- Style cho Danh Sách Bình Luận --- */
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.comment-item {
+    display: flex;
+    gap: 15px;
+}
+
+.comment-avatar img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comment-content {
+    flex: 1;
+}
+
+.comment-author {
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 2px;
+}
+
+.comment-meta {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 8px;
+}
+
+.comment-body {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #333;
+}
