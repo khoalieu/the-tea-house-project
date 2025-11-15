@@ -78,16 +78,18 @@
         <section class="checkout-page">
             <div class="container">
                 <h1 class="checkout-title">Thanh toán</h1>
-                <form class="checkout-form" action="checkout" method="post">
+
+                <form class="checkout-form" action="hoa-don.html" method="get"> <!-- sửa action sau này xóa và mở comment dòng dưới -->
+                <!-- <form class="checkout-form" action="checkout" method="post"> -->
                     <input type="hidden" name="subtotal" value="310000">
 
                     <div class="checkout-layout">
-                        <!-- CỘT TRÁI: THÔNG TIN GIAO HÀNG -->
+                        <!-- cột trái : thông tin giao hàng -->
                         <div class="checkout-left">
                             <div class="checkout-card">
                                 <h2 class="checkout-card__title">Thông tin giao hàng</h2>
 
-                                <!-- ĐỊA CHỈ MẶC ĐỊNH -->
+                                <!-- address default -->
                                 <div class="default-address-box">
                                     <label class="checkbox-field">
                                         <input type="checkbox"
@@ -105,7 +107,7 @@
                                     <input type="hidden" name="defaultAddressId" value="1">
                                 </div>
 
-                                <!-- ĐỊA CHỈ NHẬP TAY (nếu không mặc định) -->
+                                <!-- địa chỉ nhập tay (nếu không mặc định) -->
                                 <div class="manual-address">
                                     <div class="form-row form-row--2">
                                         <div class="form-field">
@@ -125,13 +127,7 @@
                                             <label for="province">Tỉnh / Thành phố</label>
                                             <select id="province" name="province">
                                                 <option value="">-- Chọn tỉnh / thành --</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-field">
-                                            <label for="district">Quận / Huyện</label>
-                                            <select id="district" name="district">
-                                                <option value="">-- Chọn quận / huyện --</option>
+                                                <!-- servelet/database load data later -->
                                             </select>
                                         </div>
                                         <div class="form-field">
@@ -167,7 +163,7 @@
                                                   placeholder="Ví dụ: Gọi trước khi giao, giao giờ hành chính,..."></textarea>
                                     </div>
                                 </div>
-                                    <!-- PHƯƠNG THỨC GIAO HÀNG (BÊN PHẢI) -->
+                                    <!-- thông tin đơn hàng and payment (bên pahir ) -->
                                 <div class="checkout-card">
                                     <h2 class="checkout-card__title">Phương thức giao hàng</h2>
 
@@ -216,7 +212,7 @@
                             </div>
                         </div>
 
-                        <!-- CỘT PHẢI: ĐƠN HÀNG + GIAO HÀNG + THANH TOÁN -->
+                        <!-- CỘT PHẢI: ĐƠN HÀNG  + THANH TOÁN -->
                         <div class="checkout-right">
                             <!-- ĐƠN HÀNG CỦA BẠN (TỪ GIỎ HÀNG) -->
                             <div class="checkout-card">
@@ -225,12 +221,7 @@
                                 <div class="order-items">
                                     <!--
                                         Sau này Servlet:
-                                        - Lấy giỏ hàng (cart) từ session
-                                        - for (CartItem item : cartItems) { ... render mỗi order-item ... }
-
-                                        Các input hidden productId, quantity dùng để Servlet nhận lại
-                                    -->
-
+                                        - Lấy giỏ hàng (cart) từ session                               -->
                                     <!-- ITEM DEMO 1 -->
                                     <div class="order-item">
                                         <input type="hidden" name="productId" value="101">
@@ -399,18 +390,34 @@
 document.addEventListener("DOMContentLoaded", function () {
     const checkbox = document.getElementById("useDefaultAddress");
     const manual = document.querySelector(".manual-address");
+    const manualFields = manual.querySelectorAll("input, select, textarea");
 
     function updateState() {
         if (checkbox.checked) {
             manual.classList.add("disabled");
+            manualFields.forEach(el => {
+                // lưu trạng thái required cũ (nếu cần)
+                if (el.hasAttribute("required")) {
+                    el.dataset.wasRequired = "true";
+                    el.removeAttribute("required");
+                }
+                el.disabled = true;
+            });
         } else {
             manual.classList.remove("disabled");
+            manualFields.forEach(el => {
+                el.disabled = false;
+                if (el.dataset.wasRequired === "true") {
+                    el.setAttribute("required", "required");
+                }
+            });
         }
     }
 
-    updateState(); // chạy khi load trang
+    updateState();              // chạy khi load
     checkbox.addEventListener("change", updateState); // chạy khi click
 });
 </script>
+
 
 </html>

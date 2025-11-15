@@ -1,0 +1,163 @@
+/*TRANG HÓA ĐƠN (invoice page) */
+
+.invoice-page {
+    padding: 40px 0 60px;
+    background: #f5f7fa;
+    font-family: var(--font-secondary, 'Montserrat', sans-serif);
+}
+
+.invoice-title {
+    font-family: var(--font-primary, 'Lora', serif);
+    font-size: 30px;
+    margin: 0 0 6px;
+    color: var(--color-primary, #107e84);
+}
+
+.invoice-subtitle {
+    margin: 0;
+    font-size: 0.96rem;
+    color: #6b7280;
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.invoice-header-right p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #4b5563;
+    text-align: right;
+}
+
+/* 1 column chứa các card xếp dọc */
+.invoice-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.invoice-card {
+}
+
+.invoice-info p {
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    color: #374151;
+}
+
+.invoice-address {
+    margin: 4px 0 10px;
+    font-size: 0.94rem;
+    color: #4b5563;
+}
+
+/* pill cho shipping / payment */
+.pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+.pill-shipping {
+    background: #e0f2fe;
+    color: #075985;
+}
+
+.pill-payment {
+    background: #ecfdf5;
+    color: #15803d;
+}
+
+/* Bảng sản phẩm */
+.invoice-table-wrapper {
+    margin: 8px 0 12px;
+    overflow-x: auto;
+}
+
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.94rem;
+}
+
+.invoice-table thead {
+    background: #f3f4f6;
+}
+
+.invoice-table th,
+.invoice-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+}
+
+.invoice-table th {
+    font-weight: 600;
+    color: #374151;
+}
+
+.invoice-table td {
+    color: #4b5563;
+}
+
+.invoice-product-name {
+    font-weight: 500;
+    color: #111827;
+}
+
+/* Tận dụng .order-summary từ checkout, thêm chút spacing */
+.invoice-summary {
+    margin-top: 10px;
+}
+
+/* Nút hành động dưới cùng */
+.invoice-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+    justify-content: flex-end;
+}
+
+.btn.btn-secondary {
+    display: inline-block;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    color: #374151;
+    text-decoration: none;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.btn.btn-secondary:hover {
+    background: #f3f4f6;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+    transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .invoice-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+    .invoice-header-right p {
+        text-align: left;
+    }
+}
+
+@media (max-width: 768px) {
+    .invoice-page {
+        padding: 28px 0 40px;
+    }
+}
