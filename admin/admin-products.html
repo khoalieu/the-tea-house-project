@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Sản phẩm - Mộc Trà Admin</title>
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../admin/assets/css/admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <div class="admin-logo">
+                    <img src="../assets/images/logoweb.png" alt="Mộc Trà">
+                    <h2>Mộc Trà Admin</h2>
+                </div>
+            </div>
+            
+            <nav class="admin-nav">
+                <ul>
+                    <li class="nav-item">
+                        <a href="admin-dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item active">
+                        <a href="admin-products.html">
+                            <i class="fas fa-box"></i>
+                            <span>Quản lý Sản phẩm</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="admin-orders.html">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Đơn hàng</span>
+                            <span class="badge">23</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="admin-customers.html">
+                            <i class="fas fa-users"></i>
+                            <span>Khách hàng</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="admin-blog.html">
+                            <i class="fas fa-newspaper"></i>
+                            <span>Quản lý Blog</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Header -->
+            <header class="admin-header">
+                <div class="header-left">
+                    <h1>Quản lý Sản phẩm</h1>
+                </div>
+                
+                <div class="header-right">
+                    <div class="header-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Tìm kiếm sản phẩm...">
+                    </div>
+                    
+                    <a href="../index.html" class="view-site-btn" target="_blank">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span>Xem trang web</span>
+                    </a>
+                </div>
+            </header>
+            
+            <!-- Content -->
+            <div class="admin-content">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="page-title">
+                        <h2>Danh sách sản phẩm</h2>
+                        <p>Quản lý tất cả sản phẩm trà và nguyên liệu pha chế</p>
+                    </div>
+                    <div class="page-actions">
+                        <a href="admin-product-add.html" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Thêm sản phẩm mới
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Filters -->
+                <div class="filters-section">
+                    <div class="filters-grid">
+                        <div class="filter-group">
+                            <label for="category-filter">Danh mục</label>
+                            <select id="category-filter" class="form-select">
+                                <option value="">Tất cả danh mục</option>
+                                <option value="tra-sua-nguyen-lieu">Trà sữa nguyên liệu</option>
+                                <option value="tra-thao-moc">Trà thảo mộc</option>
+                                <option value="bot-pha-che">Bột pha chế</option>
+                                <option value="phu-kien">Phụ kiện</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="status-filter">Trạng thái</label>
+                            <select id="status-filter" class="form-select">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="active">Đang bán</option>
+                                <option value="inactive">Ngừng bán</option>
+                                <option value="out-of-stock">Hết hàng</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="price-filter">Khoảng giá</label>
+                            <select id="price-filter" class="form-select">
+                                <option value="">Tất cả giá</option>
+                                <option value="0-50000">Dưới 50.000₫</option>
+                                <option value="50000-100000">50.000₫ - 100.000₫</option>
+                                <option value="100000-200000">100.000₫ - 200.000₫</option>
+                                <option value="200000+">Trên 200.000₫</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="sort-filter">Sắp xếp</label>
+                            <select id="sort-filter" class="form-select">
+                                <option value="newest">Mới nhất</option>
+                                <option value="oldest">Cũ nhất</option>
+                                <option value="name-asc">Tên A-Z</option>
+                                <option value="name-desc">Tên Z-A</option>
+                                <option value="price-asc">Giá thấp đến cao</option>
+                                <option value="price-desc">Giá cao đến thấp</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Products Container -->
+                <div class="products-container">
+                    <div class="table-header">
+                        <div class="products-count">Tổng cộng: <strong>24 sản phẩm</strong></div>
+                        <div class="view-options">
+                            <button class="view-btn" data-view="table">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button class="view-btn active" data-view="grid">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Products Grid -->
+                    <div class="products-grid">
+                        <!-- Product 1 -->
+                        <div class="product-card">
+                            <div class="product-image-container">
+                                <img src="../assets/images/san-pham-tra-bac-ha.jpg" alt="Trà Bạc Hà Premium" class="product-image">
+                                <span class="product-status status-active">Đang bán</span>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name">Trà Bạc Hà Premium</h3>
+                                <p class="product-sku">SKU: TBH001</p>
+                                <div class="product-price">
+                                    <span class="current-price">85,000₫</span>
+                                    <span class="original-price">95,000₫</span>
+                                </div>
+                                <div class="product-stock">
+                                    <span class="stock-label">Tồn kho:</span>
+                                    <span class="stock-value">156</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn btn-sm btn-success">
+                                        <i class="fas fa-eye"></i>
+                                        Xem
+                                    </button>
+                                    <button class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                        Sửa
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                        Xóa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 2 -->
+                        <div class="product-card">
+                            <div class="product-image-container">
+                                <img src="../assets/images/san-pham-tra-gung-mat-ong.jpg" alt="Trà Gừng Mật Ong" class="product-image">
+                                <span class="product-status status-active">Đang bán</span>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name">Trà Gừng Mật Ong</h3>
+                                <p class="product-sku">SKU: TGMO002</p>
+                                <div class="product-price">
+                                    <span class="current-price">75,000₫</span>
+                                </div>
+                                <div class="product-stock">
+                                    <span class="stock-label">Tồn kho:</span>
+                                    <span class="stock-value">89</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn btn-sm btn-success">
+                                        <i class="fas fa-eye"></i>
+                                        Xem
+                                    </button>
+                                    <button class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                        Sửa
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                        Xóa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 3 -->
+                        <div class="product-card">
+                            <div class="product-image-container">
+                                <img src="../assets/images/san-pham-bot-milk-foam.jpg" alt="Bột Milk Foam Trứng Muối" class="product-image">
+                                <span class="product-status status-active">Đang bán</span>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name">Bột Milk Foam Trứng Muối</h3>
+                                <p class="product-sku">SKU: BMFTM003</p>
+                                <div class="product-price">
+                                    <span class="current-price">120,000₫</span>
+                                </div>
+                                <div class="product-stock">
+                                    <span class="stock-label">Tồn kho:</span>
+                                    <span class="stock-value stock-low">5</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn btn-sm btn-success">
+                                        <i class="fas fa-eye"></i>
+                                        Xem
+                                    </button>
+                                    <button class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                        Sửa
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                        Xóa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 4 -->
+                        <div class="product-card">
+                            <div class="product-image-container">
+                                <img src="../assets/images/san-pham-tra-atiso.jpg" alt="Trà Atiso Đà Lạt" class="product-image">
+                                <span class="product-status status-out-of-stock">Hết hàng</span>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name">Trà Atiso Đà Lạt</h3>
+                                <p class="product-sku">SKU: TADL004</p>
+                                <div class="product-price">
+                                    <span class="current-price">65,000₫</span>
+                                    <span class="original-price">70,000₫</span>
+                                </div>
+                                <div class="product-stock">
+                                    <span class="stock-label">Tồn kho:</span>
+                                    <span class="stock-value stock-low">0</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn btn-sm btn-success">
+                                        <i class="fas fa-eye"></i>
+                                        Xem
+                                    </button>
+                                    <button class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                        Sửa
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                        Xóa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 5 -->
+                        <div class="product-card">
+                            <div class="product-image-container">
+                                <img src="../assets/images/san-pham-tran-chau-den.jpg" alt="Trân Châu Đen Taiwan" class="product-image">
+                                <span class="product-status status-active">Đang bán</span>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name">Trân Châu Đen Taiwan</h3>
+                                <p class="product-sku">SKU: TCDT005</p>
+                                <div class="product-price">
+                                    <span class="current-price">45,000₫</span>
+                                </div>
+                                <div class="product-stock">
+                                    <span class="stock-label">Tồn kho:</span>
+                                    <span class="stock-value">234</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn btn-sm btn-success">
+                                        <i class="fas fa-eye"></i>
+                                        Xem
+                                    </button>
+                                    <button class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                        Sửa
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                        Xóa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 6 -->
+                        <div class="product-card">
+                            <div class="product-image-container">
+                                <img src="../assets/images/san-pham-bot-sua-beo.jpg" alt="Bột Sữa Béo" class="product-image">
+                                <span class="product-status status-active">Đang bán</span>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name">Bột Sữa Béo Premium</h3>
+                                <p class="product-sku">SKU: BSB006</p>
+                                <div class="product-price">
+                                    <span class="current-price">95,000₫</span>
+                                </div>
+                                <div class="product-stock">
+                                    <span class="stock-label">Tồn kho:</span>
+                                    <span class="stock-value">67</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn btn-sm btn-success">
+                                        <i class="fas fa-eye"></i>
+                                        Xem
+                                    </button>
+                                    <button class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                        Sửa
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                        Xóa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="pagination-container">
+                        <div class="pagination-info">
+                            Hiển thị <strong>1-6</strong> trong tổng số <strong>24</strong> sản phẩm
+                        </div>
+                        <div class="pagination">
+                            <a href="#" class="page-btn disabled">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                            <a href="#" class="page-btn active">1</a>
+                            <a href="#" class="page-btn">2</a>
+                            <a href="#" class="page-btn">3</a>
+                            <a href="#" class="page-btn">4</a>
+                            <a href="#" class="page-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
