@@ -34,7 +34,7 @@
     text-align: right;
 }
 
-/* 1 column chứa các card xếp dọc */
+/*các card xếp dọc */
 .invoice-column {
     display: flex;
     flex-direction: column;
@@ -111,8 +111,6 @@
     font-weight: 500;
     color: #111827;
 }
-
-/* Tận dụng .order-summary từ checkout, thêm chút spacing */
 .invoice-summary {
     margin-top: 10px;
 }

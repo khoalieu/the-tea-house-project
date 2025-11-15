@@ -88,7 +88,7 @@
                     </p>
                 </div>
                 <div class="invoice-header-right">
-                    <!-- Sau này servlet fill -->
+                    <!--servlet fill -->
                     <p><strong>Mã hóa đơn:</strong> <span id="invoiceCode">MT-20241115-001</span></p>
                     <p><strong>Thời gian xuất hóa đơn:</strong>
                         <span id="invoiceDateTime">15/11/2025 14:32</span>
@@ -96,14 +96,13 @@
                 </div>
             </div>
 
-            <!-- 1 CỘT: CÁC THẺ XẾP DỌC -->
             <div class="invoice-column">
 
                 <!-- THÔNG TIN KHÁCH HÀNG -->
                 <div class="checkout-card invoice-card">
                     <h2 class="checkout-card__title">Thông tin khách hàng</h2>
                     <div class="invoice-info">
-                        <!-- Sau này servlet fill các span -->
+                        <!--servlet fill các span -->
                         <p><strong>Người nhận:</strong>
                             <span id="customerName">Nguyễn Văn A</span>
                         </p>
@@ -116,7 +115,7 @@
                     </div>
                 </div>
 
-                <!-- ĐỊA CHỈ & GIAO HÀNG -->
+                <!-- address and giao hàng-->
                 <div class="checkout-card invoice-card">
                     <h2 class="checkout-card__title">Địa chỉ & giao hàng</h2>
                     <div class="invoice-info">
@@ -135,7 +134,7 @@
                             <span id="shippingFee">20.000đ</span>
                         </p>
 
-                        <!-- Nếu sau này có thông tin shipper -->
+                        <!--thông tin shipper -->
                         <p><strong>Người giao hàng:</strong>
                             <span id="shipperName">Đang được sắp xếp</span>
                         </p>
@@ -172,12 +171,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <!-- Sau này servlet loop qua danh sách items -->
-                            <!-- Ví dụ JSP:
-                            <c:forEach var="item" items="${orderItems}">
-                              <tr>...</tr>
-                            </c:forEach>
-                            -->
+                                <!-- can servelet fill các dòng sản phẩm -->
                             <tr>
                                 <td>
                                     <span class="invoice-product-name">Trà Hoa Cúc Sấy Khô</span>
