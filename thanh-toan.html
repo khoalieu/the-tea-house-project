@@ -11,7 +11,7 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
           crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- <link rel="stylesheet" href="assets/css/checkout.css"> -->
+
 </head>
 <body>
     <!-- TOP BAR -->
@@ -120,25 +120,18 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-row">
-                                        <div class="form-field">
-                                            <label for="country">Quốc gia</label>
-                                            <select id="country" name="country">
-                                                <option value="">-- Chọn quốc gia --</option>
-                                                <option value="VN" selected>Việt Nam</option>
-                                                <option value="US">Hoa Kỳ</option>
-                                                <option value="JP">Nhật Bản</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <!-- form iput province/city  phường xã -->
-                                    <div class="form-row form-row--2">
+                                    <div class="form-row form-row--3">
                                         <div class="form-field">
                                             <label for="province">Tỉnh / Thành phố</label>
                                             <select id="province" name="province">
                                                 <option value="">-- Chọn tỉnh / thành --</option>
-                                                <!-- Servlet / JS load dữ liệu sau -->
+                                            </select>
+                                        </div>
+
+                                        <div class="form-field">
+                                            <label for="district">Quận / Huyện</label>
+                                            <select id="district" name="district">
+                                                <option value="">-- Chọn quận / huyện --</option>
                                             </select>
                                         </div>
                                         <div class="form-field">

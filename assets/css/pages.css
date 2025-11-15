@@ -1210,7 +1210,6 @@
     font-weight: 600;
 }
 
-/* checkout.css */
 /* Trang thanh toán */
 
 .checkout-page {
@@ -1587,4 +1586,119 @@
     .form-row--2 {
         grid-template-columns: 1fr;
     }
+}
+/* ======================================= */
+/* --- BỔ SUNG CSS CHO TRANG GIỎ HÀNG --- */
+/* ======================================= */
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse; /* Gộp viền bảng */
+    font-size: 0.95rem;
+}
+
+.cart-table thead {
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.cart-table th {
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 600;
+    color: #4b5563;
+    font-size: 0.9rem;
+}
+
+.cart-table td {
+    padding: 16px 12px;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+}
+
+/* Căn chỉnh các cột */
+.cart-table .col-checkbox { width: 5%; }
+.cart-table .col-product { width: 35%; }
+.cart-table .col-price { width: 15%; }
+.cart-table .col-quantity { width: 15%; }
+.cart-table .col-total { width: 15%; }
+.cart-table .col-remove { width: 10%; text-align: center; }
+
+
+/* Style cho cột "Sản phẩm" */
+.cart-item-product {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cart-item-product img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.cart-item-product a {
+    font-weight: 500;
+    color: #111827;
+    text-decoration: none;
+}
+.cart-item-product a:hover {
+    color: var(--color-primary);
+}
+
+/* Style cho giá sale (tái sử dụng từ components.css) */
+.cart-table .new-price {
+    font-weight: 600;
+    color: #ef4444;
+}
+.cart-table .old-price {
+    font-size: 0.85rem;
+    color: #9ca3af;
+    text-decoration: line-through;
+    margin-left: 5px;
+}
+
+
+/* Style cho ô "Số lượng" */
+.cart-item-quantity {
+    width: 70px; /* Giới hạn chiều rộng ô số lượng */
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 0.96rem;
+    text-align: center;
+    font-family: var(--font-secondary, 'Montserrat', sans-serif);
+    outline: none;
+}
+.cart-item-quantity:focus {
+    border-color: var(--color-primary, #107e84);
+    box-shadow: 0 0 0 3px rgba(16, 126, 132, 0.2);
+}
+
+/* Style cho nút "Xóa" */
+.cart-item-remove {
+    font-size: 1.1rem;
+    color: #ef4444;
+    text-decoration: none;
+}
+.cart-item-remove:hover {
+    color: #b91c1c;
+}
+
+/* Link "Tiếp tục mua sắm" */
+.continue-shopping-link {
+    display: inline-block;
+    margin-top: 15px;
+    text-decoration: none;
+    color: var(--color-primary);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+.continue-shopping-link:hover {
+    text-decoration: underline;
+}
+.continue-shopping-link i {
+    margin-right: 5px;
 }
