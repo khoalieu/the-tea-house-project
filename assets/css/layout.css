@@ -517,3 +517,30 @@
     height: auto;
     border-radius: 8px;
 }
+
+.main-nav ul li.has-dropdown > a {
+
+    padding-right: 30px;
+}
+
+
+.main-nav ul li.has-dropdown > a::after {
+    content: '\f107';
+    font-family: "Font Awesome 7 Free", "Font Awesome 6 Free";
+    font-weight: 900;
+
+
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    font-size: 12px;
+    color: #999;
+    transition: all 0.3s ease;
+}
+
+.main-nav ul li.has-dropdown:hover > a::after {
+    transform: translateY(-50%) rotate(180deg);
+    color: var(--color-primary);
+}
