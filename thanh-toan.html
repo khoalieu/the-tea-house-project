@@ -14,8 +14,7 @@
 
 </head>
 <body>
-    <!-- TOP BAR -->
-    <div class="top-bar">
+<div class="top-bar">
         <div class="container">
             <div class="top-bar__left">
                 <span>
@@ -31,48 +30,92 @@
                 <i class="fa-brands fa-twitter"></i>
             </div>
         </div>
-    </div>
-
-    <!-- HEADER -->
-    <header class="utility-header">
-        <div class="header-left">
-            <nav class="main-nav">
-                <div class="container">
-                    <ul>
-                        <li>
-                            <div class="logo">
-                                <a href="index.html">
-                                    <img src="assets/images/logoweb.png" alt="Tea Shop Logo">
-                                </a>
-                            </div>
-                        </li>
-                        <li><a href="index.html">TRANG CHỦ</a></li>
-                        <li><a href="san-pham.html">SẢN PHẨM</a></li>
-                        <li><a href="blog.html">CÔNG THỨC & BLOG</a></li>
-                        <li><a href="ve-chung-toi.html">VỀ CHÚNG TÔI</a></li>
-                        <li><a href="khuyen-mai.html">KHUYẾN MÃI</a></li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-        <div class="header-right">
+</div>
+<header class="utility-header">
+    <div class="header-left">
+        <nav class="main-nav">
             <div class="container">
-                <div class="header-right__content">
-                    <div class="search-bar">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" placeholder="Bạn muốn tìm gì...">
-                    </div>
-                    <span class="cart-text">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <span>Giỏ Hàng</span>
-                    </span>
+                <ul>
+                    <li>
+                        <div class="logo">
+                            <a href="index.html">
+                                <img src="assets/images/logoweb.png" alt="Tea Shop Logo">
+                            </a>
+                        </div>
+                    </li>
+                    <li><a href="index.html" class="active">TRANG CHỦ</a></li>
+                    <li class="has-dropdown">
+                        <a href="san-pham.html">SẢN PHẨM</a>
+
+                        <div class="dropdown-menu">
+                            <div class="dropdown-column">
+                                <h3>Trà Thảo Mộc</h3>
+                                <ul>
+                                    <li><a href="san-pham.html?category=tra-thao-moc">Trà Hoa Cúc</a></li>
+                                    <li><a href="san-pham.html?category=tra-thao-moc">Trà Gừng</a></li>
+                                </ul>
+                            </div>
+                            <div class="dropdown-column">
+                                <h3>Nguyên Liệu Trà Sữa</h3>
+                                <ul>
+                                    <li><a href="san-pham.html?category=nguyen-lieu-tra-sua">Trân Châu</a></li>
+                                    <li><a href="san-pham.html?category=nguyen-lieu-tra-sua">Bột Sữa</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="blog.html">CÔNG THỨC & BLOG</a></li>
+                    <li class="has-dropdown">
+                        <a href="ve-chung-toi.html">VỀ CHÚNG TÔI</a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-column">
+                                <h3>Câu Chuyện Về Trà</h3>
+                                <ul>
+                                    <li><a href="ve-chung-toi.html">Câu Chuyện Của Chúng Tôi</a></li>
+                                    <li><a href="tra-thao-moc.html">Hành Trình Của Những Tách Trà</a></li>
+                                    <li><a href="ve-chung-toi.html#sustainability">Thông Tin Về Trà Sữa Nguyên Liệu</a></li>
+                                </ul>
+                            </div>
+                            <div class="dropdown-column">
+                                <h3>Thông Tin Và Chính Sách</h3>
+                                <ul>
+                                    <li><a href="chinh-sach-ban-hang.html">Chính Sách Bán Hàng</a></li>
+                                    <li><a href="chinh-sach-thanh-toan.html">Chính Sách Thanh Toán</a></li>
+                                    <li><a href="chinh-sach-bao-hanh.html">Chính Sách Bảo Hành</a></li>
+                                    <li><a href="dieu-khoan-dich-vu.html">Điều Khoản Dịch Vụ</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="khuyen-mai.html">KHUYẾN MÃI</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="header-right">
+        <div class="container">
+            <div class="header-right__content">
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Bạn muốn tìm gì...">
+                </div>
+                <span class="cart-text">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Giỏ Hàng (0)</span>
+                </span>
+                <div class="user-account">
                     <span class="user-icons">
                         <i class="fa-solid fa-user"></i>
                     </span>
+                    <div class="user-dropdown">
+                        <a href="login.html">Đăng nhập</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+
+</header>
 
     <main>
         <section class="checkout-page">
