@@ -54,7 +54,7 @@
 
 .utility-header .header-left {
     flex: 1;
-    margin-left: 370px;
+    margin-left: 150px;
 }
 
 .utility-header .header-right {
@@ -502,4 +502,18 @@
         width: 100%;
         max-width: 250px;
     }
+}
+
+/* --- Bổ sung cho FOOTER  --- */
+
+.logo-footer {
+    width: 120px;
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+.logo-footer img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
 }
