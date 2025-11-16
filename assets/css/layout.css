@@ -316,6 +316,11 @@
     background: #f8f9fa;
     color: #107e84;
 }
+.user-dropdown a:last-child {
+    background: #f1f5f9;
+    padding: 10px 16px;
+}
+
 /* --- PHẦN 3: FOOTER --- */
 .main-footer {
     background: #107e84;
