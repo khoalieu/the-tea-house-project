@@ -79,14 +79,13 @@
             color: #107e84;
             border-right: 3px solid #107e84;
         }
-
         .nav-item i {
             margin-right: 12px;
             width: 18px;
             text-align: center;
             font-size: 16px;
         }
-
+        
         .badge {
             background: #e74c3c;
             color: white;
