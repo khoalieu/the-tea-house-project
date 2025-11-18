@@ -184,7 +184,95 @@
             </div>
             <div id="tab-3" class="tab-content">
                 <h3>Đánh Giá Của Khách Hàng</h3>
-                <p>(Chưa có đánh giá nào cho sản phẩm này)</p>
+                <div class="product-reviews">
+
+                    <div class="review-form-container">
+                        <h3>Viết đánh giá của bạn</h3>
+
+                        <form class="review-form" action="/submit-review" method="post">
+
+                            <input type="hidden" name="product_id" value="[ID_san_pham_nay]">
+
+                            <div class="form-group">
+
+                                <label>Đánh giá của bạn <span class="required">*</span></label>
+
+                                <div class="star-rating">
+                                    <input type="radio" id="star5" name="rating" value="5">
+                                    <label for="star5" title="Tuyệt vời"></label>
+
+                                    <input type="radio" id="star4" name="rating" value="4">
+                                    <label for="star4" title="Tốt"></label>
+
+                                    <input type="radio" id="star3" name="rating" value="3">
+                                    <label for="star3" title="Bình thường"></label>
+
+                                    <input type="radio" id="star2" name="rating" value="2">
+                                    <label for="star2" title="Tệ"></label>
+
+                                    <input type="radio" id="star1" name="rating" value="1">
+                                    <label for="star1" title="Rất tệ"></label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="comment_text">Bình luận của bạn</label>
+                                <textarea id="comment_text" name="comment_text" rows="4"
+                                          placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..."></textarea>
+                            </div>
+
+                            <button type="submit" class="cta-button">Gửi đánh giá</button>
+                        </form>
+                    </div>
+
+                    <hr class="review-divider">
+
+                    <div class="review-list">
+                        <h3>Tất cả đánh giá (2)</h3>
+
+                        <div class="review-item">
+                            <div class="review-avatar">
+                                <img src="https://placehold.co/60x60/eeeeee/white?text=User" alt="Avatar">
+                            </div>
+                            <div class="review-content">
+                                <div class="review-author">Nguyễn Văn A</div>
+                                <div class="review-meta">
+                                    <div class="star-rating-display">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i> </div>
+                                    <span class="review-date">11/11/2025</span>
+                                </div>
+                                <p class="review-body">
+                                    Sản phẩm rất tốt, milk foam lên vị béo ngậy, thơm mùi trứng muối. Sẽ ủng hộ shop dài dài!
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="review-item">
+                            <div class="review-avatar">
+                                <img src="https://placehold.co/60x60/eeeeee/white?text=User" alt="Avatar">
+                            </div>
+                            <div class="review-content">
+                                <div class="review-author">Trần Thị B</div>
+                                <div class="review-meta">
+                                    <div class="star-rating-display">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i> </div>
+                                    <span class="review-date">10/11/2025</span>
+                                </div>
+                                <p class="review-body">
+                                    Dễ sử dụng, pha với nước lạnh là lên bọt.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div> </div>
             </div>        </section>
         <section class="product-related">
             <h2>Sản Phẩm Liên Quan</h2>
