@@ -460,33 +460,38 @@
 </body>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Lấy tất cả radio buttons có name="selectedAddress"
+
         const addressRadios = document.querySelectorAll('input[name="selectedAddress"]');
         const manualAddressForm = document.querySelector(".manual-address");
 
+        const manualInputs = manualAddressForm.querySelectorAll("input, select, textarea");
+
         function updateFormState() {
-            // Tìm radio đang được check
             const selected = document.querySelector('input[name="selectedAddress"]:checked');
 
             if (selected && selected.value === "new") {
-                // Nếu chọn "Nhập mới" -> Hiện form (xóa class disabled)
+
                 manualAddressForm.classList.remove("disabled");
 
-                // (Tùy chọn) Focus vào ô đầu tiên
+                manualInputs.forEach(input => {
+                    input.disabled = false;
+                });
+
                 const firstInput = manualAddressForm.querySelector('input');
                 if(firstInput) firstInput.focus();
+
             } else {
-                // Nếu chọn địa chỉ có sẵn -> Ẩn form (thêm class disabled)
+
                 manualAddressForm.classList.add("disabled");
+
+                manualInputs.forEach(input => {
+                    input.disabled = true;
+                });
             }
         }
-
-        // Lắng nghe sự kiện change cho tất cả radio
         addressRadios.forEach(radio => {
             radio.addEventListener("change", updateFormState);
         });
-
-        // Chạy lần đầu khi load trang
         updateFormState();
     });
 </script>
