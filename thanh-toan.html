@@ -133,21 +133,43 @@
                                 <h2 class="checkout-card__title">Thông tin giao hàng</h2>
 
                                 <!-- address default -->
-                                <div class="default-address-box">
-                                    <label class="checkbox-field">
-                                        <input type="checkbox"
-                                               id="useDefaultAddress"
-                                               name="useDefaultAddress"
-                                               value="true"
-                                               checked>
-                                        <span>Sử dụng địa chỉ mặc định của tôi</span>
-                                    </label>
-                                    <p class="default-address-text">
-                                        <!-- servelet sẽ thay đổi fill -->
-                                        Địa chỉ mặc định: 123 Đường Trà, Phường Trà Thảo, TP. Trà Sữa, Việt Nam
-                                    </p>
-                                    <!-- ID địa chỉ mặc định của user -->
-                                    <input type="hidden" name="defaultAddressId" value="1">
+                                <div class="address-book-box">
+                                    <h3 style="font-size: 16px; margin-bottom: 15px; color: #333;">Sổ địa chỉ</h3>
+
+                                    <div class="address-list">
+                                        <label class="address-option">
+                                            <input type="radio" name="selectedAddress" value="default" checked>
+                                            <div class="address-content">
+                                                <strong class="address-label">Sử dụng thông tin và địa chỉ mặc định</strong>
+                                                <div class="address-detail">
+                                                    <span>Nguyễn Văn A - 0888 531 015</span><br>
+                                                    <span>123 Đường Trà, Phường Trà Thảo, TP. Trà Sữa</span>
+                                                </div>
+                                                <span class="badge-default">Mặc định</span>
+                                            </div>
+                                        </label>
+
+                                        <label class="address-option">
+                                            <input type="radio" name="selectedAddress" value="2">
+                                            <div class="address-content">
+                                                <strong class="address-label">Văn phòng</strong>
+                                                <div class="address-detail">
+                                                    <span>Nguyễn Văn A - 0909 123 456</span><br>
+                                                    <span>45 Đường Pha Chế, Phường Công Thức, TP. Trà Sữa</span>
+                                                </div>
+                                            </div>
+                                        </label>
+
+                                        <label class="address-option">
+                                            <input type="radio" name="selectedAddress" value="new">
+                                            <div class="address-content">
+                                                <strong class="address-label">Giao đến địa chỉ khác</strong>
+                                                <div class="address-detail">
+                                                    <span>Nhập thông tin địa chỉ mới bên dưới...</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
                                 </div>
 
                                 <!-- địa chỉ nhập tay (nếu không mặc định) -->
@@ -437,37 +459,36 @@
 </button>
 </body>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const checkbox = document.getElementById("useDefaultAddress");
-    const manual = document.querySelector(".manual-address");
-    const manualFields = manual.querySelectorAll("input, select, textarea");
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lấy tất cả radio buttons có name="selectedAddress"
+        const addressRadios = document.querySelectorAll('input[name="selectedAddress"]');
+        const manualAddressForm = document.querySelector(".manual-address");
 
-    function updateState() {
-        if (checkbox.checked) {
-            manual.classList.add("disabled");
-            manualFields.forEach(el => {
-                // lưu trạng thái required cũ (nếu cần)
-                if (el.hasAttribute("required")) {
-                    el.dataset.wasRequired = "true";
-                    el.removeAttribute("required");
-                }
-                el.disabled = true;
-            });
-        } else {
-            manual.classList.remove("disabled");
-            manualFields.forEach(el => {
-                el.disabled = false;
-                if (el.dataset.wasRequired === "true") {
-                    el.setAttribute("required", "required");
-                }
-            });
+        function updateFormState() {
+            // Tìm radio đang được check
+            const selected = document.querySelector('input[name="selectedAddress"]:checked');
+
+            if (selected && selected.value === "new") {
+                // Nếu chọn "Nhập mới" -> Hiện form (xóa class disabled)
+                manualAddressForm.classList.remove("disabled");
+
+                // (Tùy chọn) Focus vào ô đầu tiên
+                const firstInput = manualAddressForm.querySelector('input');
+                if(firstInput) firstInput.focus();
+            } else {
+                // Nếu chọn địa chỉ có sẵn -> Ẩn form (thêm class disabled)
+                manualAddressForm.classList.add("disabled");
+            }
         }
-    }
 
-    updateState();              // chạy khi load
-    checkbox.addEventListener("change", updateState); // chạy khi click
-});
+        // Lắng nghe sự kiện change cho tất cả radio
+        addressRadios.forEach(radio => {
+            radio.addEventListener("change", updateFormState);
+        });
+
+        // Chạy lần đầu khi load trang
+        updateFormState();
+    });
 </script>
-
 
 </html>
