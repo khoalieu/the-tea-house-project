@@ -3190,6 +3190,99 @@
     line-height: 1.6;
     color: #555;
 }
+/* --- BỔ SUNG CHO SORT BAR (Trang Sản phẩm) --- */
+
+.sort-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    gap: 10px;
+}
 
 
 
+.sort-bar label {
+    font-size: 14px;
+    color: #666;
+}
+
+.sort-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.sort-select:focus {
+    border-color: var(--color-primary, #107e84);
+}
+/* Style cho Sổ địa chỉ (Radio List) */
+.address-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.address-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #fff;
+}
+
+.address-option:hover {
+    border-color: #107e84;
+    background-color: #f9fafb;
+}
+
+.address-option:has(input:checked) {
+    border-color: #107e84;
+    background-color: #f0f9fa;
+    box-shadow: 0 0 0 1px #107e84;
+}
+
+.address-option input[type="radio"] {
+    margin-top: 4px;
+    accent-color: #107e84;
+}
+
+.address-content {
+    flex: 1;
+}
+
+.address-label {
+    display: block;
+    font-size: 0.95rem;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.address-detail {
+    font-size: 0.85rem;
+    color: #6b7280;
+    line-height: 1.4;
+}
+
+.badge-default {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 2px 8px;
+    background: #e5e7eb;
+    color: #374151;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    font-weight: 500;
+}
