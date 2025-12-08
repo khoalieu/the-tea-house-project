@@ -163,6 +163,32 @@
                 </div>
             </div>
             
+            <!-- Bulk Actions Bar -->
+            <div class="bulk-actions-bar" id="bulkActionsBar">
+                <input type="checkbox" class="product-checkbox" id="selectAllProducts">
+                <span class="bulk-actions-info">
+                    <strong id="selectedCount">0</strong> sản phẩm được chọn
+                </span>
+                <div class="bulk-actions-buttons">
+                    <button class="btn-bulk btn-bulk-activate" onclick="bulkActivate()">
+                        <i class="fas fa-check-circle"></i>
+                        Kích hoạt
+                    </button>
+                    <button class="btn-bulk btn-bulk-deactivate" onclick="bulkDeactivate()">
+                        <i class="fas fa-ban"></i>
+                        Ngừng bán
+                    </button>
+                    <button class="btn-bulk btn-bulk-delete" onclick="bulkDelete()">
+                        <i class="fas fa-trash"></i>
+                        Xóa
+                    </button>
+                    <button class="btn-bulk btn-bulk-cancel" onclick="cancelSelection()">
+                        <i class="fas fa-times"></i>
+                        Hủy
+                    </button>
+                </div>
+            </div>
+            
             <!-- Products Container -->
             <div class="products-container">
                 <div class="table-header">
@@ -174,6 +200,9 @@
                     <table class="orders-table">
                         <thead>
                             <tr>
+                                <th style="width: 50px;">
+                                    <input type="checkbox" class="product-checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)">
+                                </th>
                                 <th style="width: 80px;">Hình ảnh</th>
                                 <th>Tên sản phẩm</th>
                                 <th style="width: 120px;">SKU</th>
@@ -188,21 +217,23 @@
                             <!-- Product 1 -->
                             <tr>
                                 <td>
-                                    <img src="../assets/images/san-pham-tra-bac-ha.jpg" alt="Trà Bạc Hà Premium" 
-                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
                                 </td>
                                 <td>
-                                    <div style="font-weight: 600; color: #333; margin-bottom: 4px;">Trà Bạc Hà Premium</div>
-                                    <div style="font-size: 12px; color: #666;">Trà thảo mộc cao cấp</div>
+                                    <img src="../assets/images/san-pham-tra-bac-ha.jpg" alt="Trà Bạc Hà Premium" class="product-image-thumb">
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">Trà Bạc Hà Premium</div>
+                                    <div class="product-description-cell">Trà thảo mộc cao cấp</div>
                                 </td>
                                 <td>TBH001</td>
                                 <td>Trà thảo mộc</td>
                                 <td>
-                                    <div style="font-weight: 600; color: #107e84;">85,000₫</div>
-                                    <div style="font-size: 12px; color: #999; text-decoration: line-through;">95,000₫</div>
+                                    <div class="product-price-main">85,000₫</div>
+                                    <div class="product-price-original">95,000₫</div>
                                 </td>
                                 <td>
-                                    <span style="font-weight: 600; color: #28a745;">156</span>
+                                    <span class="product-stock-high">156</span>
                                 </td>
                                 <td>
                                     <span class="status-badge status-confirmed">Đang bán</span>
@@ -225,20 +256,22 @@
                             <!-- Product 2 -->
                             <tr>
                                 <td>
-                                    <img src="../assets/images/san-pham-tra-gung-mat-ong.jpg" alt="Trà Gừng Mật Ong" 
-                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
                                 </td>
                                 <td>
-                                    <div style="font-weight: 600; color: #333; margin-bottom: 4px;">Trà Gừng Mật Ong</div>
-                                    <div style="font-size: 12px; color: #666;">Trà thảo mộc ấm bụng</div>
+                                    <img src="../assets/images/san-pham-tra-gung-mat-ong.jpg" alt="Trà Gừng Mật Ong" class="product-image-thumb">
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">Trà Gừng Mật Ong</div>
+                                    <div class="product-description-cell">Trà thảo mộc ấm bụng</div>
                                 </td>
                                 <td>TGMO002</td>
                                 <td>Trà thảo mộc</td>
                                 <td>
-                                    <div style="font-weight: 600; color: #107e84;">75,000₫</div>
+                                    <div class="product-price-main">75,000₫</div>
                                 </td>
                                 <td>
-                                    <span style="font-weight: 600; color: #28a745;">89</span>
+                                    <span class="product-stock-high">89</span>
                                 </td>
                                 <td>
                                     <span class="status-badge status-confirmed">Đang bán</span>
@@ -261,20 +294,22 @@
                             <!-- Product 3 -->
                             <tr>
                                 <td>
-                                    <img src="../assets/images/san-pham-bot-milk-foam.jpg" alt="Bột Milk Foam Trứng Muối" 
-                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
                                 </td>
                                 <td>
-                                    <div style="font-weight: 600; color: #333; margin-bottom: 4px;">Bột Milk Foam Trứng Muối</div>
-                                    <div style="font-size: 12px; color: #666;">Bột pha chế cao cấp</div>
+                                    <img src="../assets/images/san-pham-bot-milk-foam.jpg" alt="Bột Milk Foam Trứng Muối" class="product-image-thumb">
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">Bột Milk Foam Trứng Muối</div>
+                                    <div class="product-description-cell">Bột pha chế cao cấp</div>
                                 </td>
                                 <td>BMFTM003</td>
                                 <td>Bột pha chế</td>
                                 <td>
-                                    <div style="font-weight: 600; color: #107e84;">120,000₫</div>
+                                    <div class="product-price-main">120,000₫</div>
                                 </td>
                                 <td>
-                                    <span style="font-weight: 600; color: #dc3545;">5</span>
+                                    <span class="product-stock-low">5</span>
                                 </td>
                                 <td>
                                     <span class="status-badge status-confirmed">Đang bán</span>
@@ -297,21 +332,23 @@
                             <!-- Product 4 -->
                             <tr>
                                 <td>
-                                    <img src="../assets/images/san-pham-tra-atiso.jpg" alt="Trà Atiso Đà Lạt" 
-                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
                                 </td>
                                 <td>
-                                    <div style="font-weight: 600; color: #333; margin-bottom: 4px;">Trà Atiso Đà Lạt</div>
-                                    <div style="font-size: 12px; color: #666;">Trà thảo mộc giải nhiệt</div>
+                                    <img src="../assets/images/san-pham-tra-atiso.jpg" alt="Trà Atiso Đà Lạt" class="product-image-thumb">
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">Trà Atiso Đà Lạt</div>
+                                    <div class="product-description-cell">Trà thảo mộc giải nhiệt</div>
                                 </td>
                                 <td>TADL004</td>
                                 <td>Trà thảo mộc</td>
                                 <td>
-                                    <div style="font-weight: 600; color: #107e84;">65,000₫</div>
-                                    <div style="font-size: 12px; color: #999; text-decoration: line-through;">70,000₫</div>
+                                    <div class="product-price-main">65,000₫</div>
+                                    <div class="product-price-original">70,000₫</div>
                                 </td>
                                 <td>
-                                    <span style="font-weight: 600; color: #dc3545;">0</span>
+                                    <span class="product-stock-low">0</span>
                                 </td>
                                 <td>
                                     <span class="status-badge status-cancelled">Hết hàng</span>
@@ -334,20 +371,22 @@
                             <!-- Product 5 -->
                             <tr>
                                 <td>
-                                    <img src="../assets/images/san-pham-tran-chau-den.jpg" alt="Trân Châu Đen Taiwan" 
-                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
                                 </td>
                                 <td>
-                                    <div style="font-weight: 600; color: #333; margin-bottom: 4px;">Trân Châu Đen Taiwan</div>
-                                    <div style="font-size: 12px; color: #666;">Nguyên liệu pha chế</div>
+                                    <img src="../assets/images/san-pham-tran-chau-den.jpg" alt="Trân Châu Đen Taiwan" class="product-image-thumb">
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">Trân Châu Đen Taiwan</div>
+                                    <div class="product-description-cell">Nguyên liệu pha chế</div>
                                 </td>
                                 <td>TCDT005</td>
                                 <td>Trà sữa nguyên liệu</td>
                                 <td>
-                                    <div style="font-weight: 600; color: #107e84;">45,000₫</div>
+                                    <div class="product-price-main">45,000₫</div>
                                 </td>
                                 <td>
-                                    <span style="font-weight: 600; color: #28a745;">234</span>
+                                    <span class="product-stock-high">234</span>
                                 </td>
                                 <td>
                                     <span class="status-badge status-confirmed">Đang bán</span>
@@ -370,20 +409,22 @@
                             <!-- Product 6 -->
                             <tr>
                                 <td>
-                                    <img src="../assets/images/san-pham-bot-sua-beo.jpg" alt="Bột Sữa Béo Premium" 
-                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
                                 </td>
                                 <td>
-                                    <div style="font-weight: 600; color: #333; margin-bottom: 4px;">Bột Sữa Béo Premium</div>
-                                    <div style="font-size: 12px; color: #666;">Bột pha chế cao cấp</div>
+                                    <img src="../assets/images/san-pham-bot-sua-beo.jpg" alt="Bột Sữa Béo Premium" class="product-image-thumb">
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">Bột Sữa Béo Premium</div>
+                                    <div class="product-description-cell">Bột pha chế cao cấp</div>
                                 </td>
                                 <td>BSB006</td>
                                 <td>Bột pha chế</td>
                                 <td>
-                                    <div style="font-weight: 600; color: #107e84;">95,000₫</div>
+                                    <div class="product-price-main">95,000₫</div>
                                 </td>
                                 <td>
-                                    <span style="font-weight: 600; color: #28a745;">67</span>
+                                    <span class="product-stock-high">67</span>
                                 </td>
                                 <td>
                                     <span class="status-badge status-confirmed">Đang bán</span>
@@ -428,5 +469,129 @@
         </div>
     </main>
 </div>
+
+<script>
+    // Toggle select all checkboxes
+    function toggleSelectAll(checkbox) {
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        const bulkActionsCheckbox = document.getElementById('selectAllProducts');
+        
+        rowCheckboxes.forEach(cb => {
+            cb.checked = checkbox.checked;
+        });
+        
+        bulkActionsCheckbox.checked = checkbox.checked;
+        updateBulkActions();
+    }
+    
+    // Update bulk actions bar
+    function updateBulkActions() {
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+        const bulkActionsCheckbox = document.getElementById('selectAllProducts');
+        const bulkActionsBar = document.getElementById('bulkActionsBar');
+        const selectedCount = document.getElementById('selectedCount');
+        
+        const checkedCount = Array.from(rowCheckboxes).filter(cb => cb.checked).length;
+        const totalCount = rowCheckboxes.length;
+        
+        // Update count
+        selectedCount.textContent = checkedCount;
+        
+        // Show/hide bulk actions bar
+        if (checkedCount > 0) {
+            bulkActionsBar.classList.add('active');
+        } else {
+            bulkActionsBar.classList.remove('active');
+        }
+        
+        // Update select all checkbox state
+        if (checkedCount === totalCount) {
+            selectAllCheckbox.checked = true;
+            bulkActionsCheckbox.checked = true;
+            selectAllCheckbox.indeterminate = false;
+        } else if (checkedCount > 0) {
+            selectAllCheckbox.checked = false;
+            bulkActionsCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = true;
+        } else {
+            selectAllCheckbox.checked = false;
+            bulkActionsCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = false;
+        }
+    }
+    
+    // Sync bulk actions bar checkbox with table header checkbox
+    document.getElementById('selectAllProducts').addEventListener('change', function() {
+        const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+        selectAllCheckbox.checked = this.checked;
+        toggleSelectAll(this);
+    });
+    
+    // Bulk actions functions
+    function bulkActivate() {
+        const selectedProducts = getSelectedProducts();
+        if (selectedProducts.length === 0) return;
+        
+        if (confirm(`Bạn có chắc muốn kích hoạt ${selectedProducts.length} sản phẩm đã chọn?`)) {
+            console.log('Activating products:', selectedProducts);
+            // Add your activation logic here
+            alert(`Đã kích hoạt ${selectedProducts.length} sản phẩm!`);
+            cancelSelection();
+        }
+    }
+    
+    function bulkDeactivate() {
+        const selectedProducts = getSelectedProducts();
+        if (selectedProducts.length === 0) return;
+        
+        if (confirm(`Bạn có chắc muốn ngừng bán ${selectedProducts.length} sản phẩm đã chọn?`)) {
+            console.log('Deactivating products:', selectedProducts);
+            // Add your deactivation logic here
+            alert(`Đã ngừng bán ${selectedProducts.length} sản phẩm!`);
+            cancelSelection();
+        }
+    }
+    
+    function bulkDelete() {
+        const selectedProducts = getSelectedProducts();
+        if (selectedProducts.length === 0) return;
+        
+        if (confirm(`CẢNH BÁO: Bạn có chắc muốn xóa ${selectedProducts.length} sản phẩm đã chọn? Hành động này không thể hoàn tác!`)) {
+            console.log('Deleting products:', selectedProducts);
+            // Add your deletion logic here
+            alert(`Đã xóa ${selectedProducts.length} sản phẩm!`);
+            cancelSelection();
+        }
+    }
+    
+    function cancelSelection() {
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+        const bulkActionsCheckbox = document.getElementById('selectAllProducts');
+        
+        rowCheckboxes.forEach(cb => {
+            cb.checked = false;
+        });
+        
+        selectAllCheckbox.checked = false;
+        bulkActionsCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false;
+        updateBulkActions();
+    }
+    
+    function getSelectedProducts() {
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        const selected = [];
+        
+        rowCheckboxes.forEach((checkbox, index) => {
+            if (checkbox.checked) {
+                selected.push(index);
+            }
+        });
+        
+        return selected;
+    }
+</script>
 </body>
 </html>
