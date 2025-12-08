@@ -645,26 +645,6 @@
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary, #107e84) 20%, transparent);
 }
 
-/* Eye icon (toggle password) */
-.login-page .password-field {
-    position: relative;
-}
-
-.login-page .eye-icon {
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #2b2f36;
-    cursor: pointer;
-    font-size: 1.1rem;
-    transition: color .25s ease;
-}
-
-.login-page .eye-icon:hover {
-    color: var(--color-primary, #107e84);
-}
-
 /* Remember + Forgot */
 .form-options {
     display: flex;
@@ -797,6 +777,88 @@
     }
 }
 
+/* ================
+   AUTH PAGES: FORGOT / OTP / RESET
+   ================ */
+
+/* Quên mật khẩu */
+.forgot-password-page .login-icon-circle i {
+    font-size: 3.5rem;
+}
+
+/* OTP */
+.otp-page .login-icon-circle i {
+    font-size: 3.5rem;
+}
+
+.input-otp {
+    text-align: center;
+    letter-spacing: 4px;
+    font-size: 1.5rem;
+    font-family: 'Roboto Mono', monospace;
+}
+
+/* Reset password */
+.reset-password-page .login-icon-circle i {
+    font-size: 3.5rem;
+}
+
+.password-hint {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-bottom: 12px;
+}
+
+/* Thông điệp sau khi backend set */
+.reset-message {
+    font-size: 0.9rem;
+    margin: 8px 0 12px;
+    color: #ef4444; /* mặc định màu đỏ nếu có lỗi, backend có thể đổi thành xanh khi thành công */
+}
+
+/* Link phụ dưới form */
+.auth-extra-links {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #4b5563;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.auth-extra-links a {
+    color: var(--color-primary, #107e84);
+    text-decoration: none;
+}
+
+.auth-extra-links a:hover {
+    text-decoration: underline;
+}
+
+/* Nút dạng link – dùng cho "Gửi lại mã OTP" */
+.link-button {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-primary, #107e84);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.link-button:hover {
+    text-decoration: underline;
+}
+
+/* Responsive nhỏ */
+@media (max-width: 480px) {
+    .auth-extra-links {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
 
 
    /* VỀ CHÚNG TÔI about pages  */

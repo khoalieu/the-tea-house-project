@@ -3,29 +3,30 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng Nhập</title>
-    <!-- <link rel="stylesheet" href="assets/css/login.css" /> -->
-    <link rel="stylesheet" href="assets/css/main.css">
+    <title>Quên Mật Khẩu</title>
+    <link rel="stylesheet" href="assets/css/main.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 <div class="top-bar">
-        <div class="container">
-            <div class="top-bar__left">
-                <span>
-                    <i class="fa-solid fa-envelope"></i> contact@moctra.com
-                </span>
-                <span>
-                    <i class="fa-solid fa-phone"></i> 0888 531 015
-                </span>
-            </div>
-            <div class="top-bar__right">
-                <i class="fa-brands fa-facebook"></i>
-                <i class="fa-brands fa-instagram"></i>
-                <i class="fa-brands fa-twitter"></i>
-            </div>
+    <div class="container">
+        <div class="top-bar__left">
+            <span>
+                <i class="fa-solid fa-envelope"></i> contact@moctra.com
+            </span>
+            <span>
+                <i class="fa-solid fa-phone"></i> 0888 531 015
+            </span>
         </div>
+        <div class="top-bar__right">
+            <i class="fa-brands fa-facebook"></i>
+            <i class="fa-brands fa-instagram"></i>
+            <i class="fa-brands fa-twitter"></i>
+        </div>
+    </div>
 </div>
+
 <header class="utility-header">
     <div class="header-left">
         <nav class="main-nav">
@@ -38,10 +39,9 @@
                             </a>
                         </div>
                     </li>
-                    <li><a href="index.html" class="">TRANG CHỦ</a></li>
+                    <li><a href="index.html">TRANG CHỦ</a></li>
                     <li class="has-dropdown">
                         <a href="san-pham.html">SẢN PHẨM</a>
-
                         <div class="dropdown-menu">
                             <div class="dropdown-column">
                                 <h3>Trà Thảo Mộc</h3>
@@ -54,12 +54,12 @@
                                 <ul>
                                     <li><a href="san-pham.html?category=nguyen-lieu-tra-sua">Trà Nền Pha Chế</a></li>
                                     <li><a href="san-pham.html?category=nguyen-lieu-tra-sua">Bột Pha Chế</a></li>
-                                    <li><a href="san-pham.html?category=nguyen-lieu-tra-sua">Topping & Trân Châu</a></li>
+                                    <li><a href="san-pham.html?category=nguyen-lieu-tra-sua">Topping &amp; Trân Châu</a></li>
                                 </ul>
                             </div>
                         </div>
                     </li>
-                    <li><a href="blog.html">CÔNG THỨC & BLOG</a></li>
+                    <li><a href="blog.html">CÔNG THỨC &amp; BLOG</a></li>
                     <li class="has-dropdown">
                         <a href="ve-chung-toi.html">VỀ CHÚNG TÔI</a>
                         <div class="dropdown-menu">
@@ -109,77 +109,49 @@
             </div>
         </div>
     </div>
-
 </header>
 
-
-    <div class="login-page">
+<main>
+    <div class="login-page forgot-password-page">
         <div class="login-box">
-
             <div class="login-header">
                 <div class="login-icon-circle">
-                    <i class="fa-solid fa-user"></i>
+                    <i class="fa-solid fa-unlock-keyhole"></i>
                 </div>
-                <h2 class="login-title">Chào mừng đến với Mộc trà</h2>
-                <p class="login-subtitle">Đăng nhập để thưởng thức trà</p>
+                <h2 class="login-title">Quên mật khẩu</h2>
+                <p class="login-subtitle">
+                    Nhập email bạn đã đăng ký để nhận liên kết 
+                </p>
             </div>
 
-
             <div class="login-content">
-
-                <form action="index-login.html" method="get" autocomplete="on"> <!--sau này servelet thì xóa dòng này mở commernt dòng dưới-->
-                <!-- <form action="#" method="post" autocomplete="on"> -->
-                    <!-- username -->
+                <form action="verify-otp.html" method="get" autocomplete="on">
                     <div class="form-row">
-                        <input 
-                            id="login-username"
-                            class="input-username"
-                            type="text"
-                            name="username"
-                            placeholder="Tên đăng nhập"
-                            required>
-                    </div>
-
-                    <!-- password -->
-                    <div class="form-row password-field">
-                        <input 
-                            id="login-password"
-                            class="input-password"
-                            type="password"
-                            name="password"
-                            placeholder="Mật khẩu"
-                            required>
-                    
-                    </div>
-
-
-                    <div class="form-options">
-                        <div class="remember">
-                            <input type="checkbox" id="remember">
-                            <label for="remember">Ghi nhớ tôi</label>
-                        </div>
-                        <a href="#">Quên mật khẩu?</a>
+                        <input
+                            id="forgot-email"
+                            class="input-email"
+                            type="email"
+                            name="email"
+                            placeholder="Email đã đăng ký"
+                            aria-label="Email đã đăng ký"
+                            required
+                        >
                     </div>
 
                     <div class="form-row">
-                        <button type="submit"  class="btn">Đăng nhập</button>
-                    </div>
-                        <!-- Mạng xã hội -->
-                    <div class="social-login">
-                        <a href="#" class="social fb"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="social gg"><i class="fa-brands fa-google"></i></a>
+                        <button type="submit" class="btn">Gửi liên kết khôi phục</button>
                     </div>
 
-                    <div class="signup">
-                        Chưa có tài khoản? <a href="signup.html">Đăng ký</a>
+                    <div class="auth-extra-links">
+                        <a href="login.html">Quay lại đăng nhập</a>
                     </div>
                 </form>
             </div>
 
         </div>
     </div>
+</main>
 
-       <!-- footer  -->
 <footer class="main-footer">
     <div class="container">
         <div class="left-footer footer-section">
@@ -189,11 +161,11 @@
                 </a>
             </div>
             <h2>LỜI NHẮN NHỦ TỪ MỘC TRÀ</h2>
-            <P>Tiệm trà Mộc Trà với những tâm hồn tự tại đã trót yêu mẹ thiên nhiên say đắm, 
+            <p>Tiệm trà Mộc Trà với những tâm hồn tự tại đã trót yêu mẹ thiên nhiên say đắm, 
                 mong muốn được dùng các loại thảo mộc chữa lành cho tất cả mọi người. 
                 Sản phẩm của Mộc Trà có thành phần từ tự nhiên, được chế biến hoàn toàn bằng công nghệ sấy lạnh,
-                 không chứa chất bảo quản và rất lành tính. Với mỗi sản phẩm bán ra đã trải qua bao lần thử nghiệm,
-                các khâu chế biến, sản xuất nghiêm ngặt để cho ra một hộp trà chất lượng đến được tay khách hàng.</P>
+                không chứa chất bảo quản và rất lành tính. Với mỗi sản phẩm bán ra đã trải qua bao lần thử nghiệm,
+                các khâu chế biến, sản xuất nghiêm ngặt để cho ra một hộp trà chất lượng đến được tay khách hàng.</p>
         </div>
         <div class="center-footer footer-section">
             <h2>THÔNG TIN LIÊN HỆ</h2>
@@ -223,21 +195,22 @@
         </div>
     </div>
 </footer>
-    <div class="footer-bottom">
-        <div class="container">
-            <div class="footer-bottom-left">
-                <p>&copy; 2024 Mộc Trà. All rights reserved.</p>
-            </div>
-            <div class="footer-bottom-right">
-                <i class="fa-brands fa-facebook"></i>
-                <i class="fa-brands fa-instagram"></i>
-                <i class="fa-brands fa-youtube"></i>
-            </div>
+<div class="footer-bottom">
+    <div class="container">
+        <div class="footer-bottom-left">
+            <p>&copy; 2024 Mộc Trà. All rights reserved.</p>
+        </div>
+        <div class="footer-bottom-right">
+            <i class="fa-brands fa-facebook"></i>
+            <i class="fa-brands fa-instagram"></i>
+            <i class="fa-brands fa-youtube"></i>
         </div>
     </div>
+</div>
+
 <button id="backToTop" class="back-to-top" title="Lên đầu trang">
     <i class="fa-solid fa-chevron-up"></i>
 </button>
- 
+<script src="assets/js/main.js"></script>
 </body>
 </html>
