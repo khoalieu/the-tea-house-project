@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Blog - Mộc Trà Admin</title>
+    <title>Quản lý Khách hàng - Mộc Trà Admin</title>
     <link rel="stylesheet" href="../assets/css/base.css">
     <link rel="stylesheet" href="../assets/css/components.css">
     <link rel="stylesheet" href="../admin/assets/css/admin.css">
-    <link rel="stylesheet" href="../admin/assets/css/admin-add-product.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -77,411 +76,567 @@
         </nav>
     </aside>
         
-        <!-- Main Content -->
-        <main class="admin-main">
-            <!-- Header -->
-            <header class="admin-header">
-                <div class="header-left">
-                    <h1>Quản lý Khách hàng</h1>
-                </div>
-                
-                <div class="header-right">
-                    <div class="header-search">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Tìm kiếm khách hàng...">
-                    </div>
-                    
-                    <a href="../index.html" class="view-site-btn" target="_blank">
-                        <i class="fas fa-external-link-alt"></i>
-                        <span>Xem trang web</span>
-                    </a>
-                </div>
-            </header>
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-left">
+                <h1>Quản lý Khách hàng</h1>
+            </div>
             
-            <!-- Content -->
-            <div class="admin-content">
-                <!-- Page Header -->
-                <div class="page-header">
-                    <div class="page-title">
-                        <h2>Danh sách khách hàng</h2>
-                        <p>Quản lý thông tin và hoạt động của khách hàng</p>
-                    </div>
+            <div class="header-right">
+                <div class="header-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Tìm kiếm khách hàng...">
                 </div>
                 
-                <!-- Filters -->
-                <div class="filters-section">
-                    <div class="filters-grid">
-                        <div class="filter-group">
-                            <label for="status-filter">Trạng thái</label>
-                            <select id="status-filter" class="form-select">
-                                <option value="">Tất cả trạng thái</option>
-                                <option value="new">Khách hàng mới</option>
-                                <option value="active">Đang hoạt động</option>
-                                <option value="vip">VIP</option>
-                                <option value="inactive">Không hoạt động</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label for="orders-filter">Số đơn hàng</label>
-                            <select id="orders-filter" class="form-select">
-                                <option value="">Tất cả</option>
-                                <option value="0">Chưa mua hàng</option>
-                                <option value="1-5">1-5 đơn</option>
-                                <option value="6-10">6-10 đơn</option>
-                                <option value="10+">Trên 10 đơn</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label for="spending-filter">Tổng chi tiêu</label>
-                            <select id="spending-filter" class="form-select">
-                                <option value="">Tất cả</option>
-                                <option value="0-500000">Dưới 500.000₫</option>
-                                <option value="500000-1000000">500.000₫ - 1.000.000₫</option>
-                                <option value="1000000+">Trên 1.000.000₫</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label for="sort-filter">Sắp xếp</label>
-                            <select id="sort-filter" class="form-select">
-                                <option value="newest">Mới nhất</option>
-                                <option value="oldest">Cũ nhất</option>
-                                <option value="name-asc">Tên A-Z</option>
-                                <option value="name-desc">Tên Z-A</option>
-                                <option value="orders-desc">Nhiều đơn hàng</option>
-                                <option value="spending-desc">Chi tiêu cao</option>
-                            </select>
-                        </div>
-                    </div>
+                <a href="../index.html" class="view-site-btn" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span>Xem trang web</span>
+                </a>
+            </div>
+        </header>
+        
+        <!-- Content -->
+        <div class="admin-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title">
+                    <h2>Danh sách khách hàng</h2>
+                    <p>Quản lý thông tin và hoạt động của khách hàng</p>
                 </div>
-                
-                <!-- Customers Container -->
-                <div class="customers-container">
-                    <div class="table-header">
-                        <div class="customers-count">Tổng cộng: <strong>348 khách hàng</strong></div>
+            </div>
+            
+            <!-- Filters -->
+            <div class="filters-section">
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label for="status-filter">Trạng thái</label>
+                        <select id="status-filter" class="form-select">
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="new">Khách hàng mới</option>
+                            <option value="active">Đang hoạt động</option>
+                            <option value="vip">VIP</option>
+                            <option value="inactive">Không hoạt động</option>
+                        </select>
                     </div>
                     
-                    <!-- Customers Grid -->
-                    <div class="customers-grid">
-                        <!-- Customer 1 -->
-                        <div class="customer-card">
-                            <span class="customer-status status-vip">VIP</span>
-                            <div class="customer-header">
-                                <div class="customer-avatar">NVA</div>
-                                <div class="customer-info">
-                                    <h3 class="customer-name">Nguyễn Văn A</h3>
-                                    <p class="customer-email">nguyenvana@email.com</p>
-                                    <p class="customer-phone">0901234567</p>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-stats-row">
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">15</div>
-                                    <div class="customer-stat-label">Đơn hàng</div>
-                                </div>
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">2.5M₫</div>
-                                    <div class="customer-stat-label">Chi tiêu</div>
-                                </div>
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">4.8</div>
-                                    <div class="customer-stat-label">Đánh giá</div>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-details">
-                                <div class="customer-detail">
-                                    <span class="detail-label">Ngày tham gia:</span>
-                                    <span class="detail-value">15/08/2024</span>
-                                </div>
-                                <div class="customer-detail">
-                                    <span class="detail-label">Lần mua cuối:</span>
-                                    <span class="detail-value">12/11/2025</span>
-                                </div>
-                                <div class="customer-detail">
-                                    <span class="detail-label">Địa chỉ:</span>
-                                    <span class="detail-value">Hà Nội</span>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-actions">
-                                <button class="btn-sm btn-success">Xem chi tiết</button>
-                                <button class="btn-sm btn-warning">Chỉnh sửa</button>
-                                <button class="btn-sm btn-info">Liên hệ</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Customer 2 -->
-                        <div class="customer-card">
-                            <span class="customer-status status-active">Hoạt động</span>
-                            <div class="customer-header">
-                                <div class="customer-avatar">TTB</div>
-                                <div class="customer-info">
-                                    <h3 class="customer-name">Trần Thị B</h3>
-                                    <p class="customer-email">tranthib@email.com</p>
-                                    <p class="customer-phone">0912345678</p>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-stats-row">
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">8</div>
-                                    <div class="customer-stat-label">Đơn hàng</div>
-                                </div>
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">1.2M₫</div>
-                                    <div class="customer-stat-label">Chi tiêu</div>
-                                </div>
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">4.5</div>
-                                    <div class="customer-stat-label">Đánh giá</div>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-details">
-                                <div class="customer-detail">
-                                    <span class="detail-label">Ngày tham gia:</span>
-                                    <span class="detail-value">02/10/2024</span>
-                                </div>
-                                <div class="customer-detail">
-                                    <span class="detail-label">Lần mua cuối:</span>
-                                    <span class="detail-value">10/11/2025</span>
-                                </div>
-                                <div class="customer-detail">
-                                    <span class="detail-label">Địa chỉ:</span>
-                                    <span class="detail-value">TP.HCM</span>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-actions">
-                                <button class="btn-sm btn-success">Xem chi tiết</button>
-                                <button class="btn-sm btn-warning">Chỉnh sửa</button>
-                                <button class="btn-sm btn-info">Liên hệ</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Customer 3 -->
-                        <div class="customer-card">
-                            <span class="customer-status status-new">Mới</span>
-                            <div class="customer-header">
-                                <div class="customer-avatar">LVC</div>
-                                <div class="customer-info">
-                                    <h3 class="customer-name">Lê Văn C</h3>
-                                    <p class="customer-email">levanc@email.com</p>
-                                    <p class="customer-phone">0923456789</p>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-stats-row">
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">2</div>
-                                    <div class="customer-stat-label">Đơn hàng</div>
-                                </div>
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">320K₫</div>
-                                    <div class="customer-stat-label">Chi tiêu</div>
-                                </div>
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">5.0</div>
-                                    <div class="customer-stat-label">Đánh giá</div>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-details">
-                                <div class="customer-detail">
-                                    <span class="detail-label">Ngày tham gia:</span>
-                                    <span class="detail-value">01/11/2025</span>
-                                </div>
-                                <div class="customer-detail">
-                                    <span class="detail-label">Lần mua cuối:</span>
-                                    <span class="detail-value">08/11/2025</span>
-                                </div>
-                                <div class="customer-detail">
-                                    <span class="detail-label">Địa chỉ:</span>
-                                    <span class="detail-value">Đà Nẵng</span>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-actions">
-                                <button class="btn-sm btn-success">Xem chi tiết</button>
-                                <button class="btn-sm btn-warning">Chỉnh sửa</button>
-                                <button class="btn-sm btn-info">Liên hệ</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Customer 4 -->
-                        <div class="customer-card">
-                            <span class="customer-status status-active">Hoạt động</span>
-                            <div class="customer-header">
-                                <div class="customer-avatar">PTD</div>
-                                <div class="customer-info">
-                                    <h3 class="customer-name">Phạm Thị D</h3>
-                                    <p class="customer-email">phamthid@email.com</p>
-                                    <p class="customer-phone">0934567890</p>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-stats-row">
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">6</div>
-                                    <div class="customer-stat-label">Đơn hàng</div>
-                                </div>
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">850K₫</div>
-                                    <div class="customer-stat-label">Chi tiêu</div>
-                                </div>
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">4.2</div>
-                                    <div class="customer-stat-label">Đánh giá</div>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-details">
-                                <div class="customer-detail">
-                                    <span class="detail-label">Ngày tham gia:</span>
-                                    <span class="detail-value">20/09/2024</span>
-                                </div>
-                                <div class="customer-detail">
-                                    <span class="detail-label">Lần mua cuối:</span>
-                                    <span class="detail-value">05/11/2025</span>
-                                </div>
-                                <div class="customer-detail">
-                                    <span class="detail-label">Địa chỉ:</span>
-                                    <span class="detail-value">Cần Thơ</span>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-actions">
-                                <button class="btn-sm btn-success">Xem chi tiết</button>
-                                <button class="btn-sm btn-warning">Chỉnh sửa</button>
-                                <button class="btn-sm btn-info">Liên hệ</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Customer 5 -->
-                        <div class="customer-card">
-                            <span class="customer-status status-inactive">Không hoạt động</span>
-                            <div class="customer-header">
-                                <div class="customer-avatar">HVE</div>
-                                <div class="customer-info">
-                                    <h3 class="customer-name">Hoàng Văn E</h3>
-                                    <p class="customer-email">hoangvane@email.com</p>
-                                    <p class="customer-phone">0945678901</p>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-stats-row">
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">3</div>
-                                    <div class="customer-stat-label">Đơn hàng</div>
-                                </div>
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">450K₫</div>
-                                    <div class="customer-stat-label">Chi tiêu</div>
-                                </div>
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">3.8</div>
-                                    <div class="customer-stat-label">Đánh giá</div>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-details">
-                                <div class="customer-detail">
-                                    <span class="detail-label">Ngày tham gia:</span>
-                                    <span class="detail-value">05/07/2024</span>
-                                </div>
-                                <div class="customer-detail">
-                                    <span class="detail-label">Lần mua cuối:</span>
-                                    <span class="detail-value">15/08/2024</span>
-                                </div>
-                                <div class="customer-detail">
-                                    <span class="detail-label">Địa chỉ:</span>
-                                    <span class="detail-value">Hải Phòng</span>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-actions">
-                                <button class="btn-sm btn-success">Xem chi tiết</button>
-                                <button class="btn-sm btn-warning">Chỉnh sửa</button>
-                                <button class="btn-sm btn-info">Liên hệ</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Customer 6 -->
-                        <div class="customer-card">
-                            <span class="customer-status status-vip">VIP</span>
-                            <div class="customer-header">
-                                <div class="customer-avatar">NTF</div>
-                                <div class="customer-info">
-                                    <h3 class="customer-name">Ngô Thị F</h3>
-                                    <p class="customer-email">ngothif@email.com</p>
-                                    <p class="customer-phone">0956789012</p>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-stats-row">
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">22</div>
-                                    <div class="customer-stat-label">Đơn hàng</div>
-                                </div>
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">3.8M₫</div>
-                                    <div class="customer-stat-label">Chi tiêu</div>
-                                </div>
-                                <div class="customer-stat">
-                                    <div class="customer-stat-number">4.9</div>
-                                    <div class="customer-stat-label">Đánh giá</div>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-details">
-                                <div class="customer-detail">
-                                    <span class="detail-label">Ngày tham gia:</span>
-                                    <span class="detail-value">10/06/2024</span>
-                                </div>
-                                <div class="customer-detail">
-                                    <span class="detail-label">Lần mua cuối:</span>
-                                    <span class="detail-value">14/11/2025</span>
-                                </div>
-                                <div class="customer-detail">
-                                    <span class="detail-label">Địa chỉ:</span>
-                                    <span class="detail-value">Bình Dương</span>
-                                </div>
-                            </div>
-                            
-                            <div class="customer-actions">
-                                <button class="btn-sm btn-success">Xem chi tiết</button>
-                                <button class="btn-sm btn-warning">Chỉnh sửa</button>
-                                <button class="btn-sm btn-info">Liên hệ</button>
-                            </div>
-                        </div>
+                    <div class="filter-group">
+                        <label for="orders-filter">Số đơn hàng</label>
+                        <select id="orders-filter" class="form-select">
+                            <option value="">Tất cả</option>
+                            <option value="0">Chưa mua hàng</option>
+                            <option value="1-5">1-5 đơn</option>
+                            <option value="6-10">6-10 đơn</option>
+                            <option value="10+">Trên 10 đơn</option>
+                        </select>
                     </div>
                     
-                    <!-- Pagination -->
-                    <div class="pagination-container">
-                        <div class="pagination-info">
-                            Hiển thị <strong>1-6</strong> trong tổng số <strong>348</strong> khách hàng
-                        </div>
-                        <div class="pagination">
-                            <a href="#" class="page-btn disabled">
-                                <i class="fas fa-chevron-left"></i>
-                            </a>
-                            <a href="#" class="page-btn active">1</a>
-                            <a href="#" class="page-btn">2</a>
-                            <a href="#" class="page-btn">3</a>
-                            <a href="#" class="page-btn">...</a>
-                            <a href="#" class="page-btn">58</a>
-                            <a href="#" class="page-btn">
-                                <i class="fas fa-chevron-right"></i>
-                            </a>
-                        </div>
+                    <div class="filter-group">
+                        <label for="spending-filter">Tổng chi tiêu</label>
+                        <select id="spending-filter" class="form-select">
+                            <option value="">Tất cả</option>
+                            <option value="0-500000">Dưới 500.000₫</option>
+                            <option value="500000-1000000">500.000₫ - 1.000.000₫</option>
+                            <option value="1000000+">Trên 1.000.000₫</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="sort-filter">Sắp xếp</label>
+                        <select id="sort-filter" class="form-select">
+                            <option value="newest">Mới nhất</option>
+                            <option value="oldest">Cũ nhất</option>
+                            <option value="name-asc">Tên A-Z</option>
+                            <option value="name-desc">Tên Z-A</option>
+                            <option value="orders-desc">Nhiều đơn hàng</option>
+                            <option value="spending-desc">Chi tiêu cao</option>
+                        </select>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+            
+            <!-- Bulk Actions Bar -->
+            <div class="bulk-actions-bar" id="bulkActionsBar">
+                <input type="checkbox" class="product-checkbox" id="selectAllCustomers">
+                <span class="bulk-actions-info">
+                    <strong id="selectedCount">0</strong> khách hàng được chọn
+                </span>
+                <div class="bulk-actions-buttons">
+                    <button class="btn-bulk btn-bulk-activate" onclick="bulkActivate()">
+                        <i class="fas fa-user-check"></i>
+                        Kích hoạt
+                    </button>
+                    <button class="btn-bulk btn-bulk-deactivate" onclick="bulkDeactivate()">
+                        <i class="fas fa-user-times"></i>
+                        Vô hiệu hóa
+                    </button>
+                    <button class="btn-bulk btn-bulk-delete" onclick="bulkDelete()">
+                        <i class="fas fa-trash"></i>
+                        Xóa
+                    </button>
+                    <button class="btn-bulk btn-bulk-cancel" onclick="cancelSelection()">
+                        <i class="fas fa-times"></i>
+                        Hủy
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Customers Container -->
+            <div class="products-container">
+                <div class="table-header">
+                    <div class="products-count">Tổng cộng: <strong>348 khách hàng</strong></div>
+                </div>
+                
+                <!-- Customers Table -->
+                <div class="table-responsive">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">
+                                    <input type="checkbox" class="product-checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)">
+                                </th>
+                                <th>Tên khách hàng</th>
+                                <th style="width: 200px;">Email / SĐT</th>
+                                <th style="width: 100px;">Đơn hàng</th>
+                                <th style="width: 130px;">Tổng chi tiêu</th>
+                                <th style="width: 150px;">Ngày tham gia</th>
+                                <th style="width: 150px;">Lần mua cuối</th>
+                                <th style="width: 120px;">Trạng thái</th>
+                                <th style="width: 130px; text-align: center;">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Customer 1 -->
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">Nguyễn Văn A</div>
+                                    <div class="product-description-cell">Địa chỉ: Hà Nội</div>
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">nguyenvana@email.com</div>
+                                    <div class="product-description-cell">0901234567</div>
+                                </td>
+                                <td>
+                                    <span class="product-stock-high">15</span>
+                                </td>
+                                <td>
+                                    <div class="product-price-main">2,500,000₫</div>
+                                </td>
+                                <td>
+                                    <div class="date-info">
+                                        <strong>15/08/2024</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="date-info">
+                                        <strong>12/11/2025</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status-badge status-vip">VIP</span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-action" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action danger" title="Xóa">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <!-- Customer 2 -->
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">Trần Thị B</div>
+                                    <div class="product-description-cell">Địa chỉ: TP.HCM</div>
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">tranthib@email.com</div>
+                                    <div class="product-description-cell">0912345678</div>
+                                </td>
+                                <td>
+                                    <span class="product-stock-high">8</span>
+                                </td>
+                                <td>
+                                    <div class="product-price-main">1,200,000₫</div>
+                                </td>
+                                <td>
+                                    <div class="date-info">
+                                        <strong>02/10/2024</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="date-info">
+                                        <strong>10/11/2025</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status-badge status-active">Hoạt động</span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-action" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action danger" title="Xóa">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <!-- Customer 3 -->
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">Lê Văn C</div>
+                                    <div class="product-description-cell">Địa chỉ: Đà Nẵng</div>
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">levanc@email.com</div>
+                                    <div class="product-description-cell">0923456789</div>
+                                </td>
+                                <td>
+                                    <span class="product-stock-low">2</span>
+                                </td>
+                                <td>
+                                    <div class="product-price-main">320,000₫</div>
+                                </td>
+                                <td>
+                                    <div class="date-info">
+                                        <strong>01/11/2025</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="date-info">
+                                        <strong>08/11/2025</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status-badge status-new">Mới</span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-action" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action danger" title="Xóa">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <!-- Customer 4 -->
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">Phạm Thị D</div>
+                                    <div class="product-description-cell">Địa chỉ: Cần Thơ</div>
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">phamthid@email.com</div>
+                                    <div class="product-description-cell">0934567890</div>
+                                </td>
+                                <td>
+                                    <span class="product-stock-high">6</span>
+                                </td>
+                                <td>
+                                    <div class="product-price-main">850,000₫</div>
+                                </td>
+                                <td>
+                                    <div class="date-info">
+                                        <strong>20/09/2024</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="date-info">
+                                        <strong>05/11/2025</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status-badge status-active">Hoạt động</span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-action" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action danger" title="Xóa">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <!-- Customer 5 -->
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">Hoàng Văn E</div>
+                                    <div class="product-description-cell">Địa chỉ: Hải Phòng</div>
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">hoangvane@email.com</div>
+                                    <div class="product-description-cell">0945678901</div>
+                                </td>
+                                <td>
+                                    <span class="product-stock-low">3</span>
+                                </td>
+                                <td>
+                                    <div class="product-price-main">450,000₫</div>
+                                </td>
+                                <td>
+                                    <div class="date-info">
+                                        <strong>05/07/2024</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="date-info">
+                                        <strong>15/08/2024</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status-badge status-inactive">Không hoạt động</span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-action" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action danger" title="Xóa">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <!-- Customer 6 -->
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">Ngô Thị F</div>
+                                    <div class="product-description-cell">Địa chỉ: Bình Dương</div>
+                                </td>
+                                <td>
+                                    <div class="product-name-cell">ngothif@email.com</div>
+                                    <div class="product-description-cell">0956789012</div>
+                                </td>
+                                <td>
+                                    <span class="product-stock-high">22</span>
+                                </td>
+                                <td>
+                                    <div class="product-price-main">3,800,000₫</div>
+                                </td>
+                                <td>
+                                    <div class="date-info">
+                                        <strong>10/06/2024</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="date-info">
+                                        <strong>14/11/2025</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status-badge status-vip">VIP</span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-action" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action danger" title="Xóa">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Hiển thị <strong>1-6</strong> trong tổng số <strong>348</strong> khách hàng
+                    </div>
+                    <div class="pagination">
+                        <a href="#" class="page-btn disabled">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                        <a href="#" class="page-btn active">1</a>
+                        <a href="#" class="page-btn">2</a>
+                        <a href="#" class="page-btn">3</a>
+                        <a href="#" class="page-btn">4</a>
+                        <a href="#" class="page-btn">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    // Toggle select all checkboxes
+    function toggleSelectAll(checkbox) {
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        const bulkActionsCheckbox = document.getElementById('selectAllCustomers');
+        
+        rowCheckboxes.forEach(cb => {
+            cb.checked = checkbox.checked;
+        });
+        
+        bulkActionsCheckbox.checked = checkbox.checked;
+        updateBulkActions();
+    }
+    
+    // Update bulk actions bar
+    function updateBulkActions() {
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+        const bulkActionsCheckbox = document.getElementById('selectAllCustomers');
+        const bulkActionsBar = document.getElementById('bulkActionsBar');
+        const selectedCount = document.getElementById('selectedCount');
+        
+        const checkedCount = Array.from(rowCheckboxes).filter(cb => cb.checked).length;
+        const totalCount = rowCheckboxes.length;
+        
+        // Update count
+        selectedCount.textContent = checkedCount;
+        
+        // Show/hide bulk actions bar
+        if (checkedCount > 0) {
+            bulkActionsBar.classList.add('active');
+        } else {
+            bulkActionsBar.classList.remove('active');
+        }
+        
+        // Update select all checkbox state
+        if (checkedCount === totalCount) {
+            selectAllCheckbox.checked = true;
+            bulkActionsCheckbox.checked = true;
+            selectAllCheckbox.indeterminate = false;
+        } else if (checkedCount > 0) {
+            selectAllCheckbox.checked = false;
+            bulkActionsCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = true;
+        } else {
+            selectAllCheckbox.checked = false;
+            bulkActionsCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = false;
+        }
+    }
+    
+    // Sync bulk actions bar checkbox with table header checkbox
+    document.getElementById('selectAllCustomers').addEventListener('change', function() {
+        const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+        selectAllCheckbox.checked = this.checked;
+        toggleSelectAll(this);
+    });
+    
+    // Bulk actions functions
+    function bulkActivate() {
+        const selectedCustomers = getSelectedCustomers();
+        if (selectedCustomers.length === 0) return;
+        
+        if (confirm(`Bạn có chắc muốn kích hoạt ${selectedCustomers.length} khách hàng đã chọn?`)) {
+            console.log('Activating customers:', selectedCustomers);
+            // Add your activation logic here
+            alert(`Đã kích hoạt ${selectedCustomers.length} khách hàng!`);
+            cancelSelection();
+        }
+    }
+    
+    function bulkDeactivate() {
+        const selectedCustomers = getSelectedCustomers();
+        if (selectedCustomers.length === 0) return;
+        
+        if (confirm(`Bạn có chắc muốn vô hiệu hóa ${selectedCustomers.length} khách hàng đã chọn?`)) {
+            console.log('Deactivating customers:', selectedCustomers);
+            // Add your deactivation logic here
+            alert(`Đã vô hiệu hóa ${selectedCustomers.length} khách hàng!`);
+            cancelSelection();
+        }
+    }
+    
+    function bulkDelete() {
+        const selectedCustomers = getSelectedCustomers();
+        if (selectedCustomers.length === 0) return;
+        
+        if (confirm(`CẢNH BÁO: Bạn có chắc muốn xóa ${selectedCustomers.length} khách hàng đã chọn? Hành động này không thể hoàn tác!`)) {
+            console.log('Deleting customers:', selectedCustomers);
+            // Add your deletion logic here
+            alert(`Đã xóa ${selectedCustomers.length} khách hàng!`);
+            cancelSelection();
+        }
+    }
+    
+    function cancelSelection() {
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+        const bulkActionsCheckbox = document.getElementById('selectAllCustomers');
+        
+        rowCheckboxes.forEach(cb => {
+            cb.checked = false;
+        });
+        
+        selectAllCheckbox.checked = false;
+        bulkActionsCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false;
+        updateBulkActions();
+    }
+    
+    function getSelectedCustomers() {
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        const selected = [];
+        
+        rowCheckboxes.forEach((checkbox, index) => {
+            if (checkbox.checked) {
+                selected.push(index);
+            }
+        });
+        
+        return selected;
+    }
+</script>
 </body>
 </html>
