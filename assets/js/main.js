@@ -10,28 +10,25 @@
         });
 
     
-    // scrip con mắt ẩn hiện mật khẩu
-  (function initPasswordToggles() {
-    document.querySelectorAll('.password-field .eye-icon').forEach(eye => {
-      const field = eye.closest('.password-field');
-      if (!field) return;
-      const input = field.querySelector('input');
-      if (!input) return;
+// Toggle ẩn / hiện mật khẩu
+(function initPasswordToggles() {
+  document.querySelectorAll('.password-field').forEach(field => {
+    const input = field.querySelector('input');
+    const eye   = field.querySelector('.eye-icon');
+    if (!input || !eye) return;
 
-      eye.addEventListener('click', () => {
-        const isHidden = input.type === 'password';
-        input.type = isHidden ? 'text' : 'password';
+    const icon = eye.querySelector('i');
 
-        const icon = eye.querySelector('i');
-        if (icon) {
-          icon.classList.toggle('fa-eye-slash', isHidden);
-          icon.classList.toggle('fa-eye', !isHidden);
-        }
+    eye.addEventListener('click', () => {
+      const isHidden = input.type === 'password';
+      input.type = isHidden ? 'text' : 'password';
 
-        // Hiệu ứng màu con mắt (tuỳ chọn)
-        eye.style.color = isHidden ? '#28a745' : '#6b7280';
-      });
+      if (icon) {
+        icon.classList.toggle('fa-eye', !isHidden);
+        icon.classList.toggle('fa-eye-slash', isHidden);
+      }
     });
-  })();
+  });
+})();
 
 

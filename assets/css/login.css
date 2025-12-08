@@ -16,33 +16,21 @@
     margin: 0 auto;
 }
 
-/* Ảnh đầu */
-.login-page .login-image img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    display: block;
-}
-
-/* title */
-.login-page .login-content {
-    padding: var(--space-xxl, 32px);
-}
 
 .login-page .login-content h2 {
     font-size: 1.6rem;
     font-weight: 700;
     margin: 0 0 var(--space-md, 16px);
-    color: var(--color-text, #191919);
+    color: var(--font-primary);
     font-family: var(--font-primary, 'Lora', serif);
 }
 
 /* Social */
 .login-page .social-login {
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-bottom: 20px;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 18px;
 }
 
 .login-page .social {
@@ -170,7 +158,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 10px;
     margin-bottom: var(--space-lg, 24px);
 }
 
@@ -213,6 +201,41 @@
 .login-page #avatarInput {
     display: none;
 }
+/* ===== ICON LOGIN THAY ẢNH BANNER ===== */
+
+/* ===== ICON USER TRONG KHUNG TRÒN ===== */
+
+.login-page .login-header {
+    text-align: center;
+    padding-top: 16px;
+}
+
+.login-page .login-icon-circle {
+    width: 150px;                 /* icon nằm trong khung tròn → to gấp đôi */
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #dcdfe5;   /* khung tròn màu xám */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 5px;
+}
+
+.login-page .login-icon-circle i {
+    font-size: 6rem;              /* icon người to gấp đôi */
+    color: #107e84;               /* icon màu xanh Mộc Trà */
+}
+
+
+.login-page .login-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--color-primary);
+    font-family: var(--font-primary, 'Lora', serif);
+}
+
+
 
 /* Khi màn hình nhỏ thì xếp dọc */
 @media (max-width: 420px) {
