@@ -1,4 +1,4 @@
-﻿/* ADMIN STYLES - Pure CSS Implementation */
+/* ADMIN STYLES - Pure CSS Implementation */
         * {
             margin: 0;
             padding: 0;
@@ -1514,124 +1514,66 @@
     font-weight: 600;
     color: #dc3545;
 }
-/* --- BULK ACTION BAR (Thanh màu vàng) --- */
-.bulk-action-bar {
-    position: fixed;
-    bottom: -100px; /* Mặc định ẩn xuống dưới */
-    left: 260px; /* Né sidebar ra (tùy độ rộng sidebar của bạn) */
-    right: 0;
-    background-color: #fff9db; /* Màu vàng nhạt */
-    border-top: 2px solid #fab005;
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
-    transition: bottom 0.3s ease-in-out;
-    z-index: 99;
+/* Style cho nút "Thêm vào KM" (Màu vàng gold) */
+.btn-bulk-promo {
+    background-color: #f1c40f; /* Màu vàng */
+    color: #2c3e50;
+    border: 1px solid #f39c12;
+}
+.btn-bulk-promo:hover {
+    background-color: #f39c12;
 }
 
-.bulk-action-bar.active {
-    bottom: 0; /* Hiện lên */
-}
-
-.bulk-info {
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-.selected-count {
-    color: #d32f2f;
-    font-weight: bold;
-}
-
-.bulk-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.btn-bulk {
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.2s;
-}
-
-.btn-promo { background-color: #2c5c38; color: white; }
-.btn-promo:hover { background-color: #1e4027; }
-
-.btn-hide { background-color: #f1f3f5; color: #333; }
-.btn-delete { background-color: #ffe3e3; color: #c92a2a; }
-
-.btn-close-bulk {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    color: #666;
-}
-
-/* --- MODAL (Popup) --- */
+/* Style cho Modal */
 .modal-overlay {
+    display: none; /* Mặc định ẩn */
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    display: flex;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Nền tối mờ */
+    z-index: 2000;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s;
 }
 
-.modal-overlay.show {
-    opacity: 1;
-    visibility: visible;
+.modal-overlay.active {
+    display: flex; /* Hiện khi có class active */
 }
 
 .modal-content {
     background: white;
-    width: 450px;
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    overflow: hidden;
-    transform: translateY(-20px);
-    transition: transform 0.3s;
-}
-
-.modal-overlay.show .modal-content {
-    transform: translateY(0);
+    width: 400px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    animation: slideDown 0.3s ease;
 }
 
 .modal-header {
-    padding: 15px 20px;
-    border-bottom: 1px solid #eee;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #f8f9fa;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
 }
 
-.modal-body { padding: 20px; }
+.close-modal {
+    cursor: pointer;
+    font-size: 24px;
+    color: #999;
+}
+
+.full-width { width: 100%; margin-top: 10px; }
+.highlight-text { color: #d35400; }
 .modal-footer {
-    padding: 15px 20px;
-    border-top: 1px solid #eee;
+    margin-top: 20px;
     display: flex;
     justify-content: flex-end;
     gap: 10px;
 }
 
-.alert-info {
-    background: #e3f2fd;
-    color: #0d47a1;
-    padding: 10px;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    margin-top: 15px;
+@keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }

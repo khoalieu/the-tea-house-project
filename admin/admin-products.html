@@ -176,6 +176,10 @@
                     <strong id="selectedCount">0</strong> sản phẩm được chọn
                 </span>
                 <div class="bulk-actions-buttons">
+                    <button class="btn-bulk btn-bulk-promo" onclick="openPromoModal()">
+                        <i class="fas fa-tags"></i>
+                        Thêm vào KM
+                    </button>
                     <button class="btn-bulk btn-bulk-activate" onclick="bulkActivate()">
                         <i class="fas fa-check-circle"></i>
                         Kích hoạt
@@ -475,14 +479,30 @@
         </div>
     </main>
 </div>
-<div class="bulk-action-bar" id="bulkActionBar">
-    <div class="bulk-info">
-        <span class="selected-count">0</span> sản phẩm đã chọn
+<div id="promoModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Thêm vào chương trình KM</h3>
+            <span class="close-modal" onclick="closePromoModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Bạn đang chọn <strong id="promoSelectedCount" class="highlight-text">0</strong> sản phẩm.</p>
+            <div class="form-group">
+                <label for="promoSelect">Chọn chương trình áp dụng:</label>
+                <select id="promoSelect" class="form-select full-width">
+                    <option value="">-- Chọn chương trình --</option>
+                    <option value="1">🔥 Mừng lễ 8/3 (Giảm 20%)</option>
+                    <option value="2">📦 Xả kho cuối tháng (Giảm 50%)</option>
+                    <option value="3">☀️ Chào hè 2025 (Mua 1 tặng 1)</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closePromoModal()">Hủy</button>
+            <button class="btn btn-primary" onclick="submitAddToPromo()">Lưu thay đổi</button>
+        </div>
     </div>
-    <div class="bulk-actions">
-        <button type="button" class="btn-bulk btn-promo" onclick="openPromoModal()">
-            <i class="fas fa-percentage"></i> Thêm vào Khuyến Mãi
-        </button>
+</div>
 
         <button type="button" class="btn-bulk btn-hide">
             <i class="fas fa-eye-slash"></i> Ẩn sản phẩm
@@ -647,55 +667,68 @@
         
         return selected;
     }
-    // --- LOGIC BULK ACTION ---
+    // --- LOGIC MODAL KHUYẾN MÃI ---
 
-    // Lấy các element
-    const bulkBar = document.getElementById('bulkActionBar');
-    const countSpan = document.querySelector('.selected-count');
-    const modalCount = document.getElementById('modalCount');
-    const promoModal = document.getElementById('promoModal');
-
-    // 1. Hàm được gọi khi user tick vào checkbox sản phẩm
-    // (Bạn cần gán onchange="checkBulk()" vào các checkbox trong bảng)
-    function checkBulk() {
-        // Đếm số checkbox đang checked
-        const checkboxes = document.querySelectorAll('.product-checkbox:checked');
-        const count = checkboxes.length;
-
-        // Cập nhật số lượng
-        countSpan.innerText = count;
-        modalCount.innerText = count;
-
-        // Hiện/Ẩn thanh Bulk Action
-        if (count > 0) {
-            bulkBar.classList.add('active');
-        } else {
-            bulkBar.classList.remove('active');
-        }
+// 1. Mở Modal
+function openPromoModal() {
+    const selectedIds = getSelectedProducts();
+    
+    // Kiểm tra xem đã chọn sản phẩm chưa
+    if (selectedIds.length === 0) {
+        alert("Vui lòng chọn ít nhất 1 sản phẩm!");
+        return;
     }
 
-    // 2. Hàm bỏ chọn tất cả (Nút X trên thanh vàng)
-    function deselectAll() {
-        const checkboxes = document.querySelectorAll('.product-checkbox');
-        checkboxes.forEach(cb => cb.checked = false);
-        checkBulk(); // Cập nhật lại trạng thái
+    // Cập nhật số lượng vào text trong Modal
+    document.getElementById('promoSelectedCount').textContent = selectedIds.length;
+    
+    // Hiển thị Modal
+    document.getElementById('promoModal').classList.add('active');
+}
+
+// 2. Đóng Modal
+function closePromoModal() {
+    document.getElementById('promoModal').classList.remove('active');
+    // Reset dropdown về mặc định nếu cần
+    document.getElementById('promoSelect').value = ""; 
+}
+
+// 3. Xử lý nút Lưu (Submit)
+function submitAddToPromo() {
+    const promotionId = document.getElementById('promoSelect').value;
+    const selectedProductIds = getSelectedProducts(); // Hàm này lấy từ code cũ
+
+    if (!promotionId) {
+        alert("Vui lòng chọn một chương trình khuyến mãi!");
+        return;
     }
 
-    // 3. Logic Modal
-    function openPromoModal() {
-        promoModal.classList.add('show');
-    }
+    // --- GỬI AJAX VỀ SERVER (JSP/Servlet) ---
+    // Ví dụ code gửi dữ liệu đi:
+    console.log("Đang thêm sản phẩm:", selectedProductIds, "vào KM ID:", promotionId);
+    
+    /* fetch('add-products-to-promotion', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `productIds=${selectedProductIds.join(',')}&promoId=${promotionId}`
+    }).then(...) 
+    */
 
-    function closePromoModal() {
-        promoModal.classList.remove('show');
-    }
+    // Giả lập thành công cho giao diện Demo
+    alert(`Đã thêm thành công ${selectedProductIds.length} sản phẩm vào chương trình!`);
+    
+    // Đóng modal và hủy chọn
+    closePromoModal();
+    cancelSelection(); // Hàm này hủy các checkbox (đã có ở code cũ)
+}
 
-    // Đóng modal khi click ra ngoài
-    window.onclick = function(event) {
-        if (event.target == promoModal) {
-            closePromoModal();
-        }
+// Đóng modal khi click ra ngoài vùng trắng
+window.onclick = function(event) {
+    const modal = document.getElementById('promoModal');
+    if (event.target == modal) {
+        closePromoModal();
     }
+}
 </script>
 </body>
 </html>
