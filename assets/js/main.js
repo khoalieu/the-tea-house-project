@@ -10,25 +10,3 @@
         });
 
     
-// Toggle ẩn / hiện mật khẩu
-(function initPasswordToggles() {
-  document.querySelectorAll('.password-field').forEach(field => {
-    const input = field.querySelector('input');
-    const eye   = field.querySelector('.eye-icon');
-    if (!input || !eye) return;
-
-    const icon = eye.querySelector('i');
-
-    eye.addEventListener('click', () => {
-      const isHidden = input.type === 'password';
-      input.type = isHidden ? 'text' : 'password';
-
-      if (icon) {
-        icon.classList.toggle('fa-eye', !isHidden);
-        icon.classList.toggle('fa-eye-slash', isHidden);
-      }
-    });
-  });
-})();
-
-
