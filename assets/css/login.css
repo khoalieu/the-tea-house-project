@@ -63,8 +63,8 @@
 /* Social icons */
 .login-page .social-login {
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+    justify-content: center;
+    gap: 24px;
     margin-bottom: 20px;
 }
 
@@ -321,6 +321,39 @@
 .link-button:hover {
     text-decoration: underline;
 }
+/* === OTP 6 ô === */
+.otp-input-group {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.otp-input {
+    width: 46px;
+    height: 55px;
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 600;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.otp-input:focus {
+    border-color: var(--color-primary, #107e84);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+
+@media (max-width: 450px) {
+    .otp-input {
+        width: 38px;
+        height: 48px;
+        font-size: 1.4rem;
+    }
+}
+
 
 /* Responsive nhỏ */
 @media (max-width: 480px) {
