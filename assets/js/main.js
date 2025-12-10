@@ -9,29 +9,76 @@
             });
         });
 
-    
-    // scrip con mắt ẩn hiện mật khẩu
-  (function initPasswordToggles() {
-    document.querySelectorAll('.password-field .eye-icon').forEach(eye => {
-      const field = eye.closest('.password-field');
-      if (!field) return;
-      const input = field.querySelector('input');
-      if (!input) return;
 
-      eye.addEventListener('click', () => {
-        const isHidden = input.type === 'password';
-        input.type = isHidden ? 'text' : 'password';
+document.addEventListener('DOMContentLoaded', function () {
+  const inputs = document.querySelectorAll('.otp-input');
+  const hiddenInput = document.getElementById('otpHiddenInput');
 
-        const icon = eye.querySelector('i');
-        if (icon) {
-          icon.classList.toggle('fa-eye-slash', isHidden);
-          icon.classList.toggle('fa-eye', !isHidden);
+  function updateHiddenInput() {
+    let code = '';
+    inputs.forEach(i => code += (i.value || ''));
+    hiddenInput.value = code;
+  }
+  // xử lý input verify 
+  inputs.forEach((input, index) => {
+    // Khi nhập
+    input.addEventListener('input', (e) => {
+      // Chỉ cho số
+      input.value = input.value.replace(/[^0-9]/g, '');
+
+      // Nếu dán nhiều số vào 1 ô -> tự tách ra
+      if (e.inputType === 'insertFromPaste' && input.value.length > 1) {
+        const chars = input.value.split('');
+        input.value = chars[0];
+        let nextIndex = index + 1;
+        for (let i = 1; i < chars.length && nextIndex < inputs.length; i++, nextIndex++) {
+          inputs[nextIndex].value = chars[i].replace(/[^0-9]/g, '');
         }
+      }
 
-        // Hiệu ứng màu con mắt (tuỳ chọn)
-        eye.style.color = isHidden ? '#28a745' : '#6b7280';
-      });
+      // Nếu có ký tự & chưa phải ô cuối -> nhảy qua ô tiếp theo
+      if (input.value && index < inputs.length - 1) {
+        inputs[index + 1].focus();
+        inputs[index + 1].select();
+      }
+
+      updateHiddenInput();
     });
-  })();
 
+    // Bắt phím để xử lý Backspace
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace') {
+        if (input.value === '' && index > 0) {
+          inputs[index - 1].focus();
+          inputs[index - 1].value = '';
+          e.preventDefault();
+          updateHiddenInput();
+        }
+      }
+
+      // Di chuyển bằng phím mũi tên trái/phải (optional cho tiện)
+      if (e.key === 'ArrowLeft' && index > 0) {
+        inputs[index - 1].focus();
+      }
+      if (e.key === 'ArrowRight' && index < inputs.length - 1) {
+        inputs[index + 1].focus();
+      }
+    });
+  });
+});
+
+document.getElementById('otpForm').addEventListener('submit', function (e) {
+  const inputs = document.querySelectorAll('.otp-input');
+  let code = '';
+
+  inputs.forEach(i => code += (i.value || ''));
+
+  if (code.length !== 6) {
+    alert('Vui lòng nhập đủ 6 số OTP');
+    e.preventDefault();
+    return;
+  }
+
+  document.getElementById('otpHiddenInput').value = code;
+});
 

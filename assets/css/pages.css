@@ -527,15 +527,16 @@
     color: #999;
 }
 
+/* login.css */
 
-/* login.css*/
+/* Khung tổng thể */
 .login-page {
     padding: var(--space-xxl, 48px) 0;
     font-family: var(--font-secondary, 'Roboto', sans-serif);
     background: transparent; /* theo base.css */
 }
 
-/* Khung ngoài – canh giữa */
+/* Hộp form chính */
 .login-page .login-box {
     background: #fff;
     border-radius: 14px;
@@ -546,58 +547,85 @@
     margin: 0 auto;
 }
 
-/* Ảnh đầu */
-.login-page .login-image img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    display: block;
+/* Nội dung bên trong box */
+.login-page .login-content {
+    padding: var(--space-xxl, 32px);
 }
 
-/* Nội dung */
-.login-page .login-content {
-     padding: var(--space-xxl, 32px);
+/* Header + icon user tròn */
+.login-page .login-header {
+    text-align: center;
+    padding-top: 16px;
 }
-.login-page .login-content h2 {
+
+.login-page .login-icon-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #dcdfe5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 5px;
+}
+
+.login-page .login-icon-circle i {
+    font-size: 6rem;
+    color: #107e84;
+}
+
+.login-page .login-title {
     font-size: 1.6rem;
     font-weight: 700;
-    margin: 0 0 var(--space-md, 16px);
-    color: var(--color-text, #191919);
+    margin: 0;
+    color: var(--color-primary, #107e84);
     font-family: var(--font-primary, 'Lora', serif);
 }
 
-/* Social */
+.login-page .login-subtitle {
+    margin-top: 4px;
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+/* Social icons */
 .login-page .social-login {
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+    justify-content: center;
+    gap: 24px;
     margin-bottom: 20px;
-    }
+}
+
 .login-page .social {
     width: 36px;
     height: 36px;
     display: inline-flex;
-    align-items: center; justify-content: center;
+    align-items: center;
+    justify-content: center;
     color: #fff;
     border-radius: 50%;
     text-decoration: none;
     transition: transform .2s, opacity .2s;
 }
+
 .login-page .social.fb { background: #3b5998; }
 .login-page .social.gg { background: #558d37; }
+
 .login-page .social:hover {
-     opacity: 0.9;
-     transform: translateY(-2px);
+    opacity: 0.9;
+    transform: translateY(-2px);
 }
 
-/* Form */
+/* Form fields */
 .login-page .form-row {
     margin-bottom: 16px;
     position: relative;
     display: block;
 }
+
 .login-page input {
-  width: 100%;
+    width: 100%;
     padding: 12px 14px;
     border: 1px solid var(--color-border, #dcdfe5);
     border-radius: 8px;
@@ -607,50 +635,46 @@
     color: var(--color-text, #191919);
     background: #fff;
 }
-.login-page input::placeholder { color: #9aa0a6; }
+
+.login-page input::placeholder {
+    color: #9aa0a6;
+}
+
 .login-page input:focus {
     border-color: var(--color-primary, #107e84);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary, #107e84) 20%, transparent);
 }
 
-/* Eye icon (toggle password) */
-.login-page .password-field {
-    position: relative;
-}
-.login-page .eye-icon {
-    position: absolute;
-    right: 14px; top: 50%;
-    transform: translateY(-50%);
-    color: #2b2f36;
-    cursor: pointer;
-    font-size: 1.1rem;
-    transition: color .25s ease;
-}
-.login-page .eye-icon:hover {
-     color: var(--color-primary, #107e84);
-    }
-
-/* Remember + Forgot*/
+/* Remember + Forgot */
 .form-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 16px;
 }
+
 .form-options .remember {
     display: flex;
     align-items: center;
     gap: 6px;
-    white-space: nowrap; /* chặn xuống dòng */
+    white-space: nowrap;
 }
+
 .form-options a {
     color: var(--color-primary, #107e84);
     text-decoration: none;
     transition: text-decoration .2s;
 }
-.form-options a:hover { text-decoration: underline; }
 
-/* Button */
+.form-options a:hover {
+    text-decoration: underline;
+}
+
+.form-options:hover label {
+    color: var(--color-primary, #107e84);
+}
+
+/* Button submit */
 .login-page .btn {
     width: 100%;
     background: var(--color-primary, #107e84);
@@ -662,26 +686,31 @@
     cursor: pointer;
     transition: transform .2s ease, filter .2s ease, background .2s ease;
 }
+
 .login-page .btn:hover {
     filter: brightness(.96);
     transform: scale(1.02);
     background: color-mix(in srgb, var(--color-primary, #107e84) 85%, #36a13f);
 }
 
-/* Link đăng ký */
+/* Link chuyển Login <-> Signup */
 .login-page .signup {
     margin-top: 12px;
     text-align: center;
     font-size: .95rem;
     color: #334155;
 }
+
 .login-page .signup a {
     color: var(--color-primary, #107e84);
     text-decoration: none;
 }
-.login-page .signup a:hover { text-decoration: underline; }
 
-/* Avatar */
+.login-page .signup a:hover {
+    text-decoration: underline;
+}
+
+/* Avatar (trang Đăng ký) */
 .login-page .avatar-row {
     display: flex;
     align-items: center;
@@ -689,6 +718,7 @@
     gap: 16px;
     margin-bottom: var(--space-lg, 24px);
 }
+
 .login-page .avatar-text {
     font-family: var(--font-primary, 'Lora', serif);
     font-weight: 600;
@@ -696,8 +726,10 @@
     font-size: 1.5rem;
     white-space: nowrap;
 }
+
 .login-page .avatar-box {
-    width: 96px; height: 96px;
+    width: 96px;
+    height: 96px;
     border: 2px solid var(--color-primary, #107e84);
     border-radius: 10px;
     overflow: hidden;
@@ -707,30 +739,160 @@
     box-shadow: 0 4px 10px rgba(0,0,0,.08);
     transition: transform .2s, border-color .2s;
 }
+
 .login-page .avatar-box:hover {
     transform: translateY(-1px);
     border-color: color-mix(in srgb, var(--color-primary, #107e84) 70%, white 30%);
 }
+
 .login-page .avatar-box img {
-    width: 100%; height: 100%;
-    object-fit: cover; display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
-.login-page #signup-avatarInput {
-     display: none;
+
+/* input file ẩn – trùng với id trong signup.html */
+#signup-avatarInput {
+    display: none;
 }
 
 /* Responsive */
 @media (max-width: 480px) {
-  .login-page { padding: 32px 0; }
-  .login-page .login-content { padding: 24px; }
-  .login-page .login-content h2 { font-size: 1.4rem; }
+    .login-page {
+        padding: 32px 0;
+    }
+    .login-page .login-content {
+        padding: 24px;
+    }
+    .login-page .login-title {
+        font-size: 1.4rem;
+    }
 }
+
 @media (max-width: 420px) {
-  .login-page .avatar-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+    .login-page .avatar-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
+
+/* ================
+   AUTH PAGES: FORGOT / OTP / RESET
+   ================ */
+
+/* Quên mật khẩu */
+.forgot-password-page .login-icon-circle i {
+    font-size: 3.5rem;
+}
+
+/* OTP */
+.otp-page .login-icon-circle i {
+    font-size: 3.5rem;
+}
+
+.input-otp {
+    text-align: center;
+    letter-spacing: 4px;
+    font-size: 1.5rem;
+    font-family: 'Roboto Mono', monospace;
+}
+
+/* Reset password */
+.reset-password-page .login-icon-circle i {
+    font-size: 3.5rem;
+}
+
+.password-hint {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-bottom: 12px;
+}
+
+/* Thông điệp sau khi backend set */
+.reset-message {
+    font-size: 0.9rem;
+    margin: 8px 0 12px;
+    color: #ef4444; /* mặc định màu đỏ nếu có lỗi, backend có thể đổi thành xanh khi thành công */
+}
+
+/* Link phụ dưới form */
+.auth-extra-links {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #4b5563;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.auth-extra-links a {
+    color: var(--color-primary, #107e84);
+    text-decoration: none;
+}
+
+.auth-extra-links a:hover {
+    text-decoration: underline;
+}
+
+/* Nút dạng link – dùng cho "Gửi lại mã OTP" */
+.link-button {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-primary, #107e84);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.link-button:hover {
+    text-decoration: underline;
+}
+
+/* Responsive nhỏ */
+@media (max-width: 480px) {
+    .auth-extra-links {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+/* ===== OTP 6 ô ===== */
+.otp-input-group {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.otp-input {
+    width: 46px;
+    height: 55px;
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 600;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.otp-input:focus {
+    border-color: var(--color-primary, #107e84);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+
+@media (max-width: 450px) {
+    .otp-input {
+        width: 38px;
+        height: 48px;
+        font-size: 1.4rem;
+    }
+}
+
+
 
    /* VỀ CHÚNG TÔI about pages  */
 
@@ -2254,7 +2416,38 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
 }
+.form-actions {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
 
+.btn-save-changes {
+    width: 100%;
+    background: #17a2b8; /* Màu xanh lục như hình */
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-save-changes:hover {
+    background: #138496;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+}
+
+.btn-save-changes:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
 
 
@@ -3036,6 +3229,160 @@
         padding: 28px 0 40px;
     }
 }
+/* ==========================================================================
+   PHẦN ĐÁNH GIÁ SẢN PHẨM (PRODUCT REVIEWS)
+   ========================================================================== */
+
+.product-reviews {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid #eee;
+}
+
+.product-reviews h3 {
+    font-family: var(--font-primary, 'Lora', serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-text, #333);
+    margin-bottom: 20px;
+}
+
+/* --- 1. FORM VIẾT ĐÁNH GIÁ --- */
+.review-form-container {
+    background-color: #f9f9f9;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+}
+
+.review-form .form-group {
+    margin-bottom: 20px;
+}
+
+.review-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    gap: 5px;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 28px;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+    margin: 0;
+}
+
+
+.star-rating label::before {
+    content: '\f005';
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: #ffc107;
+}
+
+
+.star-rating input:checked + label:hover,
+.star-rating input:checked ~ label:hover,
+.star-rating label:hover ~ input:checked ~ label,
+.star-rating input:checked ~ label:hover ~ label {
+    color: #e0a800;
+}
+
+
+.review-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: var(--font-secondary, 'Montserrat', sans-serif);
+    font-size: 14px;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.review-form textarea:focus {
+    outline: none;
+    border-color: var(--color-primary, #107e84);
+    box-shadow: 0 0 0 3px rgba(16, 126, 132, 0.1);
+}
+
+.review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.review-item {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #eee;
+}
+
+.review-item:last-child {
+    border-bottom: none;
+}
+
+.review-avatar img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #eee;
+}
+
+.review-content {
+    flex: 1;
+}
+
+.review-author {
+    font-weight: 700;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.review-meta {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.star-rating-display {
+    color: #ffc107;
+    font-size: 14px;
+}
+
+.review-date {
+    font-size: 13px;
+    color: #999;
+}
+
+.review-body {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555;
+}
 /* --- BỔ SUNG CHO SORT BAR (Trang Sản phẩm) --- */
 
 .sort-bar {
@@ -3047,6 +3394,8 @@
     border-bottom: 1px solid #eee;
     gap: 10px;
 }
+
+
 
 .sort-bar label {
     font-size: 14px;
@@ -3130,3 +3479,4 @@
     border-radius: 4px;
     font-weight: 500;
 }
+
