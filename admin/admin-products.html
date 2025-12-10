@@ -40,6 +40,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="admin-banners.html">
+                        <i class="fas fa-images"></i>
+                        <span>Quản lý Banner</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="admin-categories.html">
                         <i class="fas fa-sitemap"></i>
                         <span>Danh mục Sản phẩm</span>
@@ -469,7 +475,56 @@
         </div>
     </main>
 </div>
+<div class="bulk-action-bar" id="bulkActionBar">
+    <div class="bulk-info">
+        <span class="selected-count">0</span> sản phẩm đã chọn
+    </div>
+    <div class="bulk-actions">
+        <button type="button" class="btn-bulk btn-promo" onclick="openPromoModal()">
+            <i class="fas fa-percentage"></i> Thêm vào Khuyến Mãi
+        </button>
 
+        <button type="button" class="btn-bulk btn-hide">
+            <i class="fas fa-eye-slash"></i> Ẩn sản phẩm
+        </button>
+        <button type="button" class="btn-bulk btn-delete">
+            <i class="fas fa-trash"></i> Xóa
+        </button>
+    </div>
+    <button type="button" class="btn-close-bulk" onclick="deselectAll()">
+        <i class="fas fa-times"></i>
+    </button>
+</div>
+
+<div class="modal-overlay" id="promoModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Thêm vào chương trình khuyến mãi</h3>
+            <span class="close-modal" onclick="closePromoModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Bạn đang chọn <strong id="modalCount">0</strong> sản phẩm.</p>
+
+            <div class="form-group">
+                <label>Chọn chương trình áp dụng:</label>
+                <select class="form-control">
+                    <option value="">-- Chọn chương trình --</option>
+                    <option value="1">Mừng lễ 8/3 (Giảm 20%)</option>
+                    <option value="2">Xả kho hè (Giảm 50%)</option>
+                    <option value="3">Deal Hot Mỗi Ngày</option>
+                </select>
+            </div>
+
+            <div class="alert-info">
+                <i class="fas fa-info-circle"></i> Sản phẩm sẽ được thêm vào bảng <b>PROMOTION_ITEMS</b>.
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closePromoModal()">Hủy</button>
+            <button class="btn btn-primary">Xác nhận thêm</button>
+        </div>
+    </div>
+</div>
 <script>
     // Toggle select all checkboxes
     function toggleSelectAll(checkbox) {
@@ -591,6 +646,55 @@
         });
         
         return selected;
+    }
+    // --- LOGIC BULK ACTION ---
+
+    // Lấy các element
+    const bulkBar = document.getElementById('bulkActionBar');
+    const countSpan = document.querySelector('.selected-count');
+    const modalCount = document.getElementById('modalCount');
+    const promoModal = document.getElementById('promoModal');
+
+    // 1. Hàm được gọi khi user tick vào checkbox sản phẩm
+    // (Bạn cần gán onchange="checkBulk()" vào các checkbox trong bảng)
+    function checkBulk() {
+        // Đếm số checkbox đang checked
+        const checkboxes = document.querySelectorAll('.product-checkbox:checked');
+        const count = checkboxes.length;
+
+        // Cập nhật số lượng
+        countSpan.innerText = count;
+        modalCount.innerText = count;
+
+        // Hiện/Ẩn thanh Bulk Action
+        if (count > 0) {
+            bulkBar.classList.add('active');
+        } else {
+            bulkBar.classList.remove('active');
+        }
+    }
+
+    // 2. Hàm bỏ chọn tất cả (Nút X trên thanh vàng)
+    function deselectAll() {
+        const checkboxes = document.querySelectorAll('.product-checkbox');
+        checkboxes.forEach(cb => cb.checked = false);
+        checkBulk(); // Cập nhật lại trạng thái
+    }
+
+    // 3. Logic Modal
+    function openPromoModal() {
+        promoModal.classList.add('show');
+    }
+
+    function closePromoModal() {
+        promoModal.classList.remove('show');
+    }
+
+    // Đóng modal khi click ra ngoài
+    window.onclick = function(event) {
+        if (event.target == promoModal) {
+            closePromoModal();
+        }
     }
 </script>
 </body>
