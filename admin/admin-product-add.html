@@ -214,7 +214,7 @@
                                     <div class="form-group">
                                         <label for="sale_price">Giá khuyến mãi (VNĐ)</label>
                                         <input type="number" id="sale_price" name="sale_price" class="form-control" min="0" step="1000">
-                                        <div class="help-text">Để trống nếu không có khuyến mãi</div>
+                                        <div class="help-text">Nhập giá này để chạy "Deal Hot" hoặc xả kho (Sẽ được ưu tiên hiển thị)</div>
                                     </div>
                                     
                                     <div class="form-row">
@@ -247,16 +247,17 @@
                                         </div>
                                         <input type="file" id="image_url" name="image_url" accept="image/*" style="display: none;" required>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="gallery">Bộ sưu tập hình ảnh</label>
                                         <div class="gallery-upload" onclick="document.getElementById('gallery').click()">
                                             <i class="fas fa-images"></i>
                                             <p>Tải lên nhiều hình ảnh</p>
-                                            <small>Có thể chọn nhiều file</small>
+                                            <small>Có thể chọn nhiều file (Giữ Ctrl để chọn)</small>
                                         </div>
                                         <input type="file" id="gallery" name="gallery[]" accept="image/*" multiple style="display: none;">
-                                        <div class="help-text">Sẽ được lưu dưới dạng JSON array</div>
+
+                                        <div class="help-text">Ảnh sẽ được lưu vào thư viện (Bảng PRODUCT_IMAGES)</div>
                                     </div>
                                 </div>
                             </div>
@@ -290,5 +291,6 @@
             </div>
         </main>
     </div>
+
 </body>
 </html>

@@ -3318,3 +3318,22 @@
     font-weight: 500;
 }
 
+.hero-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 30px;
+    background-color: #2c5c38;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    border: 2px solid #2c5c38;
+}
+
+.hero-btn:hover {
+    background-color: transparent;
+    color: #fff;
+    border-color: #fff;
+}
