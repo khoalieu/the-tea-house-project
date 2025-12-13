@@ -1,0 +1,524 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết Khách hàng - Mộc Trà Admin</title>
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="assets/css/admin-customer-detail.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+<body>
+<div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-header">
+            <div class="admin-logo">
+                <img src="../assets/images/logoweb.png" alt="Mộc Trà">
+                <h2>Mộc Trà Admin</h2>
+            </div>
+        </div>
+
+        <nav class="admin-nav">
+            <ul>
+                <li class="nav-item">
+                    <a href="admin-dashboard.jsp">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="admin-products.jsp">
+                        <i class="fas fa-box"></i>
+                        <span>Tất cả Sản phẩm</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-categories.jsp">
+                        <i class="fas fa-sitemap"></i>
+                        <span>Danh mục Sản phẩm</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="admin-orders.jsp">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Đơn hàng</span>
+                        <span class="badge">23</span>
+                    </a>
+                </li>
+
+                <li class="nav-item active">
+                    <a href="admin-customers.jsp">
+                        <i class="fas fa-users"></i>
+                        <span>Khách hàng</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="admin-blog.jsp">
+                        <i class="fas fa-newspaper"></i>
+                        <span>Tất cả Bài viết</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-blog-categories.jsp">
+                        <i class="fas fa-folder"></i>
+                        <span>Danh mục Blog</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+        
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-left">
+                <h1>Chi tiết Khách hàng</h1>
+            </div>
+            
+            <div class="header-right">
+                <a href="../index.jsp" class="view-site-btn" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span>Xem trang web</span>
+                </a>
+            </div>
+        </header>
+        
+        <!-- Content -->
+        <div class="admin-content">
+            <!-- Customer Detail Header -->
+            <div class="customer-detail-header">
+                <div class="customer-meta">
+                    <div class="customer-avatar-large">NVA</div>
+                    <div class="customer-info-header">
+                        <h2>Nguyễn Văn A</h2>
+                        <span><i class="fas fa-envelope"></i> nguyenvana@email.com</span>
+                        <span><i class="fas fa-phone"></i> 0901234567</span>
+                        <span style="color: #107e84; font-weight: 600;">
+                            <i class="fas fa-crown"></i> Khách hàng VIP
+                        </span>
+                    </div>
+                </div>
+                <div class="customer-actions-top">
+                    <a href="admin-customers.jsp" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Quay lại
+                    </a>
+                    <button class="btn btn-success" onclick="editCustomer()">
+                        <i class="fas fa-edit"></i>
+                        Chỉnh sửa
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteCustomer()">
+                        <i class="fas fa-trash"></i>
+                        Xóa
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Statistics -->
+            <div class="detail-card full-width-card" style="margin-bottom: 30px;">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-bar"></i> Thống kê tổng quan
+                </h3>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">15</div>
+                        <div class="stat-label">Tổng đơn hàng</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">2.5M₫</div>
+                        <div class="stat-label">Tổng chi tiêu</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">167K₫</div>
+                        <div class="stat-label">Giá trị TB/đơn</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">4.8⭐</div>
+                        <div class="stat-label">Đánh giá TB</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detail Grid -->
+            <div class="detail-grid">
+                <!-- Thông tin cá nhân -->
+                <div class="detail-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-user"></i> Thông tin cá nhân
+                    </h3>
+                    <div class="info-row">
+                        <span class="info-label">Tên đăng nhập:</span>
+                        <span class="info-value">nguyenvana</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email:</span>
+                        <span class="info-value">nguyenvana@email.com</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Số điện thoại:</span>
+                        <span class="info-value">0901234567</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Họ tên:</span>
+                        <span class="info-value">Nguyễn Văn A</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Ngày sinh:</span>
+                        <span class="info-value">15/03/1990</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Giới tính:</span>
+                        <span class="info-value">Nam</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Vai trò:</span>
+                        <span class="info-value">
+                            <span class="status-badge status-confirmed">Khách hàng</span>
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Trạng thái:</span>
+                        <span class="info-value">
+                            <span class="status-badge status-active">Đang hoạt động</span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Thông tin tài khoản -->
+                <div class="detail-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-info-circle"></i> Thông tin tài khoản
+                    </h3>
+                    <div class="info-row">
+                        <span class="info-label">Ngày đăng ký:</span>
+                        <span class="info-value">15/08/2024 10:30</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Lần mua cuối:</span>
+                        <span class="info-value">12/11/2025 14:20</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Thời gian hoạt động:</span>
+                        <span class="info-value" style="color: #28a745;">4 tháng</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Tần suất mua hàng:</span>
+                        <span class="info-value">3.75 đơn/tháng</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Số lượng đánh giá:</span>
+                        <span class="info-value">12 đánh giá</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Số lượng bình luận:</span>
+                        <span class="info-value">8 bình luận</span>
+                    </div>
+                </div>
+
+                <!-- Địa chỉ giao hàng -->
+                <div class="detail-card full-width-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-map-marker-alt"></i> Địa chỉ giao hàng (3 địa chỉ)
+                    </h3>
+                    <div class="addresses-list">
+                        <div class="address-item default">
+                            <div class="address-label">
+                                <i class="fas fa-home"></i> Nhà riêng
+                                <span class="address-default-badge">Mặc định</span>
+                            </div>
+                            <div class="address-text">
+                                123 Đường Lê Lợi, Phường Bến Thành, Quận 1, TP. Hồ Chí Minh
+                            </div>
+                            <div class="address-contact">
+                                <i class="fas fa-user"></i> Nguyễn Văn A | 
+                                <i class="fas fa-phone"></i> 0901234567
+                            </div>
+                        </div>
+
+                        <div class="address-item">
+                            <div class="address-label">
+                                <i class="fas fa-building"></i> Văn phòng
+                            </div>
+                            <div class="address-text">
+                                456 Đường Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh
+                            </div>
+                            <div class="address-contact">
+                                <i class="fas fa-user"></i> Nguyễn Văn A | 
+                                <i class="fas fa-phone"></i> 0901234567
+                            </div>
+                        </div>
+
+                        <div class="address-item">
+                            <div class="address-label">
+                                <i class="fas fa-heart"></i> Nhà bố mẹ
+                            </div>
+                            <div class="address-text">
+                                789 Đường Trần Hưng Đạo, Phường Cầu Kho, Quận 1, TP. Hồ Chí Minh
+                            </div>
+                            <div class="address-contact">
+                                <i class="fas fa-user"></i> Nguyễn Văn B | 
+                                <i class="fas fa-phone"></i> 0912345678
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Giỏ hàng hiện tại -->
+                <div class="detail-card full-width-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-shopping-cart"></i> Giỏ hàng hiện tại (3 sản phẩm)
+                    </h3>
+                    <div class="cart-items-list">
+                        <div class="cart-item">
+                            <img src="../assets/images/san-pham-tra-bac-ha.jpg" alt="Product" class="cart-item-image">
+                            <div class="cart-item-info">
+                                <div class="cart-item-name">Trà Bạc Hà Premium</div>
+                                <div class="cart-item-price">85,000₫</div>
+                                <div class="cart-item-quantity">Số lượng: 2</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-weight: 600; color: #107e84; font-size: 16px;">170,000₫</div>
+                                <small style="color: #999;">Thêm vào: 08/12/2025</small>
+                            </div>
+                        </div>
+
+                        <div class="cart-item">
+                            <img src="../assets/images/san-pham-tra-gung-mat-ong.jpg" alt="Product" class="cart-item-image">
+                            <div class="cart-item-info">
+                                <div class="cart-item-name">Trà Gừng Mật Ong</div>
+                                <div class="cart-item-price">75,000₫</div>
+                                <div class="cart-item-quantity">Số lượng: 1</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-weight: 600; color: #107e84; font-size: 16px;">75,000₫</div>
+                                <small style="color: #999;">Thêm vào: 07/12/2025</small>
+                            </div>
+                        </div>
+
+                        <div class="cart-item">
+                            <img src="../assets/images/san-pham-tran-chau-den.jpg" alt="Product" class="cart-item-image">
+                            <div class="cart-item-info">
+                                <div class="cart-item-name">Trân Châu Đen Taiwan</div>
+                                <div class="cart-item-price">45,000₫</div>
+                                <div class="cart-item-quantity">Số lượng: 3</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-weight: 600; color: #107e84; font-size: 16px;">135,000₫</div>
+                                <small style="color: #999;">Thêm vào: 06/12/2025</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: right; margin-top: 15px; padding-top: 15px; border-top: 2px solid #eee;">
+                        <strong style="font-size: 18px; color: #107e84;">Tổng giỏ hàng: 380,000₫</strong>
+                    </div>
+                </div>
+
+                <!-- Lịch sử đơn hàng -->
+                <div class="detail-card full-width-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-history"></i> Lịch sử đơn hàng (15 đơn)
+                    </h3>
+                    <div class="table-responsive">
+                        <table class="orders-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã đơn</th>
+                                    <th>Ngày đặt</th>
+                                    <th>Sản phẩm</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thanh toán</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="order-number">ORD-015</span></td>
+                                    <td>12/11/2025</td>
+                                    <td>3 sản phẩm</td>
+                                    <td style="font-weight: 600; color: #107e84;">250,000₫</td>
+                                    <td><span class="status-badge status-confirmed">Hoàn thành</span></td>
+                                    <td><span class="status-badge published">Đã thanh toán</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="order-number">ORD-014</span></td>
+                                    <td>05/11/2025</td>
+                                    <td>2 sản phẩm</td>
+                                    <td style="font-weight: 600; color: #107e84;">180,000₫</td>
+                                    <td><span class="status-badge status-confirmed">Hoàn thành</span></td>
+                                    <td><span class="status-badge published">Đã thanh toán</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="order-number">ORD-013</span></td>
+                                    <td>28/10/2025</td>
+                                    <td>5 sản phẩm</td>
+                                    <td style="font-weight: 600; color: #107e84;">420,000₫</td>
+                                    <td><span class="status-badge status-confirmed">Hoàn thành</span></td>
+                                    <td><span class="status-badge published">Đã thanh toán</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="order-number">ORD-012</span></td>
+                                    <td>15/10/2025</td>
+                                    <td>1 sản phẩm</td>
+                                    <td style="font-weight: 600; color: #107e84;">85,000₫</td>
+                                    <td><span class="status-badge status-cancelled">Đã hủy</span></td>
+                                    <td><span class="status-badge status-pending">Chưa thanh toán</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="order-number">ORD-011</span></td>
+                                    <td>08/10/2025</td>
+                                    <td>4 sản phẩm</td>
+                                    <td style="font-weight: 600; color: #107e84;">320,000₫</td>
+                                    <td><span class="status-badge status-confirmed">Hoàn thành</span></td>
+                                    <td><span class="status-badge published">Đã thanh toán</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Đánh giá sản phẩm -->
+                <div class="detail-card full-width-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-star"></i> Đánh giá sản phẩm (12 đánh giá)
+                    </h3>
+                    <div class="reviews-list">
+                        <div class="review-item">
+                            <div class="review-product">
+                                <span><i class="fas fa-box"></i> Trà Bạc Hà Premium</span>
+                                <span class="review-rating">⭐⭐⭐⭐⭐ (5.0)</span>
+                            </div>
+                            <div class="review-text">
+                                Trà rất thơm và mát, uống rất dễ chịu. Giao hàng nhanh, đóng gói cẩn thận. Sẽ ủng hộ shop lâu dài!
+                            </div>
+                            <div class="review-date">
+                                <i class="far fa-clock"></i> 13/11/2025 10:30
+                            </div>
+                        </div>
+
+                        <div class="review-item">
+                            <div class="review-product">
+                                <span><i class="fas fa-box"></i> Trà Gừng Mật Ong</span>
+                                <span class="review-rating">⭐⭐⭐⭐ (4.0)</span>
+                            </div>
+                            <div class="review-text">
+                                Chất lượng tốt, vị gừng hơi cay nhưng vẫn dễ uống. Giá cả hợp lý.
+                            </div>
+                            <div class="review-date">
+                                <i class="far fa-clock"></i> 06/11/2025 15:20
+                            </div>
+                        </div>
+
+                        <div class="review-item">
+                            <div class="review-product">
+                                <span><i class="fas fa-box"></i> Trân Châu Đen Taiwan</span>
+                                <span class="review-rating">⭐⭐⭐⭐⭐ (5.0)</span>
+                            </div>
+                            <div class="review-text">
+                                Trân châu dẻo dai, ngon. Dùng để pha trà sữa rất tuyệt. Sẽ mua thêm!
+                            </div>
+                            <div class="review-date">
+                                <i class="far fa-clock"></i> 29/10/2025 09:15
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hoạt động gần đây -->
+                <div class="detail-card full-width-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-clock"></i> Hoạt động gần đây
+                    </h3>
+                    <div class="activity-timeline">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Đã đặt đơn hàng mới</div>
+                                <div class="activity-description">
+                                    Đơn hàng #ORD-015 - Tổng: 250,000₫ (3 sản phẩm)
+                                </div>
+                                <div class="activity-time">
+                                    <i class="far fa-clock"></i> 12/11/2025 14:20
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Đã đánh giá sản phẩm</div>
+                                <div class="activity-description">
+                                    Trà Bạc Hà Premium - 5 sao
+                                </div>
+                                <div class="activity-time">
+                                    <i class="far fa-clock"></i> 10/11/2025 09:15
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-cart-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Đã thêm vào giỏ hàng</div>
+                                <div class="activity-description">
+                                    Trà Gừng Mật Ong x1
+                                </div>
+                                <div class="activity-time">
+                                    <i class="far fa-clock"></i> 07/12/2025 16:30
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Đã bình luận bài viết</div>
+                                <div class="activity-description">
+                                    "Lợi ích tuyệt vời của trà hoa cúc"
+                                </div>
+                                <div class="activity-time">
+                                    <i class="far fa-clock"></i> 01/11/2025 11:45
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    function editCustomer() {
+        alert('Chức năng chỉnh sửa khách hàng');
+        // Redirect to edit page or open modal
+    }
+
+    function deleteCustomer() {
+        if (confirm('CẢNH BÁO: Bạn có chắc muốn xóa khách hàng này? Hành động này không thể hoàn tác!')) {
+            console.log('Deleting customer...');
+            alert('Đã xóa khách hàng thành công!');
+            window.location.href = 'admin-customers.jsp';
+        }
+    }
+</script>
+</body>
+</html>

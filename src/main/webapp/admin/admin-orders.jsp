@@ -1,0 +1,357 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Blog - Mộc Trà Admin</title>
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="assets/css/admin-add-product.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+<body>
+<div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-header">
+            <div class="admin-logo">
+                <img src="../assets/images/logoweb.png" alt="Mộc Trà">
+                <h2>Mộc Trà Admin</h2>
+            </div>
+        </div>
+
+        <nav class="admin-nav">
+            <ul>
+                <li class="nav-item">
+                    <a href="admin-dashboard.jsp">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="admin-products.jsp">
+                        <i class="fas fa-box"></i>
+                        <span>Tất cả Sản phẩm</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-banners.jsp">
+                        <i class="fas fa-images"></i>
+                        <span>Quản lý Banner</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-categories.jsp">
+                        <i class="fas fa-sitemap"></i>
+                        <span>Danh mục Sản phẩm</span>
+                    </a>
+                </li>
+
+                <li class="nav-item active">
+                    <a href="admin-orders.html">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Đơn hàng</span>
+                        <span class="badge">23</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="admin-customers.jsp">
+                        <i class="fas fa-users"></i>
+                        <span>Khách hàng</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="admin-blog.jsp">
+                        <i class="fas fa-newspaper"></i>
+                        <span>Tất cả Bài viết</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-blog-categories.jsp">
+                        <i class="fas fa-folder"></i>
+                        <span>Danh mục Blog</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-header">
+            <div class="header-left">
+                <h1>Quản lý Đơn hàng</h1>
+            </div>
+
+            <div class="header-right">
+                <div class="header-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Tìm kiếm đơn hàng...">
+                </div>
+
+                <a href="../index.jsp" class="view-site-btn" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span>Xem trang web</span>
+                </a>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            <div class="page-header">
+                <div class="page-title">
+                    <h2>Danh sách đơn hàng</h2>
+                    <p>Quản lý và theo dõi tất cả đơn hàng</p>
+                </div>
+            </div>
+
+            <div class="filters-section">
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label for="status-filter">Trạng thái</label>
+
+                        <select id="status-filter" class="form-select">
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="pending">Chờ xử lý</option>
+                            <option value="completed">Đã hoàn tất</option>
+                            <option value="cancelled">Đã hủy</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="date-filter">Thời gian</label>
+                        <select id="date-filter" class="form-select">
+                            <option value="">Tất cả thời gian</option>
+                            <option value="today">Hôm nay</option>
+                            <option value="yesterday">Hôm qua</option>
+                            <option value="week">Tuần này</option>
+                            <option value="month">Tháng này</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="amount-filter">Tổng tiền</label>
+                        <select id="amount-filter" class="form-select">
+                            <option value="">Tất cả</option>
+                            <option value="0-100000">Dưới 100.000₫</option>
+                            <option value="100000-500000">100.000₫ - 500.000₫</option>
+                            <option value="500000+">Trên 500.000₫</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="sort-filter">Sắp xếp</label>
+                        <select id="sort-filter" class="form-select">
+                            <option value="newest">Mới nhất</option>
+                            <option value="oldest">Cũ nhất</option>
+                            <option value="amount-desc">Giá trị cao</option>
+                            <option value="amount-asc">Giá trị thấp</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="orders-container">
+                <div class="table-header">
+                    <div class="orders-count">Tổng cộng: <strong>236 đơn hàng</strong></div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="orders-table">
+                        <thead>
+                        <tr>
+                            <th>Mã đơn hàng</th>
+                            <th>Khách hàng</th>
+                            <th>Sản phẩm</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày đặt</th>
+                            <th>Thao tác</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <div class="order-id">#DH001</div>
+                            </td>
+                            <td>
+                                <div class="customer-info">
+                                    <div class="customer-name">Nguyễn Văn A</div>
+                                    <div class="customer-phone">0901234567</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="order-items">
+                                    <div class="order-item">2x Trà Bạc Hà Premium</div>
+                                    <div class="order-item">1x Bột Milk Foam</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="order-amount">245,000₫</div>
+                            </td>
+                            <td>
+                                <span class="status-badge status-pending">Chờ xử lý</span>
+                            </td>
+                            <td>
+                                <div class="order-date">
+                                    <div>15/11/2025</div>
+                                    <small>10:30</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="admin-order-detail.jsp" class="btn-action" title="Xem chi tiết" style="display:flex; align-items:center; justify-content:center; text-decoration:none;">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <button class="btn-action" title="Chuyển sang 'Hoàn tất'">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn-action danger" title="Hủy đơn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="order-id">#DH002</div>
+                            </td>
+                            <td>
+                                <div class="customer-info">
+                                    <div class="customer-name">Trần Thị B</div>
+                                    <div class="customer-phone">0912345678</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="order-items">
+                                    <div class="order-item">3x Trà Gừng Mật Ong</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="order-amount">225,000₫</div>
+                            </td>
+                            <td>
+                                <span class="status-badge status-delivered">Đã hoàn tất</span>
+                            </td>
+                            <td>
+                                <div class="order-date">
+                                    <div>15/11/2025</div>
+                                    <small>09:15</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-action" title="Xem chi tiết">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="order-id">#DH003</div>
+                            </td>
+                            <td>
+                                <div class="customer-info">
+                                    <div class="customer-name">Lê Văn C</div>
+                                    <div class="customer-phone">0923456789</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="order-items">
+                                    <div class="order-item">1x Trà Atiso Đà Lạt</div>
+                                    <div class="order-item">2x Trân Châu Đen</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="order-amount">155,000₫</div>
+                            </td>
+                            <td>
+                                <span class="status-badge status-delivered">Đã hoàn tất</span>
+                            </td>
+                            <td>
+                                <div class="order-date">
+                                    <div>14/11/2025</div>
+                                    <small>16:45</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-action" title="Xem chi tiết">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="order-id">#DH005</div>
+                            </td>
+                            <td>
+                                <div class="customer-info">
+                                    <div class="customer-name">Hoàng Văn E</div>
+                                    <div class="customer-phone">0945678901</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="order-items">
+                                    <div class="order-item">4x Trà Bạc Hà Premium</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="order-amount">340,000₫</div>
+                            </td>
+                            <td>
+                                <span class="status-badge status-cancelled">Đã hủy</span>
+                            </td>
+                            <td>
+                                <div class="order-date">
+                                    <div>13/11/2025</div>
+                                    <small>14:30</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-action" title="Xem chi tiết">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Hiển thị <strong>1-4</strong> trong tổng số <strong>236</strong> đơn hàng
+                    </div>
+                    <div class="pagination">
+                        <a href="#" class="page-btn disabled">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                        <a href="#" class="page-btn active">1</a>
+                        <a href="#" class="page-btn">2</a>
+                        <a href="#" class="page-btn">3</a>
+                        <a href="#" class="page-btn">...</a>
+                        <a href="#" class="page-btn">47</a>
+                        <a href="#" class="page-btn">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

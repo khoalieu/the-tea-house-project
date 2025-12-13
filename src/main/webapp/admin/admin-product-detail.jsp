@@ -1,0 +1,392 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết Sản phẩm - Mộc Trà Admin</title>
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="assets/css/admin-product-detail.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+<body>
+<div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-header">
+            <div class="admin-logo">
+                <img src="../assets/images/logoweb.png" alt="Mộc Trà">
+                <h2>Mộc Trà Admin</h2>
+            </div>
+        </div>
+
+        <nav class="admin-nav">
+            <ul>
+                <li class="nav-item">
+                    <a href="admin-dashboard.jsp">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="nav-item active">
+                    <a href="admin-products.jsp">
+                        <i class="fas fa-box"></i>
+                        <span>Tất cả Sản phẩm</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-categories.jsp">
+                        <i class="fas fa-sitemap"></i>
+                        <span>Danh mục Sản phẩm</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="admin-orders.jsp">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Đơn hàng</span>
+                        <span class="badge">23</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="admin-customers.jsp">
+                        <i class="fas fa-users"></i>
+                        <span>Khách hàng</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="admin-blog.jsp">
+                        <i class="fas fa-newspaper"></i>
+                        <span>Tất cả Bài viết</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin-blog-categories.jsp">
+                        <i class="fas fa-folder"></i>
+                        <span>Danh mục Blog</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+        
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-left">
+                <h1>Chi tiết Sản phẩm</h1>
+            </div>
+            
+            <div class="header-right">
+                <a href="../index.jsp" class="view-site-btn" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span>Xem trang web</span>
+                </a>
+            </div>
+        </header>
+        
+        <!-- Content -->
+        <div class="admin-content">
+            <!-- Product Detail Header -->
+            <div class="product-detail-header">
+                <div class="product-meta">
+                    <h2>Trà Bạc Hà Premium</h2>
+                    <span>SKU: TBH001 | Danh mục: Trà thảo mộc</span>
+                </div>
+                <div class="product-actions-top">
+                    <a href="admin-products.jsp" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Quay lại
+                    </a>
+                    <a href="admin-product-edit.jsp" class="btn btn-success">
+                        <i class="fas fa-edit"></i>
+                        Chỉnh sửa
+                    </a>
+                    <button class="btn btn-danger" onclick="deleteProduct()">
+                        <i class="fas fa-trash"></i>
+                        Xóa
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Detail Grid -->
+            <div class="detail-grid">
+                <!-- Thông tin cơ bản -->
+                <div class="detail-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-info-circle"></i> Thông tin cơ bản
+                    </h3>
+                    <div class="info-row">
+                        <span class="info-label">Tên sản phẩm:</span>
+                        <span class="info-value">Trà Bạc Hà Premium</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">SKU:</span>
+                        <span class="info-value">TBH001</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Danh mục:</span>
+                        <span class="info-value">Trà thảo mộc</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Trạng thái:</span>
+                        <span class="info-value">
+                            <span class="status-badge status-confirmed">Đang bán</span>
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Ngày tạo:</span>
+                        <span class="info-value">15/10/2024 14:30</span>
+                    </div>
+                    <div class="badge-group">
+                        <span class="badge-lg badge-bestseller">
+                            <i class="fas fa-star"></i> Sản phẩm bán chạy
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Giá & Kho -->
+                <div class="detail-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-dollar-sign"></i> Giá & Kho hàng
+                    </h3>
+                    <div class="info-row">
+                        <span class="info-label">Giá gốc:</span>
+                        <span class="info-value" style="text-decoration: line-through; color: #999;">95,000₫</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Giá bán:</span>
+                        <span class="info-value" style="color: #107e84; font-size: 18px;">85,000₫</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Giảm giá:</span>
+                        <span class="info-value" style="color: #28a745;">10,000₫ (10.5%)</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Tồn kho:</span>
+                        <span class="info-value" style="color: #28a745;">
+                            <i class="fas fa-boxes"></i> 156 sản phẩm
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Thống kê -->
+                <div class="detail-card full-width-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-chart-line"></i> Thống kê
+                    </h3>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-number">245</div>
+                            <div class="stat-label">Đã bán</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">18</div>
+                            <div class="stat-label">Đánh giá</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">4.8⭐</div>
+                            <div class="stat-label">Xếp hạng TB</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hình ảnh sản phẩm -->
+                <div class="detail-card full-width-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-images"></i> Hình ảnh sản phẩm (5 ảnh)
+                    </h3>
+                    <div class="product-images-gallery">
+                        <div class="gallery-item main-image">
+                            <img src="../assets/images/san-pham-tra-bac-ha.jpg" alt="Ảnh chính">
+                            <span class="main-badge">Ảnh chính</span>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="../assets/images/san-pham-tra-bac-ha.jpg" alt="Ảnh phụ 1">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="../assets/images/san-pham-tra-bac-ha.jpg" alt="Ảnh phụ 2">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="../assets/images/san-pham-tra-bac-ha.jpg" alt="Ảnh phụ 3">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="../assets/images/san-pham-tra-bac-ha.jpg" alt="Ảnh phụ 4">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mô tả ngắn -->
+                <div class="detail-card full-width-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-align-left"></i> Mô tả ngắn
+                    </h3>
+                    <div class="description-content">
+                        Trà bạc hà cao cấp với hương vị thơm mát, giúp thư giãn tinh thần và hỗ trợ tiêu hóa tốt. Sản phẩm được chọn lọc từ những lá bạc hà tươi ngon nhất.
+                    </div>
+                </div>
+
+                <!-- Mô tả chi tiết -->
+                <div class="detail-card full-width-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-file-alt"></i> Mô tả chi tiết
+                    </h3>
+                    <div class="description-content">
+                        <p><strong>Trà Bạc Hà Premium</strong> là sản phẩm cao cấp được chế biến từ lá bạc hà tươi ngon nhất, mang đến hương vị thơm mát đặc trưng.</p>
+                        
+                        <p><strong>Công dụng:</strong></p>
+                        <ul>
+                            <li>Giúp thư giãn, giảm căng thẳng</li>
+                            <li>Hỗ trợ tiêu hóa, giảm đầy hơi</li>
+                            <li>Thanh nhiệt, giải độc cơ thể</li>
+                            <li>Cải thiện giấc ngủ</li>
+                        </ul>
+
+                        <p><strong>Thành phần:</strong> 100% lá bạc hà tự nhiên, không chất bảo quản</p>
+                    </div>
+                </div>
+
+                <!-- Thành phần -->
+                <div class="detail-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-leaf"></i> Thành phần
+                    </h3>
+                    <div class="ingredients-list">
+                        <ul>
+                            <li>Lá bạc hà tươi: 95%</li>
+                            <li>Lá trà xanh: 3%</li>
+                            <li>Hương liệu tự nhiên: 2%</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Hướng dẫn sử dụng -->
+                <div class="detail-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-book"></i> Hướng dẫn sử dụng
+                    </h3>
+                    <div class="instructions-list">
+                        <ol>
+                            <li>Cho 1-2 thìa trà vào ấm</li>
+                            <li>Rót nước sôi 85-90°C</li>
+                            <li>Để ủ 3-5 phút</li>
+                            <li>Thưởng thức khi còn nóng</li>
+                        </ol>
+                        <p style="margin-top: 10px;"><strong>Lưu ý:</strong> Bảo quản nơi khô ráo, tránh ánh nắng trực tiếp.</p>
+                    </div>
+                </div>
+
+                <!-- Khuyến mãi đang áp dụng -->
+                <div class="detail-card full-width-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-tags"></i> Khuyến mãi đang áp dụng (2)
+                    </h3>
+                    <div class="promotions-list">
+                        <div class="promotion-item">
+                            <div class="promotion-name">
+                                <i class="fas fa-percent"></i> Giảm giá mùa thu
+                            </div>
+                            <div class="promotion-discount">
+                                Giảm 10% - Giảm 10,000₫
+                            </div>
+                            <div class="promotion-dates">
+                                Từ 01/10/2024 đến 31/12/2024
+                            </div>
+                        </div>
+                        <div class="promotion-item">
+                            <div class="promotion-name">
+                                <i class="fas fa-gift"></i> Mua 2 tặng 1
+                            </div>
+                            <div class="promotion-discount">
+                                Tặng 1 sản phẩm cùng loại khi mua 2
+                            </div>
+                            <div class="promotion-dates">
+                                Từ 15/11/2024 đến 15/12/2024
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Đánh giá của khách hàng -->
+                <div class="detail-card full-width-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-star"></i> Đánh giá của khách hàng (18 đánh giá)
+                    </h3>
+                    <div class="reviews-list">
+                        <div class="review-item">
+                            <div class="review-header">
+                                <span class="review-author">
+                                    <i class="fas fa-user-circle"></i> Nguyễn Văn A
+                                </span>
+                                <span class="review-rating">
+                                    ⭐⭐⭐⭐⭐ (5.0)
+                                </span>
+                            </div>
+                            <div class="review-text">
+                                Trà rất thơm và mát, uống rất dễ chịu. Giao hàng nhanh, đóng gói cẩn thận. Sẽ ủng hộ shop lâu dài!
+                            </div>
+                            <div class="review-date">
+                                <i class="far fa-clock"></i> 10/11/2025 15:30
+                            </div>
+                        </div>
+
+                        <div class="review-item">
+                            <div class="review-header">
+                                <span class="review-author">
+                                    <i class="fas fa-user-circle"></i> Trần Thị B
+                                </span>
+                                <span class="review-rating">
+                                    ⭐⭐⭐⭐ (4.0)
+                                </span>
+                            </div>
+                            <div class="review-text">
+                                Chất lượng tốt, giá cả hợp lý. Mình đã mua lần 2 rồi. Có điều giao hàng hơi lâu.
+                            </div>
+                            <div class="review-date">
+                                <i class="far fa-clock"></i> 08/11/2025 10:20
+                            </div>
+                        </div>
+
+                        <div class="review-item">
+                            <div class="review-header">
+                                <span class="review-author">
+                                    <i class="fas fa-user-circle"></i> Lê Văn C
+                                </span>
+                                <span class="review-rating">
+                                    ⭐⭐⭐⭐⭐ (5.0)
+                                </span>
+                            </div>
+                            <div class="review-text">
+                                Trà bạc hà ngon nhất mình từng uống. Hương vị tự nhiên, không bị hóa chất. Recommend!
+                            </div>
+                            <div class="review-date">
+                                <i class="far fa-clock"></i> 05/11/2025 18:45
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    function deleteProduct() {
+        if (confirm('CẢNH BÁO: Bạn có chắc muốn xóa sản phẩm này? Hành động này không thể hoàn tác!')) {
+            console.log('Deleting product...');
+            alert('Đã xóa sản phẩm thành công!');
+            window.location.href = 'admin-products.jsp';
+        }
+    }
+</script>
+</body>
+</html>
