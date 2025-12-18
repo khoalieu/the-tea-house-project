@@ -1,19 +1,19 @@
 package backend.model;
 
-public class Category {
+public class BlogCategory {
     private Integer id;
     private String name;
     private String slug;
-    private Integer parentId;
+    private String description;
     private Boolean isActive;
 
-    public Category() {}
+    public BlogCategory() {}
 
-    public Category(Integer id, String name, String slug, Integer parentId, Boolean isActive) {
+    public BlogCategory(Integer id, String name, String slug, String description, Boolean isActive) {
         this.id = id;
         this.name = name;
         this.slug = slug;
-        this.parentId = parentId;
+        this.description = description;
         this.isActive = isActive;
     }
 
@@ -26,8 +26,8 @@ public class Category {
     public String getSlug() { return slug; }
     public void setSlug(String slug) { this.slug = slug; }
 
-    public Integer getParentId() { return parentId; }
-    public void setParentId(Integer parentId) { this.parentId = parentId; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
     public Boolean getIsActive() { return isActive; }
     public void setIsActive(Boolean active) { isActive = active; }
