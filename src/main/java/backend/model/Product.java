@@ -2,22 +2,21 @@ package backend.model;
 
 import backend.model.enums.ProductStatus;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Product {
-    private Integer id;
+    private int id;
     private String name;
     private String slug;
     private String description;
     private String shortDescription;
-    private BigDecimal price;
-    private BigDecimal salePrice;
+    private double price;           // decimal(15,2)
+    private double salePrice;       // decimal(15,2)
     private String sku;
-    private Integer stockQuantity;
+    private int stockQuantity;
     private Integer categoryId;
     private String imageUrl;
-    private Boolean isBestseller;
+    private boolean isBestseller;
     private ProductStatus status;
     private String ingredients;
     private String usageInstructions;
@@ -25,30 +24,8 @@ public class Product {
 
     public Product() {}
 
-    public Product(Integer id, String name, String slug, String description, String shortDescription,
-                   BigDecimal price, BigDecimal salePrice, String sku, Integer stockQuantity,
-                   Integer categoryId, String imageUrl, Boolean isBestseller, ProductStatus status,
-                   String ingredients, String usageInstructions, LocalDateTime createdAt) {
-        this.id = id;
-        this.name = name;
-        this.slug = slug;
-        this.description = description;
-        this.shortDescription = shortDescription;
-        this.price = price;
-        this.salePrice = salePrice;
-        this.sku = sku;
-        this.stockQuantity = stockQuantity;
-        this.categoryId = categoryId;
-        this.imageUrl = imageUrl;
-        this.isBestseller = isBestseller;
-        this.status = status;
-        this.ingredients = ingredients;
-        this.usageInstructions = usageInstructions;
-        this.createdAt = createdAt;
-    }
-
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -62,17 +39,17 @@ public class Product {
     public String getShortDescription() { return shortDescription; }
     public void setShortDescription(String shortDescription) { this.shortDescription = shortDescription; }
 
-    public BigDecimal getPrice() { return price; }
-    public void setPrice(BigDecimal price) { this.price = price; }
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
 
-    public BigDecimal getSalePrice() { return salePrice; }
-    public void setSalePrice(BigDecimal salePrice) { this.salePrice = salePrice; }
+    public double getSalePrice() { return salePrice; }
+    public void setSalePrice(double salePrice) { this.salePrice = salePrice; }
 
     public String getSku() { return sku; }
     public void setSku(String sku) { this.sku = sku; }
 
-    public Integer getStockQuantity() { return stockQuantity; }
-    public void setStockQuantity(Integer stockQuantity) { this.stockQuantity = stockQuantity; }
+    public int getStockQuantity() { return stockQuantity; }
+    public void setStockQuantity(int stockQuantity) { this.stockQuantity = stockQuantity; }
 
     public Integer getCategoryId() { return categoryId; }
     public void setCategoryId(Integer categoryId) { this.categoryId = categoryId; }
@@ -80,8 +57,8 @@ public class Product {
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
-    public Boolean getIsBestseller() { return isBestseller; }
-    public void setIsBestseller(Boolean bestseller) { isBestseller = bestseller; }
+    public boolean isBestseller() { return isBestseller; }
+    public void setBestseller(boolean bestseller) { isBestseller = bestseller; }
 
     public ProductStatus getStatus() { return status; }
     public void setStatus(ProductStatus status) { this.status = status; }

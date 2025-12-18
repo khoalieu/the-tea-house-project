@@ -1,36 +1,26 @@
 package backend.model;
 
-import java.math.BigDecimal;
-
 public class OrderItem {
-    private Integer id;
-    private Integer orderId;
-    private Integer productId;
-    private Integer quantity;
-    private BigDecimal price; // snapshot lúc mua
+    private int id;
+    private int orderId;
+    private int productId;
+    private int quantity;
+    private double price;
 
     public OrderItem() {}
 
-    public OrderItem(Integer id, Integer orderId, Integer productId, Integer quantity, BigDecimal price) {
-        this.id = id;
-        this.orderId = orderId;
-        this.productId = productId;
-        this.quantity = quantity;
-        this.price = price;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public int getOrderId() { return orderId; }
+    public void setOrderId(int orderId) { this.orderId = orderId; }
 
-    public Integer getOrderId() { return orderId; }
-    public void setOrderId(Integer orderId) { this.orderId = orderId; }
+    public int getProductId() { return productId; }
+    public void setProductId(int productId) { this.productId = productId; }
 
-    public Integer getProductId() { return productId; }
-    public void setProductId(Integer productId) { this.productId = productId; }
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
-
-    public BigDecimal getPrice() { return price; }
-    public void setPrice(BigDecimal price) { this.price = price; }
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
 }
