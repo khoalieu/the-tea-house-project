@@ -28,44 +28,36 @@
                     <a href="#" class="social gg"><i class="fa-brands fa-google"></i></a>
                 </div>
 
-                <form action="index-login.jsp" method="get" autocomplete="on"> <!--sau này servelet thì xóa dòng này mở commernt dòng dưới-->
-                <!-- <form action="#" method="post" autocomplete="on"> -->
-                    <!-- username -->
+                <form action="<%= request.getContextPath() %>/login" method="post">
+
+                    <% String error = (String) request.getAttribute("error"); %>
+                    <% if (error != null) { %>
+                    <div style="color: red; text-align: center; margin-bottom: 10px; font-weight: bold;">
+                        <%= error %>
+                    </div>
+                    <% } %>
+
                     <div class="form-row">
-                        <input 
-                            id="login-username"
-                            class="input-username"
-                            type="text"
-                            name="username"
-                            placeholder="Tên đăng nhập"
-                            required>
+                        <input type="text" name="username" placeholder="Tên đăng nhập" required
+                               value="<%= request.getAttribute("username") != null ? request.getAttribute("username") : "" %>">
                     </div>
 
-                    <!-- password -->
                     <div class="form-row password-field">
-                        <input 
-                            id="login-password"
-                            class="input-password"
-                            type="password"
-                            name="password"
-                            placeholder="Mật khẩu"
-                            required>
+                        <input type="password" name="password" id="password" placeholder="Mật khẩu" required>
                         <div class="eye-icon" id="toggleEye">
                             <i class="fa-regular fa-eye"></i>
                         </div>
                     </div>
 
-
-                    <div class="form-options">
-                        <div class="remember">
-                            <input type="checkbox" id="remember">
-                            <label for="remember">Ghi nhớ tôi</label>
-                        </div>
-                        <a href="#">Quên mật khẩu?</a>
+                    <div class="form-actions">
+                        <label class="remember-me">
+                            <input type="checkbox"> Ghi nhớ tài khoản
+                        </label>
+                        <a href="#" class="forgot-password">Quên mật khẩu?</a>
                     </div>
 
                     <div class="form-row">
-                        <button type="submit"  class="btn">Đăng nhập</button>
+                        <button type="submit" class="btn">Đăng nhập</button>
                     </div>
 
                     <div class="signup">

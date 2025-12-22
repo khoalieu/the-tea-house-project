@@ -1,5 +1,5 @@
 package backend.model.enums;
 
 public enum UserRole {
-    admin, customer, editor
+    ADMIN, CUSTOMER, EDITOR
 }
