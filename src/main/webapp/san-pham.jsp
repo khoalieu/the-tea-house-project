@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -76,7 +77,7 @@
                                     <img src="${p.imageUrl}" alt="${p.name}">
                                     <h3>${p.name}</h3>
                                     <p class="price">
-                                        ${p.price} VNĐ
+                                        <fmt:formatNumber value="${p.price}" pattern="#,###"/> VNĐ
                                     </p>
                                     <a href="chi-tiet-san-pham.jsp?id=${p.id}" class="cta-button">Xem Chi Tiết</a>
                                 </div>
@@ -94,7 +95,7 @@
                                    <img src="${p.imageUrl}" alt="${p.name}">
                                    <h3>${p.name}</h3>
                                    <p class="price">
-                                       ${p.price} VNĐ
+                                       <fmt:formatNumber value="${p.price}" pattern="#,###"/> VNĐ
                                    </p>
                                    <a href="chi-tiet-san-pham.jsp?id=${p.id}" class="cta-button">Xem Chi Tiết</a>
                                </div>
