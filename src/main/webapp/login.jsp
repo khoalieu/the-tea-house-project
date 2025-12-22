@@ -15,44 +15,39 @@
     <div class="login-page">
         <div class="login-box">
 
-            <div class="login-image">
-                <img src="assets/images/image-tra-login.png" alt="Background">
+            <div class="login-header">
+                <div class="login-icon-circle">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <h2 class="login-title">Chào mừng đến với Mộc trà</h2>
+                <p class="login-subtitle">Đăng nhập để thưởng thức trà</p>
             </div>
 
+
             <div class="login-content">
-                <h2>Đăng Nhập</h2>
 
-            <!-- Mạng xã hội -->
-                <div class="social-login">
-                    <a href="#" class="social fb"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="social gg"><i class="fa-brands fa-google"></i></a>
-                </div>
-
-                <form action="index-login.jsp" method="get" autocomplete="on"> <!--sau này servelet thì xóa dòng này mở commernt dòng dưới-->
-                <!-- <form action="#" method="post" autocomplete="on"> -->
+                <form action="#" method="post" autocomplete="on">
                     <!-- username -->
                     <div class="form-row">
-                        <input 
-                            id="login-username"
-                            class="input-username"
-                            type="text"
-                            name="username"
-                            placeholder="Tên đăng nhập"
-                            required>
+                        <input
+                                id="login-username"
+                                class="input-username"
+                                type="text"
+                                name="username"
+                                placeholder="Tên đăng nhập"
+                                required>
                     </div>
 
                     <!-- password -->
                     <div class="form-row password-field">
-                        <input 
-                            id="login-password"
-                            class="input-password"
-                            type="password"
-                            name="password"
-                            placeholder="Mật khẩu"
-                            required>
-                        <div class="eye-icon" id="toggleEye">
-                            <i class="fa-regular fa-eye"></i>
-                        </div>
+                        <input
+                                id="login-password"
+                                class="input-password"
+                                type="password"
+                                name="password"
+                                placeholder="Mật khẩu"
+                                required>
+
                     </div>
 
 
@@ -61,15 +56,20 @@
                             <input type="checkbox" id="remember">
                             <label for="remember">Ghi nhớ tôi</label>
                         </div>
-                        <a href="#">Quên mật khẩu?</a>
+                        <a href="quen-mat-khau.html">Quên mật khẩu?</a>
                     </div>
 
                     <div class="form-row">
                         <button type="submit"  class="btn">Đăng nhập</button>
                     </div>
+                    <!-- Mạng xã hội -->
+                    <div class="social-login">
+                        <a href="#" class="social fb"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social gg"><i class="fa-brands fa-google"></i></a>
+                    </div>
 
                     <div class="signup">
-                        Chưa có tài khoản? <a href="signup.jsp">Đăng ký</a>
+                        Chưa có tài khoản? <a href="signup.html">Đăng ký</a>
                     </div>
                 </form>
             </div>

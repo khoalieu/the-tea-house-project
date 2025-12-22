@@ -14,112 +14,102 @@
 <jsp:include page="common/header.jsp"></jsp:include>
     <div class="login-page">
         <div class="login-box">
-
-        <!-- Ảnh đầu trang -->
-        <div class="login-image">
-            <img src="assets/images/image-tra-login.png" alt="Background">
-        </div>
-
-        <div class="login-content">
-            <h2>Đăng Ký</h2>
-
-            <!-- Mạng xã hội -->
-            <div class="social-login">
-            <a href="#" class="social fb"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" class="social gg"><i class="fa-brands fa-google"></i></a>
+            <div class="login-header">
+                <div class="login-icon-circle">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <h2 class="login-title">Tạo tài khoản Mới</h2>
+                <p class="login-subtitle">Tham gia cùng Mộc Trà để trải nghiệm tốt hơn</p>
             </div>
 
-            <form action="login.jsp" method="get" enctype="multipart/form-data" autocomplete="on"> <!--sau này servlet thì xóa nó đi mở comment dòng dưới-->
-            <!-- <form action="#" method="post" enctype="multipart/form-data" autocomplete="on"> -->
-                  <!-- Username -->
-                <div class="form-row">
-                    <input
-                        id="signup-username"
-                        class="input-username"
-                        type="text"
-                        name="username"
-                        placeholder="Tên đăng nhập"
-                        aria-label="Tên đăng nhập"
-                        required>
-                </div>
 
-                <!-- Email -->
-                <div class="form-row">
-                    <input
-                        id="signup-email"
-                        class="input-email"
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        aria-label="Email"
-                        required>
-                </div>
-                <!-- Phone -->
-                <div class="form-row">
-                    <input
-                        id="signup-phone"
-                        class="input-phone"
-                        type="tel"
-                        name="phone"
-                        placeholder="Số điện thoại"
-                        pattern="[0-9]{10}"
-                        required>
-                </div>
-
-
-
-                <!-- Password -->
-                <div class="form-row password-field">
-                    <input
-                        id="signup-password"
-                        class="input-password"
-                        type="password"
-                        name="password"
-                        placeholder="Mật khẩu"
-                        aria-label="Mật khẩu"
-                        required>
-                    <div class="eye-icon" id="toggleEyePwd">
-                        <i class="fa-regular fa-eye"></i>
-                    </div>
-                </div>
-
-                <!-- Confirm Password -->
-                <div class="form-row password-field">
-                    <input
-                    id="signup-confirmPassword"
-                    class="input-confirm"
-                    type="password"
-                    name="confirmPassword"
-                    placeholder="Xác nhận mật khẩu"
-                    aria-label="Xác nhận mật khẩu"
-                    required>
-                    <div class="eye-icon" id="toggleEyeConfirm">
-                    <i class="fa-regular fa-eye"></i>
-                    </div>
-                </div>
-                <!-- Avatar upload -->
-                <div class="form-row avatar-row">
-                    <label class="avatar-text" for="avatarInput">Avatar</label>
-
-                    <div class="avatar-box" id="signup-avatarBox" role="button" aria-label="Chọn ảnh đại diện">
-                    <img id="signup-avatarPreview" src="assets/images/useravata.png" alt="Ảnh đại diện">
+            <div class="login-content">
+                <form action="#" method="post" enctype="multipart/form-data" autocomplete="on">
+                    <!-- Username -->
+                    <div class="form-row">
+                        <input
+                                id="signup-username"
+                                class="input-username"
+                                type="text"
+                                name="username"
+                                placeholder="Tên đăng nhập"
+                                aria-label="Tên đăng nhập"
+                                required>
                     </div>
 
-                    <input type="file" id="signup-avatarInput" accept="image/*" style="display:none;">
-                </div>
+                    <!-- Email -->
+                    <div class="form-row">
+                        <input
+                                id="signup-email"
+                                class="input-email"
+                                type="email"
+                                name="email"
+                                placeholder="Email"
+                                aria-label="Email"
+                                required>
+                    </div>
+                    <!-- Phone -->
+                    <div class="form-row">
+                        <input
+                                id="signup-phone"
+                                class="input-phone"
+                                type="tel"
+                                name="phone"
+                                placeholder="Số điện thoại"
+                                pattern="[0-9]{10}"
+                                required>
+                    </div>
 
-                <!-- Submit -->
-                <div class="form-row">
-                    <button type="submit" class="btn">Đăng ký</button>
-                </div>
 
-                <!-- Link về đăng nhập -->
-                <div class="signup">
-                    Đã có tài khoản?
-                    <a href="login.jsp">Đăng nhập</a>
-                </div>
-            </form>
-        </div>
+
+                    <!-- Password -->
+                    <div class="form-row password-field">
+                        <input
+                                id="signup-password"
+                                class="input-password"
+                                type="password"
+                                name="password"
+                                placeholder="Mật khẩu"
+                                aria-label="Mật khẩu"
+                                required>
+
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="form-row password-field">
+                        <input
+                                id="signup-confirmPassword"
+                                class="input-confirm"
+                                type="password"
+                                name="confirmPassword"
+                                placeholder="Xác nhận mật khẩu"
+                                aria-label="Xác nhận mật khẩu"
+                                required>
+
+                    </div>
+                    <!-- Avatar upload -->
+                    <div class="form-row avatar-row">
+                        <label class="avatar-text" for="avatarInput">Avatar</label>
+
+                        <div class="avatar-box" id="signup-avatarBox" role="button" aria-label="Chọn ảnh đại diện">
+                            <img id="signup-avatarPreview" src="assets/images/useravata.png" alt="Ảnh đại diện">
+                        </div>
+
+                        <input type="file" id="signup-avatarInput" accept="image/*" style="display:none;">
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="form-row">
+                        <button type="submit" class="btn">Đăng ký</button>
+                    </div>
+
+                    <!-- Link về đăng nhập -->
+                    <div class="signup">
+                        Đã có tài khoản?
+                        <a href="login.html">Đăng nhập</a>
+                    </div>
+                </form>
+            </div>
 
         </div>
     </div>
