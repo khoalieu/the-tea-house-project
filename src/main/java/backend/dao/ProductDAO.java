@@ -61,7 +61,7 @@ public class ProductDAO {
                 case "price-desc": sql.append(" ORDER BY price DESC "); break;
                 case "newest": sql.append(" ORDER BY created_at DESC "); break;
                 case "name-asc": sql.append(" ORDER BY name ASC "); break;
-                default: sql.append(" ORDER BY created_at DESC ");;
+                default: sql.append(" ORDER BY created_at DESC ");
 
             }
         }
