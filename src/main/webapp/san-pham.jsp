@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -68,61 +69,38 @@
                 <section class="product-group">
                     <h2 class="group-title">Trà Thảo Mộc</h2>
                     <div class="product-grid">
-                        <div class="product-card">
-                            <img src="assets/images/san-pham-tra-lai.jpg" alt="Lục Trà Lài">
-                            <h3>Lục Trà Lài</h3>
-                            <p class="price">
-                                182.000 VNĐ
-                            </p>
-                            <a href="chi-tiet-san-pham-tra-lai.jsp" class="cta-button">Xem Chi Tiết</a>
-                        </div>
 
-                        <div class="product-card">
-                            <img src="assets/images/san-pham-hong-tra.jpg" alt="Hồng Trà Shan Tuyết">
-                            <h3>Hồng Trà Shan Tuyết</h3>
-                            <p class="price">
-                                97.000 VNĐ
-                            </p>
-                            <a href="chi-tiet-san-pham-hong-tra.jsp" class="cta-button">Xem Chi Tiết</a>
-                        </div>
-                        <div class="product-card">
-                            <img src="assets/images/san-pham-tra-bac-ha.jpg" alt="Trà Bạc Hà">
-                            <h3>Trà Bạc Hà</h3>
-                            <p class="price">
-                                80.000 VNĐ
-                            </p>
-                            <a href="chi-tiet-san-pham-tra-bac-ha.jsp" class="cta-button">Xem Chi Tiết</a>
-                        </div>
+                        <c:forEach var="p" items="${products}">
+                            <c:if test="${p.categoryId == 1}">
+                                <div class="product-card">
+                                    <img src="${p.imageUrl}" alt="${p.name}">
+                                    <h3>${p.name}</h3>
+                                    <p class="price">
+                                        ${p.price} VNĐ
+                                    </p>
+                                    <a href="chi-tiet-san-pham.jsp?id=${p.id}" class="cta-button">Xem Chi Tiết</a>
+                                </div>
+                            </c:if>
+                        </c:forEach>
                     </div>
                 </section>
 
                 <section class="product-group">
                     <h2 class="group-title">Nguyên Liệu Trà Sữa</h2>
                     <div class="product-grid">
-                        <div class="product-card">
-                            <img src="assets/images/san-pham-bot-milk-foam.jpg" alt="Bột Milk Foam">
-                            <h3>Bột Milk Foam</h3>
-                            <p class="price">
-                                89.000 VNĐ
-                            </p>
-                            <a href="chi-tiet-san-pham-bot-milk-foam-trung-muoi.jsp" class="cta-button">Xem Chi Tiết</a>
-                        </div>
-                        <div class="product-card">
-                            <span class="sale-tag">-10%</span>
-                            <img src ="assets/images/san-pham-tran-chau-den-1.jpg" alt="Sản Phẩm Sale">
-                            <h3>Trân Châu Đường Đen</h3>
-                            <p class="price">
-                                <span class="new-price">45.000 VNĐ</span> <span class="old-price">50.000 VNĐ</span> </p>
-                            <a href="chi-tiet-san-pham-tran-chau-den.jsp" class="cta-button">Xem Chi Tiết</a>
-                        </div>
-                        <div class="product-card">
-                            <img src="assets/images/san-pham-bot-sua-beo.jpg" alt="Bột Sữa Béo">
-                            <h3>Bột Sữa Béo</h3>
-                            <p class="price">
-                                70.000 VNĐ
-                            </p>
-                            <a href="chi-tiet-san-pham-bot-sua-beo.jsp" class="cta-button">Xem Chi Tiết</a>
-                        </div>
+                       <c:forEach var ="p" items="${products}">
+                           <c:if test="${p.categoryId == 2}">
+                               <div class="product-card">
+                                   <img src="${p.imageUrl}" alt="${p.name}">
+                                   <h3>${p.name}</h3>
+                                   <p class="price">
+                                       ${p.price} VNĐ
+                                   </p>
+                                   <a href="chi-tiet-san-pham.jsp?id=${p.id}" class="cta-button">Xem Chi Tiết</a>
+                               </div>
+                           </c:if>
+                       </c:forEach>
+
                     </div>
                 </section>
 
