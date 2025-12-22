@@ -28,16 +28,16 @@
                     <h3>Danh Mục Sản Phẩm</h3>
                     <ul class="category-filter-list">
 
-                        <li class="category-parent all-products active">
-                            <a href="san-pham.html">Tất Cả Sản Phẩm</a>
+                        <li class="category-parent ${currentCategory == null ? 'active' : ''}">
+                            <a href="san-pham">Tất Cả Sản Phẩm</a>
                         </li>
 
-                        <li class="category-parent">
-                            <a href="san-pham.html?category=tra-thao-moc">Trà Thảo Mộc (12)</a>
+                        <li class="category-parent ${currentCategory == 1 ? 'active' : ''}">
+                            <a href="san-pham?category=1">Trà Thảo Mộc (12)</a>
                         </li>
 
-                        <li class="category-parent">
-                            <a href="san-pham.html?category=nguyen-lieu-tra-sua">Nguyên Liệu Trà Sữa (17)</a>
+                        <li class="category-parent ${currentCategory == 2 ? 'active' : ''}">
+                            <a href="san-pham?category=2">Nguyên Liệu Trà Sữa (17)</a>
 
                             <ul class="category-child-list">
                                 <li><a href="#">Trà Nền Pha Chế (5)</a></li>
@@ -58,58 +58,46 @@
             <div class="shop-grid-wrapper">
                 <div class="sort-bar">
                     <label for="sort-by">Sắp xếp theo:</label>
-                    <select id="sort-by" class="sort-select">
-                        <option value="default">Mặc định</option>
-                        <option value="newest">Mới nhất</option>
-                        <option value="price-asc">Giá: Thấp đến Cao</option>
-                        <option value="price-desc">Giá: Cao đến Thấp</option>
-                        <option value="name-asc">Tên: A-Z</option>
+                    <select id="sort-by" class="sort-select" onchange="location = this.value;">
+                        <option value="san-pham?sort=default&category=${currentCategory}" ${currentSort == 'default' ? 'selected' : ''}>Mặc định</option>
+                        <option value="san-pham?sort=newest&category=${currentCategory}" ${currentSort == 'newest' ? 'selected' : ''}>Mới nhất</option>
+                        <option value="san-pham?sort=price-asc&category=${currentCategory}" ${currentSort == 'price-asc' ? 'selected' : ''}>Giá: Thấp đến Cao</option>
+                        <option value="san-pham?sort=price-desc&category=${currentCategory}" ${currentSort == 'price-desc' ? 'selected' : ''}>Giá: Cao đến Thấp</option>
                     </select>
                 </div>
 
                 <section class="product-group">
-                    <h2 class="group-title">Trà Thảo Mộc</h2>
+
+                    <h2 class="group-title">${categoryName}</h2>
+
                     <div class="product-grid">
+
+                        <c:if test="${products.size() == 0}">
+                            <p style="text-align: center; width: 100%; col-span: 3;">
+                                Không tìm thấy sản phẩm nào phù hợp!
+                            </p>
+                        </c:if>
 
                         <c:forEach var="p" items="${products}">
-                            <c:if test="${p.categoryId == 1}">
-                                <div class="product-card">
-                                    <img src="${p.imageUrl}" alt="${p.name}">
-                                    <h3>${p.name}</h3>
-                                    <p class="price">
-                                        <fmt:formatNumber value="${p.price}" pattern="#,###"/> VNĐ
-                                    </p>
-                                    <a href="chi-tiet-san-pham.jsp?id=${p.id}" class="cta-button">Xem Chi Tiết</a>
-                                </div>
-                            </c:if>
+                            <div class="product-card">
+                                <img src="${p.imageUrl}" alt="${p.name}">
+                                <h3>${p.name}</h3>
+                                <p class="price">
+                                    <fmt:setLocale value="vi_VN"/>
+                                    <fmt:formatNumber value="${p.price}" type="currency" currencySymbol=""/> VNĐ
+                                </p>
+                                <a href="chi-tiet-san-pham.jsp?id=${p.id}" class="cta-button">Xem Chi Tiết</a>
+                            </div>
                         </c:forEach>
-                    </div>
-                </section>
-
-                <section class="product-group">
-                    <h2 class="group-title">Nguyên Liệu Trà Sữa</h2>
-                    <div class="product-grid">
-                       <c:forEach var ="p" items="${products}">
-                           <c:if test="${p.categoryId == 2}">
-                               <div class="product-card">
-                                   <img src="${p.imageUrl}" alt="${p.name}">
-                                   <h3>${p.name}</h3>
-                                   <p class="price">
-                                       <fmt:formatNumber value="${p.price}" pattern="#,###"/> VNĐ
-                                   </p>
-                                   <a href="chi-tiet-san-pham.jsp?id=${p.id}" class="cta-button">Xem Chi Tiết</a>
-                               </div>
-                           </c:if>
-                       </c:forEach>
 
                     </div>
                 </section>
 
                 <div class="pagination">
-                    <a href="#" class="active">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">&raquo;</a>
+                    <c:forEach begin="1" end="${totalPages}" var="i">
+                        <a href="san-pham?page=${i}&category=${currentCategory}&sort=${currentSort}"
+                           class="${currentPage == i ? 'active' : ''}">${i}</a>
+                    </c:forEach>
                 </div>
             </div>
         </div>
