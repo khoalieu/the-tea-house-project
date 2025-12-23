@@ -1,6 +1,8 @@
 package backend.model.enums;
 
 public enum ProductStatus {
-    active, inactive, out_of_stock
-
+    ACTIVE,
+    INACTIVE,
+    OUT_OF_STOCK
 }
+
