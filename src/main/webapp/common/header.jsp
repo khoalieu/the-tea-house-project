@@ -127,6 +127,7 @@
                     </span>
                     <div class="user-dropdown">
                         <a href="login.jsp">Đăng nhập</a>
+                        <a href="logout">Đăng xuất</a>
                     </div>
                 </div>
             </div>
