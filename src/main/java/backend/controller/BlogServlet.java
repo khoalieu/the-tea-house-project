@@ -23,40 +23,32 @@ public class BlogServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        BlogPostDAO dao = new BlogPostDAO();
+        String q = request.getParameter("q");
 
         int page = 1;
         try {
             page = Integer.parseInt(request.getParameter("page"));
         } catch (Exception ignored) {}
-
         if (page < 1) page = 1;
 
-        BlogPostDAO dao = new BlogPostDAO();
-
-        int totalBlogs = dao.countPublishedBlogs();
-        int totalPages = (int) Math.ceil((double) totalBlogs / PAGE_SIZE);
-
+        int total = dao.countBlogs(q);
+        int totalPages = (int) Math.ceil((double) total / PAGE_SIZE);
         if (totalPages > 0 && page > totalPages) page = totalPages;
 
-        List<BlogPost> blogs = dao.getPublishedBlogs(page, PAGE_SIZE);
+        List<BlogPost> blogs = dao.getBlogs(q, page, PAGE_SIZE);
 
-        // map: blogId -> date string
         Map<Integer, String> dateMap = new HashMap<>();
         for (BlogPost b : blogs) {
-            if (b.getCreatedAt() != null) {
-                dateMap.put(b.getId(), b.getCreatedAt().format(DF));
-            }
+            dateMap.put(b.getId(), b.getCreatedAt().format(DF));
         }
 
         request.setAttribute("blogs", blogs);
         request.setAttribute("dateMap", dateMap);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("currentQ", q);
 
         request.getRequestDispatcher("/blog.jsp").forward(request, response);
-    }
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
     }
 }

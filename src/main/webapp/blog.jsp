@@ -28,8 +28,15 @@
 
                     <div class="sidebar-widget">
                         <h3>Tìm Kiếm Bài Viết</h3>
-                        <input type="text" placeholder="Nhập từ khóa..." style="width: 100%; padding: 10px;">
+                        <form action="${pageContext.request.contextPath}/blog" method="get">
+                            <input type="text" name="q"
+                                   value="${currentQ}"
+                                   placeholder="Nhập từ khóa..."
+                                   style="width:100%; padding:10px;">
+                        </form>
+
                     </div>
+
 
                     <div class="sidebar-widget">
                         <h3>Danh Mục</h3>
@@ -108,7 +115,7 @@
             <c:if test="${totalPages > 1}">
                 <div class="pagination">
                     <c:forEach begin="1" end="${totalPages}" var="i">
-                        <a href="${pageContext.request.contextPath}/blog?page=${i}"
+                        <a href="${pageContext.request.contextPath}/blog?page=${i}&q=${currentQ}"
                            class="${currentPage == i ? 'active' : ''}">
                                 ${i}
                         </a>
