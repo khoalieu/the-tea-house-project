@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -28,43 +30,41 @@
 
                     <div class="sidebar-widget">
                         <h3>Tìm Kiếm Bài Viết</h3>
-                        <form action="${pageContext.request.contextPath}/blog" method="get">
-                            <input type="text" name="q"
-                                   value="${currentQ}"
-                                   placeholder="Nhập từ khóa..."
-                                   style="width:100%; padding:10px;">
+                        <form action="blog" method="get">
+                            <input type="text" name="q" value="${param.q}"
+                                   placeholder="Nhập từ khóa..." style="width: 100%; padding: 10px;">
                         </form>
-
                     </div>
-
 
                     <div class="sidebar-widget">
                         <h3>Danh Mục</h3>
                         <ul class="sidebar-list">
-                            <li><a href="#">Công Thức Pha Chế (5)</a></li>
-                            <li><a href="#">Kiến Thức Về Trà (3)</a></li>
-                            <li><a href="#">Nguyên Liệu Mới (2)</a></li>
+                            <li>
+                                <a href="blog" class="${mode == 'all' ? 'active' : ''}">Tất Cả</a>
+                            </li>
+
+                            <c:forEach var="c" items="${categories}">
+                                <li>
+                                    <a href="blog?cat=${c.slug}" class="${c.slug == cat ? 'active' : ''}">
+                                            ${c.name} (<c:out value="${categoryCountMap[c.id]}" default="0"/>)
+                                    </a>
+                                </li>
+                            </c:forEach>
+
                         </ul>
                     </div>
 
                     <div class="sidebar-widget">
                         <h3>Bài Viết Mới Nhất</h3>
-
-                        <div class="recent-post">
-                            <img src="https://placehold.co/70x70/ffb74d/white" alt="thumb">
-                            <div class="recent-post-info">
-                                <a href="#">Cách tự làm trân châu đen tại nhà</a>
-                                <span>10/11/2025</span>
+                        <c:forEach var="r" items="${recentPosts}">
+                            <div class="recent-post">
+                                <img src="${r.featuredImage}" alt="thumb">
+                                <div class="recent-post-info">
+                                    <a href="blog-detail?slug=${r.slug}">${r.title}</a>
+                                    <span>${recent[r.id]}</span>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="recent-post">
-                            <img src="https://placehold.co/70x70/cddc39/white" alt="thumb">
-                            <div class="recent-post-info">
-                                <a href="#">Phân biệt Hồng Trà và Lục Trà</a>
-                                <span>09/11/2025</span>
-                            </div>
-                        </div>
+                        </c:forEach>
                     </div>
 
                 </aside>
@@ -72,53 +72,58 @@
                     <div class="blog-grid">
 
                         <c:if test="${empty blogs}">
-                            <p style="text-align:center; width:100%;">Chưa có bài viết nào.</p>
+                            <p style="text-align:center; width:100%;">${emptyMessage}</p>
                         </c:if>
+
 
                         <c:forEach var="b" items="${blogs}">
                             <div class="blog-card">
-                                <img
-                                        src="${empty b.featuredImage ? 'https://placehold.co/600x400' : b.featuredImage}"
-                                        alt=""
-                                />
-
+                                <img src="${empty b.featuredImage ? 'https://placehold.co/600x400' : b.featuredImage}" alt=""/>
                                 <h3>${b.title}</h3>
 
                                 <div class="blog-card-meta">
-                    <span class="meta-item">
-                        <i class="fa-solid fa-eye"></i>
-                        <span>${b.viewsCount} Lượt xem</span>
-                    </span>
+                                    <span class="meta-item">
+                                        <i class="fa-solid fa-eye"></i>
+                                        <span>${b.viewsCount} Lượt xem</span>
+                                    </span>
 
                                     <span class="meta-item">
-                        <i class="fa-solid fa-calendar"></i>
-                        <span>${dateMap[b.id]}</span>
-                    </span>
+                                        <i class="fa-solid fa-calendar"></i>
+                                        <span>${dateMap[b.id]}</span>
+                                    </span>
 
                                     <span class="meta-item">
-                        <i class="fa-solid fa-user"></i>
-                        <span>Admin</span>
-                    </span>
+                                        <i class="fa-solid fa-user"></i>
+                                        <span>Admin</span>
+                                    </span>
                                 </div>
-
                                 <p>${empty b.excerpt ? '(Chưa có mô tả)' : b.excerpt}</p>
 
                                 <a href="${pageContext.request.contextPath}/blog-detail?slug=${b.slug}">Đọc Thêm</a>
                             </div>
                         </c:forEach>
-
                     </div>
                 </div>
-
-
             </div>
+
             <c:if test="${totalPages > 1}">
                 <div class="pagination">
                     <c:forEach begin="1" end="${totalPages}" var="i">
-                        <a href="${pageContext.request.contextPath}/blog?page=${i}&q=${currentQ}"
-                           class="${currentPage == i ? 'active' : ''}">
-                                ${i}
-                        </a>
+
+                        <c:choose>
+                            <c:when test="${mode == 'search'}">
+                                <a href="blog?page=${i}&q=${q}" class="${currentPage == i ? 'active' : ''}">${i}</a>
+                            </c:when>
+
+                            <c:when test="${mode == 'cat'}">
+                                <a href="blog?page=${i}&cat=${cat}" class="${currentPage == i ? 'active' : ''}">${i}</a>
+                            </c:when>
+
+                            <c:otherwise>
+                                <a href="blog?page=${i}" class="${currentPage == i ? 'active' : ''}">${i}</a>
+                            </c:otherwise>
+                        </c:choose>
+
                     </c:forEach>
                 </div>
             </c:if>
