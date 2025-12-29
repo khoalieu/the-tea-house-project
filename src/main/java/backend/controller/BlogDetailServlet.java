@@ -14,9 +14,10 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import backend.dao.UserDAO;
+
 
 @WebServlet("/chi-tiet-blog")
 public class BlogDetailServlet extends HttpServlet {
@@ -86,8 +87,12 @@ public class BlogDetailServlet extends HttpServlet {
         List<BlogComment> comments = commentDAO.getByPostId(post.getId());
         Map<Integer, String> commentDateMap = new HashMap<>();
         for (BlogComment c : comments) {
-            if (c.getCreatedAt() != null) commentDateMap.put(c.getId(), c.getCreatedAt().format(DF_COMMENT));
+            if (c.getCreatedAt() != null) {
+                commentDateMap.put(c.getId(), c.getCreatedAt().format(DF_COMMENT));
+            }
         }
+        request.setAttribute("commentUserMap", new UserDAO().getUserMapByPostId(post.getId()));
+
 
         String postDate = (post.getCreatedAt() == null) ? "" : post.getCreatedAt().format(DF_DATE);
 

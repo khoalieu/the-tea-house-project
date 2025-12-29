@@ -76,19 +76,24 @@
                         </c:if>
 
                         <c:forEach var="cm" items="${comments}">
+                            <c:set var="u" value="${commentUserMap[cm.userId]}" />
+
                             <div class="comment-item">
                                 <div class="comment-avatar">
-                                    <img src="https://placehold.co/60x60/eeeeee/white?text=User" alt="Avatar">
+                                    <img src="${empty u || empty u.avatar ? 'https://placehold.co/60x60/eeeeee/white?text=User' : u.avatar}" alt="Avatar">
                                 </div>
+
                                 <div class="comment-content">
-                                    <div class="comment-author">User ${cm.userId}</div>
+                                    <div class="comment-author">
+                                            ${not empty u && (not empty u.firstName || not empty u.lastName)? u.firstName.concat(' ').concat(u.lastName) : 'User '.concat(cm.userId)}
+                                    </div>
                                     <div class="comment-meta">${commentDateMap[cm.id]}</div>
-                                    <p class="comment-body">
-                                        <c:out value="${cm.commentText}"/>
-                                    </p>
+                                    <p class="comment-body"><c:out value="${cm.commentText}"/></p>
                                 </div>
+
                             </div>
                         </c:forEach>
+
                     </div>
                 </div>
 
