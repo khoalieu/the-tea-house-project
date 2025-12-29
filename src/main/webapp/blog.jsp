@@ -26,48 +26,9 @@
     <section class="blog-page-content">
         <div class="container">
             <div class="blog-detail-layout">
-                <aside class="blog-sidebar">
+                <%--   search + bar + recent--%>
+                <jsp:include page="common/blog-sidebar.jsp"></jsp:include>
 
-                    <div class="sidebar-widget">
-                        <h3>Tìm Kiếm Bài Viết</h3>
-                        <form action="blog" method="get">
-                            <input type="text" name="q" value="${param.q}"
-                                   placeholder="Nhập từ khóa..." style="width: 100%; padding: 10px;">
-                        </form>
-                    </div>
-
-                    <div class="sidebar-widget">
-                        <h3>Danh Mục</h3>
-                        <ul class="sidebar-list">
-                            <li>
-                                <a href="blog" class="${mode == 'all' ? 'active' : ''}">Tất Cả</a>
-                            </li>
-
-                            <c:forEach var="c" items="${categories}">
-                                <li>
-                                    <a href="blog?cat=${c.slug}" class="${c.slug == cat ? 'active' : ''}">
-                                            ${c.name} (<c:out value="${categoryCountMap[c.id]}" default="0"/>)
-                                    </a>
-                                </li>
-                            </c:forEach>
-
-                        </ul>
-                    </div>
-
-                    <div class="sidebar-widget">
-                        <h3>Bài Viết Mới Nhất</h3>
-                        <c:forEach var="r" items="${recentPosts}">
-                            <div class="recent-post">
-                                <img src="${r.featuredImage}" alt="thumb">
-                                <div class="recent-post-info">
-                                    <a href="blog-detail?slug=${r.slug}">${r.title}</a>
-                                    <span>${recent[r.id]}</span>
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </div>
-
-                </aside>
                 <div class="blog-post-content">
                     <div class="blog-grid">
 
@@ -78,7 +39,7 @@
 
                         <c:forEach var="b" items="${blogs}">
                             <div class="blog-card">
-                                <img src="${empty b.featuredImage ? 'https://placehold.co/600x400' : b.featuredImage}" alt=""/>
+                                <img src="${b.featuredImage}" alt=""/>
                                 <h3>${b.title}</h3>
 
                                 <div class="blog-card-meta">
@@ -99,7 +60,7 @@
                                 </div>
                                 <p>${empty b.excerpt ? '(Chưa có mô tả)' : b.excerpt}</p>
 
-                                <a href="${pageContext.request.contextPath}/blog-detail?slug=${b.slug}">Đọc Thêm</a>
+                                <a href="${pageContext.request.contextPath}/chi-tiet-blog?slug=${b.slug}">Đọc Thêm</a>
                             </div>
                         </c:forEach>
                     </div>

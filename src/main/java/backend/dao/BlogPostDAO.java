@@ -2,6 +2,7 @@ package backend.dao;
 
 import backend.db.DBConnect;
 import backend.model.BlogPost;
+import backend.model.enums.BlogStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -165,6 +166,67 @@ public class BlogPostDAO {
             e.printStackTrace();
         }
         return list;
+    }
+    // blog detail
+    public BlogPost getPublishedBySlug(String slug) {
+        String sql = "SELECT id, title, slug, excerpt, content, featured_image, " +
+                "author_id, category_id, status, views_count, meta_title, meta_description, created_at " +
+                "FROM blog_posts " +
+                "WHERE status = 'published' AND slug = ? " +
+                "LIMIT 1";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, slug);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    BlogPost b = new BlogPost();
+                    b.setId(rs.getInt("id"));
+                    b.setTitle(rs.getString("title"));
+                    b.setSlug(rs.getString("slug"));
+                    b.setExcerpt(rs.getString("excerpt"));
+                    b.setContent(rs.getString("content"));
+                    b.setFeaturedImage(rs.getString("featured_image"));
+                    b.setAuthorId(rs.getInt("author_id"));
+
+                    int catId = rs.getInt("category_id");
+                    b.setCategoryId(rs.wasNull() ? null : catId);
+
+                    b.setViewsCount(rs.getInt("views_count"));
+                    b.setMetaTitle(rs.getString("meta_title"));
+                    b.setMetaDescription(rs.getString("meta_description"));
+
+                    String st = rs.getString("status");
+                    if (st != null) b.setStatus(BlogStatus.valueOf(st.toUpperCase()));
+
+                    Timestamp ts = rs.getTimestamp("created_at");
+                    if (ts != null) b.setCreatedAt(ts.toLocalDateTime());
+
+                    return b;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    // view
+    public void incrementViews(int postId) {
+        String sql = "UPDATE blog_posts " +
+                "SET views_count = IFNULL(views_count, 0) + 1 " +
+                "WHERE id = ?";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, postId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private BlogPost mapCard(ResultSet rs) throws Exception {

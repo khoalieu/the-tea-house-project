@@ -62,6 +62,7 @@ public class BlogServlet extends HttpServlet {
             request.setAttribute("mode", "search");
             request.setAttribute("q", q);
             request.setAttribute("cat", null);
+            request.setAttribute("activeCatSlug", null);
             request.setAttribute("totalPages", totalPages);
         }
         // category
@@ -75,6 +76,7 @@ public class BlogServlet extends HttpServlet {
             request.setAttribute("mode", "cat");
             request.setAttribute("cat", cat);
             request.setAttribute("q", null);
+            request.setAttribute("activeCatSlug", cat);
             request.setAttribute("totalPages", totalPages);
         }
         // ALL
@@ -88,6 +90,7 @@ public class BlogServlet extends HttpServlet {
             request.setAttribute("mode", "all");
             request.setAttribute("cat", null);
             request.setAttribute("q", null);
+            request.setAttribute("activeCatSlug", null);
             request.setAttribute("totalPages", totalPages);
         }
 
