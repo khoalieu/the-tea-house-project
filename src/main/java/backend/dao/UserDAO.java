@@ -8,6 +8,7 @@ import org.mindrot.jbcrypt.BCrypt; // Import thư viện BCrypt
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.*;
 
 public class UserDAO {
     Connection conn = null;
@@ -91,4 +92,37 @@ public class UserDAO {
             e.printStackTrace();
         }
     }
+    // 4. Lấy map user theo postId (Dùng trong hiển thị comment)
+    public Map<Integer, User> getUserMapByPostId(int postId) {
+        Map<Integer, User> map = new HashMap<>();
+
+        String sql = "SELECT DISTINCT u.id, u.first_name, u.last_name, u.avatar "
+                + "FROM users u "
+                + "JOIN blog_comments bc ON bc.user_id = u.id "
+                + "WHERE bc.post_id = ?";
+
+        try (Connection c = new DBConnect().getConnection();
+             PreparedStatement p = c.prepareStatement(sql)) {
+
+            p.setInt(1, postId);
+
+            try (ResultSet r = p.executeQuery()) {
+                while (r.next()) {
+                    User u = new User();
+                    u.setId(r.getInt("id"));
+                    u.setFirstName(r.getString("first_name"));
+                    u.setLastName(r.getString("last_name"));
+                    u.setAvatar(r.getString("avatar"));
+                    map.put(u.getId(), u);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return map;
+    }
+
+
 }

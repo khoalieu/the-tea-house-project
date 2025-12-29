@@ -155,7 +155,7 @@
                 <p>Trà hoa cúc không chỉ là một thức uống thơm ngon, thư giãn mà còn mang lại vô vàn lợi ích
                     cho sức khỏe, đặc biệt là cải thiện giấc ngủ...</p>
 
-                <a href="chi-tiet-blog-mau.jsp">Đọc Thêm</a>
+                <a href="chi-tiet-blog.jsp">Đọc Thêm</a>
             </div>
             <div class="blog-card">
                 <img src="assets/images/loi-ich-tra-hoa-cuc.jpg" alt="">
@@ -173,7 +173,7 @@
                 <p>Trà hoa cúc không chỉ là một thức uống thơm ngon, thư giãn mà còn mang lại vô vàn lợi ích
                     cho sức khỏe, đặc biệt là cải thiện giấc ngủ...</p>
 
-                <a href="chi-tiet-blog-mau.jsp">Đọc Thêm</a>
+                <a href="chi-tiet-blog.jsp">Đọc Thêm</a>
             </div>
             <div class="blog-card">
                 <img src="assets/images/loi-ich-tra-hoa-cuc.jpg" alt="">
@@ -191,7 +191,7 @@
                 <p>Trà hoa cúc không chỉ là một thức uống thơm ngon, thư giãn mà còn mang lại vô vàn lợi ích
                     cho sức khỏe, đặc biệt là cải thiện giấc ngủ...</p>
 
-                <a href="chi-tiet-blog-mau.jsp">Đọc Thêm</a>
+                <a href="chi-tiet-blog.jsp">Đọc Thêm</a>
             </div>
         </div>
     </div>

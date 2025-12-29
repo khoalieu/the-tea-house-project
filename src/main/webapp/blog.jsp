@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -24,187 +26,69 @@
     <section class="blog-page-content">
         <div class="container">
             <div class="blog-detail-layout">
-                <aside class="blog-sidebar">
+                <%--   search + bar + recent--%>
+                <jsp:include page="common/blog-sidebar.jsp"></jsp:include>
 
-                    <div class="sidebar-widget">
-                        <h3>Tìm Kiếm Bài Viết</h3>
-                        <input type="text" placeholder="Nhập từ khóa..." style="width: 100%; padding: 10px;">
-                    </div>
-
-                    <div class="sidebar-widget">
-                        <h3>Danh Mục</h3>
-                        <ul class="sidebar-list">
-                            <li><a href="#">Công Thức Pha Chế (5)</a></li>
-                            <li><a href="#">Kiến Thức Về Trà (3)</a></li>
-                            <li><a href="#">Nguyên Liệu Mới (2)</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="sidebar-widget">
-                        <h3>Bài Viết Mới Nhất</h3>
-
-                        <div class="recent-post">
-                            <img src="https://placehold.co/70x70/ffb74d/white" alt="thumb">
-                            <div class="recent-post-info">
-                                <a href="#">Cách tự làm trân châu đen tại nhà</a>
-                                <span>10/11/2025</span>
-                            </div>
-                        </div>
-
-                        <div class="recent-post">
-                            <img src="https://placehold.co/70x70/cddc39/white" alt="thumb">
-                            <div class="recent-post-info">
-                                <a href="#">Phân biệt Hồng Trà và Lục Trà</a>
-                                <span>09/11/2025</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </aside>
                 <div class="blog-post-content">
                     <div class="blog-grid">
-                        <div class="blog-card">
-                            <img src="assets/images/loi-ich-tra-hoa-cuc.jpg" alt="">
-                            <h3>5 Lợi Ích Bất Ngờ Của Trà Hoa Cúc</h3>
-                            <div class ="blog-card-meta">
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-eye"></i>
-                                    <span>1.234 Lượt xem</span>
-                                </span>
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-calendar"></i>
-                                    <span>11/11/2025</span>
-                                </span>
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-user"></i>
-                                    <span>Admin</span>
-                                </span>
-                            </div>
-                            <p>Trà hoa cúc không chỉ là một thức uống thơm ngon, thư giãn mà còn mang lại vô vàn lợi ích
-                                cho sức khỏe, đặc biệt là cải thiện giấc ngủ...</p>
 
-                            <a href="chi-tiet-blog-mau.jsp">Đọc Thêm</a>
-                        </div>
-                        <div class="blog-card">
-                            <img src="assets/images/loi-ich-tra-hoa-cuc.jpg" alt="">
-                            <h3>5 Lợi Ích Bất Ngờ Của Trà Hoa Cúc</h3>
-                            <div class ="blog-card-meta">
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-eye"></i>
-                                    <span>1.234 Lượt xem</span>
-                                </span>
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-calendar"></i>
-                                    <span>11/11/2025</span>
-                                </span>
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-user"></i>
-                                    <span>Admin</span>
-                                </span>
-                            </div>
-                            <p>Trà hoa cúc không chỉ là một thức uống thơm ngon, thư giãn mà còn mang lại vô vàn lợi ích
-                                cho sức khỏe, đặc biệt là cải thiện giấc ngủ...</p>
+                        <c:if test="${empty blogs}">
+                            <p style="text-align:center; width:100%;">${emptyMessage}</p>
+                        </c:if>
 
-                            <a href="chi-tiet-blog-mau.jsp">Đọc Thêm</a>
-                        </div>
-                        <div class="blog-card">
-                            <img src="assets/images/loi-ich-tra-hoa-cuc.jpg" alt="">
-                            <h3>5 Lợi Ích Bất Ngờ Của Trà Hoa Cúc</h3>
-                            <div class ="blog-card-meta">
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-eye"></i>
-                                    <span>1.234 Lượt xem</span>
-                                </span>
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-calendar"></i>
-                                    <span>11/11/2025</span>
-                                </span>
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-user"></i>
-                                    <span>Admin</span>
-                                </span>
-                            </div>
-                            <p>Trà hoa cúc không chỉ là một thức uống thơm ngon, thư giãn mà còn mang lại vô vàn lợi ích
-                                cho sức khỏe, đặc biệt là cải thiện giấc ngủ...</p>
 
-                            <a href="chi-tiet-blog-mau.jsp">Đọc Thêm</a>
-                        </div>
-                        <div class="blog-card">
-                            <img src="assets/images/loi-ich-tra-hoa-cuc.jpg" alt="">
-                            <h3>5 Lợi Ích Bất Ngờ Của Trà Hoa Cúc</h3>
-                            <div class ="blog-card-meta">
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-eye"></i>
-                                    <span>1.234 Lượt xem</span>
-                                </span>
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-calendar"></i>
-                                    <span>11/11/2025</span>
-                                </span>
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-user"></i>
-                                    <span>Admin</span>
-                                </span>
-                            </div>
-                            <p>Trà hoa cúc không chỉ là một thức uống thơm ngon, thư giãn mà còn mang lại vô vàn lợi ích
-                                cho sức khỏe, đặc biệt là cải thiện giấc ngủ...</p>
+                        <c:forEach var="b" items="${blogs}">
+                            <div class="blog-card">
+                                <img src="${b.featuredImage}" alt=""/>
+                                <h3>${b.title}</h3>
 
-                            <a href="chi-tiet-blog-mau.jsp">Đọc Thêm</a>
-                        </div>
-                        <div class="blog-card">
-                            <img src="assets/images/loi-ich-tra-hoa-cuc.jpg" alt="">
-                            <h3>5 Lợi Ích Bất Ngờ Của Trà Hoa Cúc</h3>
-                            <div class ="blog-card-meta">
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-eye"></i>
-                                    <span>1.234 Lượt xem</span>
-                                </span>
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-calendar"></i>
-                                    <span>11/11/2025</span>
-                                </span>
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-user"></i>
-                                    <span>Admin</span>
-                                </span>
-                            </div>
-                            <p>Trà hoa cúc không chỉ là một thức uống thơm ngon, thư giãn mà còn mang lại vô vàn lợi ích
-                                cho sức khỏe, đặc biệt là cải thiện giấc ngủ...</p>
+                                <div class="blog-card-meta">
+                                    <span class="meta-item">
+                                        <i class="fa-solid fa-eye"></i>
+                                        <span>${b.viewsCount} Lượt xem</span>
+                                    </span>
 
-                            <a href="chi-tiet-blog-mau.jsp">Đọc Thêm</a>
-                        </div>
-                        <div class="blog-card">
-                            <img src="assets/images/loi-ich-tra-hoa-cuc.jpg" alt="">
-                            <h3>5 Lợi Ích Bất Ngờ Của Trà Hoa Cúc</h3>
-                            <div class ="blog-card-meta">
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-eye"></i>
-                                    <span>1.234 Lượt xem</span>
-                                </span>
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-calendar"></i>
-                                    <span>11/11/2025</span>
-                                </span>
-                                <span class="meta-item">
-                                    <i class="fa-solid fa-user"></i>
-                                    <span>Admin</span>
-                                </span>
-                            </div>
-                            <p>Trà hoa cúc không chỉ là một thức uống thơm ngon, thư giãn mà còn mang lại vô vàn lợi ích
-                                cho sức khỏe, đặc biệt là cải thiện giấc ngủ...</p>
+                                    <span class="meta-item">
+                                        <i class="fa-solid fa-calendar"></i>
+                                        <span>${dateMap[b.id]}</span>
+                                    </span>
 
-                            <a href="chi-tiet-blog-mau.jsp">Đọc Thêm</a>
-                        </div>
+                                    <span class="meta-item">
+                                        <i class="fa-solid fa-user"></i>
+                                        <span>Admin</span>
+                                    </span>
+                                </div>
+                                <p>${empty b.excerpt ? '(Chưa có mô tả)' : b.excerpt}</p>
+
+                                <a href="${pageContext.request.contextPath}/chi-tiet-blog?slug=${b.slug}">Đọc Thêm</a>
+                            </div>
+                        </c:forEach>
                     </div>
                 </div>
+            </div>
 
-            </div>
-            <div class="pagination">
-                <a href="#" class="active">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">&raquo;</a>
-            </div>
+            <c:if test="${totalPages > 1}">
+                <div class="pagination">
+                    <c:forEach begin="1" end="${totalPages}" var="i">
+
+                        <c:choose>
+                            <c:when test="${mode == 'search'}">
+                                <a href="blog?page=${i}&q=${q}" class="${currentPage == i ? 'active' : ''}">${i}</a>
+                            </c:when>
+
+                            <c:when test="${mode == 'cat'}">
+                                <a href="blog?page=${i}&cat=${cat}" class="${currentPage == i ? 'active' : ''}">${i}</a>
+                            </c:when>
+
+                            <c:otherwise>
+                                <a href="blog?page=${i}" class="${currentPage == i ? 'active' : ''}">${i}</a>
+                            </c:otherwise>
+                        </c:choose>
+
+                    </c:forEach>
+                </div>
+            </c:if>
+
         </div>
     </section>
 </main>
