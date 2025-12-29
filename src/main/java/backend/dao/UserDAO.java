@@ -40,7 +40,7 @@ public class UserDAO {
                     user.setEmail(rs.getString("email"));
                     user.setFirstName(rs.getString("first_name"));
                     user.setLastName(rs.getString("last_name"));
-
+                    user.setPhone(rs.getString("phone"));
                     // Xử lý Role (Enum) an toàn hơn
                     try {
                         user.setRole(UserRole.valueOf(rs.getString("role").toUpperCase()));
@@ -125,4 +125,21 @@ public class UserDAO {
     }
 
 
+    // Hàm cập nhật thông tin cá nhân
+    public boolean updateUserInfo(int userId, String firstName, String lastName) {
+        String query = "UPDATE users SET first_name = ?, last_name = ? WHERE id = ?";
+        try {
+            conn = new DBConnect().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, firstName);
+            ps.setString(2, lastName);
+            ps.setInt(3, userId);
+
+            int rowAffected = ps.executeUpdate();
+            return rowAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
