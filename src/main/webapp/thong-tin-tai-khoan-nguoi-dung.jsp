@@ -20,6 +20,8 @@
 
             <main class="main-content">
                 <h2 class="section-title">Thông tin người dùng</h2>
+
+                <%-- Hiển thị thông báo --%>
                 <c:if test="${not empty sessionScope.msg}">
                     <div class="alert alert-${sessionScope.msgType}"
                          style="padding: 15px; margin-bottom: 20px; border-radius: 4px;
@@ -29,39 +31,40 @@
                     </div>
                     <c:remove var="msg" scope="session"/>
                 </c:if>
-                <form action="update-full-profile" method="post" class="profile-form">
+
+                <form action="update-profile-info" method="post" class="profile-form" style="margin-bottom: 40px; border-bottom: 1px solid #eee; padding-bottom: 20px;">
+                    <input type="hidden" name="action" value="update_info">
 
                     <div class="form-row">
                         <div class="input-group">
-                            <%-- Thêm name="firstname" --%>
                             <input type="text" id="firstname" name="firstname"
-                                   value="${sessionScope.user.firstName}" placeholder=" ">
+                                   value="${sessionScope.user.firstName}" placeholder=" " required>
                             <label for="firstname">Tên</label>
                         </div>
 
                         <div class="input-group">
-                            <%-- Thêm name="lastname" --%>
                             <input type="text" id="lastname" name="lastname"
-                                   value="${sessionScope.user.lastName}" placeholder=" ">
+                                   value="${sessionScope.user.lastName}" placeholder=" " required>
                             <label for="lastname">Họ</label>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="input-group">
-                            <input type="text" id="dob" name="dob" placeholder="YYYY-MM-DD"
+                            <%-- Sửa type="date" để tránh lỗi định dạng --%>
+                            <input type="date" id="dob" name="dob"
                                    value="${sessionScope.user.dateOfBirth != null ? sessionScope.user.dateOfBirth.toLocalDate() : ''}">
                             <label for="dob">Ngày Sinh</label>
                         </div>
 
                         <div class="input-group">
                             <select id="gender" name="gender">
-                                <option value="" disabled selected hidden></option>
-                                <option value="MALE" ${sessionScope.user.gender == 'MALE' ? 'selected' : ''}>Nam</option>
-                                <option value="FEMALE" ${sessionScope.user.gender == 'FEMALE' ? 'selected' : ''}>Nữ</option>
-                                <option value="OTHER" ${sessionScope.user.gender == 'OTHER' ? 'selected' : ''}>Khác</option>
+                                <option value="" disabled selected hidden>Chọn giới tính</option>
+                                <%-- Value để chữ thường cho khớp database --%>
+                                <option value="male" ${sessionScope.user.gender == 'MALE' ? 'selected' : ''}>Nam</option>
+                                <option value="female" ${sessionScope.user.gender == 'FEMALE' ? 'selected' : ''}>Nữ</option>
+                                <option value="other" ${sessionScope.user.gender == 'OTHER' ? 'selected' : ''}>Khác</option>
                             </select>
-                            <label for="gender">Giới tính</label>
                             <i class="fa-solid fa-chevron-down select-arrow"></i>
                         </div>
                     </div>
@@ -79,39 +82,45 @@
                             <div class="phone-prefix">
                                 <span>SDT</span> <i class="fa-solid fa-chevron-down"></i>
                             </div>
-                            <%-- Thêm name="phone" --%>
                             <input type="tel" id="phone" name="phone" placeholder=" "
                                    value="${sessionScope.user.phone}">
                             <label for="phone">Số điện thoại</label>
                         </div>
                     </div>
 
-                    <h3 class="section-subtitle" style="margin-top: 30px;">Đổi mật khẩu</h3>
+                    <div class="form-actions" style="margin-top: 20px;">
+                        <button type="submit" class="btn-save-changes">Lưu Thông Tin</button>
+                    </div>
+                </form>
+
+                <h3 class="section-subtitle">Đổi mật khẩu</h3>
+                <form action="change-password" method="post" class="profile-form">
+                    <input type="hidden" name="action" value="change_password">
+
                     <p style="font-size: 13px; color: #666; margin-bottom: 15px;">
-                        *Chỉ nhập vào đây nếu bạn muốn thay đổi mật khẩu
+                        *Vui lòng nhập mật khẩu cũ để xác thực thay đổi
                     </p>
 
                     <div class="form-row password-row">
                         <div class="input-group">
-                            <input type="password" id="oldPassword" name="oldPassword" placeholder=" ">
+                            <input type="password" id="oldPassword" name="oldPassword" placeholder=" " required>
                             <label for="oldPassword">Mật khẩu cũ</label>
                         </div>
 
                         <div class="input-group">
-                            <input type="password" id="newPassword" name="newPassword" placeholder=" ">
+                            <input type="password" id="newPassword" name="newPassword" placeholder=" " required>
                             <label for="newPassword">Mật khẩu mới</label>
                         </div>
 
                         <div class="input-group">
-                            <input type="password" id="confirmNewPassword" name="confirmNewPassword" placeholder=" ">
+                            <input type="password" id="confirmNewPassword" name="confirmNewPassword" placeholder=" " required>
                             <label for="confirmNewPassword">Xác nhận mật khẩu mới</label>
                         </div>
                     </div>
 
                     <div class="form-actions" style="margin-top: 30px;">
-                        <button type="submit" class="btn-save-changes">Lưu Thay Đổi</button>
+                        <button type="submit" class="btn-save-changes" style="background-color: #e67e22;">Cập Nhật Mật Khẩu</button>
                     </div>
-
                 </form>
             </main>
 

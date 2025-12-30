@@ -121,25 +121,34 @@ public class UserDAO {
 
         return map;
     }
-    public boolean updateProfile(int userId, String firstName, String lastName, String phone, String gender, String dob) {
-        String query = "UPDATE users SET first_name = ?, last_name = ?, phone = ?, gender = ?, date_of_birth = ? WHERE id = ?";
-        try {
-            conn = new DBConnect().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setString(1, firstName);
-            ps.setString(2, lastName);
+    public boolean updateProfile(String firstname, String lastname, String phone, String dob, String gender, int userId) throws SQLException {
+        // 1. Sửa câu Query: Xóa dấu phẩy trước WHERE và thêm phone
+        String query = "UPDATE users SET first_name = ?, last_name = ?, phone = ?, dateOfBirth = ?, gender = ? WHERE id = ?";
+
+        try (Connection conn = new DBConnect().getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setString(1, firstname);
+            ps.setString(2, lastname);
             ps.setString(3, phone);
-            ps.setString(4, gender);
+
             if (dob != null && !dob.trim().isEmpty()) {
-                ps.setDate(5, java.sql.Date.valueOf(dob));
+                ps.setDate(4, java.sql.Date.valueOf(dob));
             } else {
-                ps.setNull(5, java.sql.Types.DATE);
+                ps.setNull(4, java.sql.Types.DATE);
+            }
+            if (gender != null) {
+                ps.setString(5, gender.toLowerCase());
+            } else {
+                ps.setString(5, "other");
             }
             ps.setInt(6, userId);
+
             int rows = ps.executeUpdate();
             return rows > 0;
+
         } catch (Exception e) {
-            System.out.println("Lỗi updateProfile: " + e.getMessage());
+            System.err.println("Lỗi updateProfile: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
