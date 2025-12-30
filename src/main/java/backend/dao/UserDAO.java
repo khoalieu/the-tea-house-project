@@ -5,9 +5,7 @@ import backend.model.User;
 import backend.model.enums.UserRole;
 import org.mindrot.jbcrypt.BCrypt; // Import thư viện BCrypt
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.*;
 
 public class UserDAO {
@@ -40,7 +38,7 @@ public class UserDAO {
                     user.setEmail(rs.getString("email"));
                     user.setFirstName(rs.getString("first_name"));
                     user.setLastName(rs.getString("last_name"));
-
+                    user.setPhone(rs.getString("phone"));
                     // Xử lý Role (Enum) an toàn hơn
                     try {
                         user.setRole(UserRole.valueOf(rs.getString("role").toUpperCase()));
@@ -123,6 +121,67 @@ public class UserDAO {
 
         return map;
     }
+    public boolean updateProfile(String firstname, String lastname, String phone, String dob, String gender, int userId) throws SQLException {
+        // 1. Sửa câu Query: Xóa dấu phẩy trước WHERE và thêm phone
+        String query = "UPDATE users SET first_name = ?, last_name = ?, phone = ?, dateOfBirth = ?, gender = ? WHERE id = ?";
 
+        try (Connection conn = new DBConnect().getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
 
+            ps.setString(1, firstname);
+            ps.setString(2, lastname);
+            ps.setString(3, phone);
+
+            if (dob != null && !dob.trim().isEmpty()) {
+                ps.setDate(4, java.sql.Date.valueOf(dob));
+            } else {
+                ps.setNull(4, java.sql.Types.DATE);
+            }
+            if (gender != null) {
+                ps.setString(5, gender.toLowerCase());
+            } else {
+                ps.setString(5, "other");
+            }
+            ps.setInt(6, userId);
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+
+        } catch (Exception e) {
+            System.err.println("Lỗi updateProfile: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean changePassword(int userId, String newPassword) {
+        // Mã hóa mật khẩu mới trước khi lưu
+        String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt(12));
+        String query = "UPDATE users SET password_hash = ? WHERE id = ?";
+        try {
+            conn = new DBConnect().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, hashedPassword);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean checkPassword(int userId, String oldPassword) {
+        String query = "SELECT password_hash FROM users WHERE id = ?";
+        try {
+            conn = new DBConnect().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                String currentHash = rs.getString("password_hash");
+                return BCrypt.checkpw(oldPassword, currentHash);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
