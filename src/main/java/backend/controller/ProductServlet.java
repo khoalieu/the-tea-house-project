@@ -28,11 +28,11 @@ public class ProductServlet extends HttpServlet {
             try {
                 categoryId = Integer.parseInt(categoryParam);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                categoryId = null;
             }
         }
         int page = 1;
-        if(pageParam !=null){
+        if(pageParam !=null && !pageParam.isEmpty()){
             try{
                 page = Integer.parseInt(pageParam);
             } catch (Exception e){
@@ -42,11 +42,7 @@ public class ProductServlet extends HttpServlet {
 
         int pageSize = 12;
         List<Product> products = null;
-        try {
-            products = productDAO.getProducts(categoryId, sortParam, page, pageSize);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        products = productDAO.getProducts(categoryId, sortParam, page, pageSize);
         int totalProducts = 0;
         try {
             totalProducts = productDAO.countProducts(categoryId);
