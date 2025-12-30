@@ -35,14 +35,14 @@
                     <div class="input-group">
                         <%-- Thêm name="firstname" --%>
                         <input type="text" id="firstname" name="firstname"
-                               value="${sessionScope.user.firstName}" placeholder=" " required>
+                               value="${sessionScope.user.firstName}" placeholder=" ">
                         <label for="firstname">Tên</label>
                     </div>
 
                     <div class="input-group">
                         <%-- Thêm name="lastname" --%>
                         <input type="text" id="lastname" name="lastname"
-                               value="${sessionScope.user.lastName}" placeholder=" " required>
+                               value="${sessionScope.user.lastName}" placeholder=" ">
                         <label for="lastname">Họ</label>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                 <div class="form-row">
                     <div class="input-group">
                         <input type="text" id="dob" name="dob" placeholder="YYYY-MM-DD"
-                               value="${sessionScope.user.dateOfBirth}" onfocus="(this.type='date')" onblur="(this.type='text')">
+                               value="${sessionScope.user.dateOfBirth != null ? sessionScope.user.dateOfBirth.toLocalDate() : ''}">
                         <label for="dob">Ngày Sinh</label>
                     </div>
 

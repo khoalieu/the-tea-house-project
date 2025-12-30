@@ -27,14 +27,14 @@ public class UpdateFullProfileServlet extends HttpServlet {
             response.sendRedirect("login.jsp");
             return;
         }
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
+        String firstName = request.getParameter("firstname");
+        String lastName = request.getParameter("lastname");
         String phone = request.getParameter("phone");
         String gender = request.getParameter("gender");
         String email = request.getParameter("email");
         String dobStr = request.getParameter("dob");
         LocalDateTime dob = null;
-        if (dobStr != null && !dobStr.isEmpty()) {
+        if (dobStr != null && !dobStr.trim().isEmpty()) {
             try {
                 dob = LocalDate.parse(dobStr).atStartOfDay();
             } catch (Exception e) {
