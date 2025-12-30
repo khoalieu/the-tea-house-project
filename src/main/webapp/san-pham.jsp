@@ -50,9 +50,42 @@
                 </div>
                 <div class="filter-group">
                     <h3>Lọc Theo Giá</h3>
-                    <input type="range" min="0" max="500000" style="width: 100%;">
-                    <p>Giá: 0 VNĐ — 500.000 VNĐ</p>
+
+                    <input type="range"
+                           id="priceRange"
+                           min="0" max="500000" step="5000"
+                           value="${currentPrice != null ? currentPrice : 500000}"
+                           style="width: 100%; cursor: pointer;"
+                           oninput="updatePriceLabel(this.value)"
+                           onchange="applyPriceFilter(this.value)">
+
+                    <p>
+                        Giá: 0 VNĐ — <span id="priceValue" style="font-weight: bold; color: #28a745;">
+                            <c:choose>
+                                <c:when test="${currentPrice != null}">
+                                    <fmt:formatNumber value="${currentPrice}" pattern="#,###"/>
+                                </c:when>
+                                <c:otherwise>500.000</c:otherwise>
+                            </c:choose>
+                        </span> VNĐ
+                    </p>
                 </div>
+                <script>
+                    function updatePriceLabel(value) {
+                        let formattedVal = new Intl.NumberFormat('vi-VN').format(value);
+                        document.getElementById('priceValue').innerText = formattedVal;
+                    }
+
+                    function applyPriceFilter(value) {
+                        let currentUrl = new URL(window.location.href);
+
+                        currentUrl.searchParams.set('price', value);
+
+                        currentUrl.searchParams.set('page', '1');
+
+                        window.location.href = currentUrl.toString();
+                    }
+                </script>
             </aside>
 
             <div class="shop-grid-wrapper">
