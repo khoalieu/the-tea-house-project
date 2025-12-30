@@ -5,9 +5,7 @@ import backend.model.User;
 import backend.model.enums.UserRole;
 import org.mindrot.jbcrypt.BCrypt; // Import thư viện BCrypt
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.*;
 
 public class UserDAO {
@@ -123,20 +121,55 @@ public class UserDAO {
 
         return map;
     }
-
-
-    // Hàm cập nhật thông tin cá nhân
-    public boolean updateUserInfo(int userId, String firstName, String lastName) {
-        String query = "UPDATE users SET first_name = ?, last_name = ? WHERE id = ?";
+    public boolean updateProfile(int userId, String firstName, String lastName, String phone, String gender, String dob) {
+        String query = "UPDATE users SET first_name = ?, last_name = ?, phone = ?, gender = ?, date_of_birth = ? WHERE id = ?";
         try {
             conn = new DBConnect().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, firstName);
             ps.setString(2, lastName);
-            ps.setInt(3, userId);
-
-            int rowAffected = ps.executeUpdate();
-            return rowAffected > 0;
+            ps.setString(3, phone);
+            ps.setString(4, gender);
+            if (dob != null && !dob.trim().isEmpty()) {
+                ps.setDate(5, java.sql.Date.valueOf(dob));
+            } else {
+                ps.setNull(5, java.sql.Types.DATE);
+            }
+            ps.setInt(6, userId);
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (Exception e) {
+            System.out.println("Lỗi updateProfile: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean changePassword(int userId, String newPassword) {
+        // Mã hóa mật khẩu mới trước khi lưu
+        String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt(12));
+        String query = "UPDATE users SET password_hash = ? WHERE id = ?";
+        try {
+            conn = new DBConnect().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, hashedPassword);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean checkPassword(int userId, String oldPassword) {
+        String query = "SELECT password_hash FROM users WHERE id = ?";
+        try {
+            conn = new DBConnect().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                String currentHash = rs.getString("password_hash");
+                return BCrypt.checkpw(oldPassword, currentHash);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
