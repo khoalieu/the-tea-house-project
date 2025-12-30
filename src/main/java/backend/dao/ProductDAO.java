@@ -15,93 +15,78 @@ public class ProductDAO {
     public ProductDAO() {
 
     }
-    public List<Product> getAllProducts() {
-        List<Product> products = new ArrayList<>();
-        String sql = "SELECT * FROM products";
 
-        try (Connection conn = DBConnect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                Product product = new Product();
-                product.setId(rs.getInt("id"));
-                product.setName(rs.getString("name"));
-                product.setDescription(rs.getString("description"));
-                product.setShortDescription(rs.getString("short_description"));
-                product.setPrice(rs.getDouble("price"));
-                product.setSalePrice(rs.getDouble("sale_price"));
-                product.setSku(rs.getString("sku"));
-                product.setStockQuantity(rs.getInt("stock_quantity"));
-                product.setCategoryId(rs.getInt("category_id"));
-                product.setImageUrl(rs.getString("image_url"));
-                product.setBestseller(rs.getBoolean("is_bestseller"));
-                product.setStatus(ProductStatus.valueOf(rs.getString("status")));
-                product.setIngredients(rs.getString("ingredients"));
-                product.setUsageInstructions(rs.getString("usage_instructions"));
-                product.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-                products.add(product);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return products;
-    }
-
-    public List<Product> getProducts(Integer categoryId, String sort, int index, int size) throws SQLException {
+    public List<Product> getProducts(Integer categoryId, String sort, int index, int size) {
         List<Product> list = new ArrayList<>();
+
         StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE status = 'active' ");
-        if(categoryId != null){
+        if (categoryId != null) {
             sql.append(" AND category_id = ? ");
         }
 
-        if(sort != null){
-            switch(sort){
+        // Logic sắp xếp
+        if (sort != null) {
+            switch (sort) {
                 case "price-asc": sql.append(" ORDER BY price ASC "); break;
                 case "price-desc": sql.append(" ORDER BY price DESC "); break;
-                case "newest": sql.append(" ORDER BY created_at DESC "); break;
                 case "name-asc": sql.append(" ORDER BY name ASC "); break;
+                case "newest": sql.append(" ORDER BY created_at DESC "); break;
                 default: sql.append(" ORDER BY created_at DESC ");
-
             }
-        }
-        else{
+        } else {
             sql.append(" ORDER BY created_at DESC ");
         }
+
         sql.append(" LIMIT ? OFFSET ?");
 
-        try(Connection conn = DBConnect.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql.toString())){
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
             int paramIndex = 1;
-            if(categoryId != null){
+            if (categoryId != null) {
                 ps.setInt(paramIndex++, categoryId);
             }
 
+            int offset = (index - 1) * size;
             ps.setInt(paramIndex++, size);
-            ps.setInt(paramIndex++, (index-1)*size);
+            ps.setInt(paramIndex++, offset);
 
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                Product product = new Product();
-                product.setId(rs.getInt("id"));
-                product.setName(rs.getString("name"));
-                product.setDescription(rs.getString("description"));
-                product.setShortDescription(rs.getString("short_description"));
-                product.setPrice(rs.getDouble("price"));
-                product.setSalePrice(rs.getDouble("sale_price"));
-                product.setSku(rs.getString("sku"));
-                product.setStockQuantity(rs.getInt("stock_quantity"));
-                product.setCategoryId(rs.getInt("category_id"));
-                product.setImageUrl(rs.getString("image_url"));
-                product.setBestseller(rs.getBoolean("is_bestseller"));
-                product.setStatus(ProductStatus.valueOf(rs.getString("status")));
-                product.setIngredients(rs.getString("ingredients"));
-                product.setUsageInstructions(rs.getString("usage_instructions"));
-                product.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-                list.add(product);
+
+            while (rs.next()) {
+                Product p = new Product();
+                    p.setId(rs.getInt("id"));
+                    p.setName(rs.getString("name"));
+                    p.setSlug(rs.getString("slug"));
+                    p.setDescription(rs.getString("description"));
+                    p.setShortDescription(rs.getString("short_description"));
+                    p.setPrice(rs.getDouble("price"));
+                    p.setSalePrice(rs.getDouble("sale_price"));
+                    p.setSku(rs.getString("sku"));
+                    p.setStockQuantity(rs.getInt("stock_quantity"));
+                    p.setCategoryId(rs.getInt("category_id"));
+                    p.setImageUrl(rs.getString("image_url"));
+                    p.setBestseller(rs.getBoolean("is_bestseller"));
+                    String statusStr = rs.getString("status");
+                    if (statusStr != null) {
+                        try {
+                            p.setStatus(ProductStatus.valueOf(statusStr.toUpperCase()));
+                        } catch (IllegalArgumentException e) {
+                            p.setStatus(ProductStatus.ACTIVE);
+                        }
+                    }
+
+                    p.setIngredients(rs.getString("ingredients"));
+                    p.setUsageInstructions(rs.getString("usage_instructions"));
+
+                    if (rs.getTimestamp("created_at") != null) {
+                        p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                    }
+                    list.add(p);
             }
-        }catch (Exception e){
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
@@ -123,13 +108,5 @@ public class ProductDAO {
                 e.printStackTrace();
             }
             return 0;
-    }
-    public static void main(String[] args) {
-        ProductDAO dao = new ProductDAO();
-        List<Product> list = dao.getAllProducts();
-
-        for (Product p : list) {
-            System.out.println(p.getName() + " - " + p.getPrice());
-        }
     }
 }
