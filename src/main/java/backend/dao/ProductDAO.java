@@ -16,14 +16,16 @@ public class ProductDAO {
 
     }
 
-    public List<Product> getProducts(Integer categoryId, String sort, int index, int size) {
+    public List<Product> getProducts(Integer categoryId, String sort,Double maxPrice, int index, int size) {
         List<Product> list = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE status = 'active' ");
         if (categoryId != null) {
             sql.append(" AND category_id = ? ");
         }
-
+        if (maxPrice != null) {
+            sql.append(" AND (CASE WHEN sale_price > 0 THEN sale_price ELSE price END) <= ? ");
+        }
         // Logic sắp xếp
         if (sort != null) {
             switch (sort) {
@@ -47,6 +49,7 @@ public class ProductDAO {
             if (categoryId != null) {
                 ps.setInt(paramIndex++, categoryId);
             }
+            if (maxPrice != null) ps.setDouble(paramIndex++, maxPrice);
 
             int offset = (index - 1) * size;
             ps.setInt(paramIndex++, size);
@@ -92,21 +95,26 @@ public class ProductDAO {
         return list;
     }
 
-    public int countProducts(Integer categoryId) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM products WHERE status = 'active' ";
+    public int countProducts(Integer categoryId, Double maxPrice) throws SQLException {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM products WHERE status = 'active' ");
         if(categoryId != null){
-            sql += " AND category_id = ? ";
+            sql.append(" AND category_id = ? ");
+        }
+        if (maxPrice != null) {
+            sql.append(" AND (CASE WHEN sale_price > 0 THEN sale_price ELSE price END) <= ? ");
         }
         try(Connection conn = DBConnect.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)) {
-            if (categoryId != null) {
-                ps.setInt(1, categoryId);
-            }
+            PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            int paramIndex = 1;
+            if (categoryId != null) ps.setInt(paramIndex++, categoryId);
+            if (maxPrice != null) ps.setDouble(paramIndex++, maxPrice);
+
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getInt(1);
-        } catch (Exception e){
-                e.printStackTrace();
-            }
-            return 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

@@ -22,7 +22,7 @@ public class ProductServlet extends HttpServlet {
         String categoryParam = request.getParameter("category");
         String sortParam = request.getParameter("sort");
         String pageParam = request.getParameter("page");
-
+        String priceParam = request.getParameter("price");
         Integer categoryId = null;
         if(categoryParam != null && !categoryParam.isEmpty()) {
             try {
@@ -39,13 +39,20 @@ public class ProductServlet extends HttpServlet {
                 page = 1;
             }
         }
-
+        Double maxPrice = null;
+        if (priceParam != null && !priceParam.isEmpty()) {
+            try {
+                maxPrice = Double.parseDouble(priceParam);
+            } catch (Exception e) {
+                maxPrice = null;
+            }
+        }
         int pageSize = 12;
         List<Product> products = null;
-        products = productDAO.getProducts(categoryId, sortParam, page, pageSize);
+        products = productDAO.getProducts(categoryId, sortParam, maxPrice, page, pageSize);
         int totalProducts = 0;
         try {
-            totalProducts = productDAO.countProducts(categoryId);
+            totalProducts = productDAO.countProducts(categoryId, maxPrice);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -64,6 +71,7 @@ public class ProductServlet extends HttpServlet {
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("currentCategory", categoryId);
         request.setAttribute("currentSort", sortParam);
+        request.setAttribute("currentPrice", maxPrice);
         request.getRequestDispatcher("/san-pham.jsp").forward(request, response);
     }
 }
