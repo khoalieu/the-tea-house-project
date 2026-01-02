@@ -2,6 +2,7 @@ package backend.dao;
 
 import backend.db.DBConnect;
 import backend.model.User;
+import backend.model.enums.UserGender;
 import backend.model.enums.UserRole;
 import org.mindrot.jbcrypt.BCrypt; // Import thư viện BCrypt
 
@@ -16,7 +17,6 @@ public class UserDAO {
     // 1. Kiểm tra đăng nhập (LOGIC MỚI)
     public User checkLogin(String username, String password) {
         try {
-            // Bước 1: Chỉ tìm user theo username (không so sánh pass trong SQL)
             String query = "SELECT * FROM users WHERE username = ? AND is_active = 1";
             conn = new DBConnect().getConnection();
             ps = conn.prepareStatement(query);
@@ -24,14 +24,10 @@ public class UserDAO {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                // Bước 2: Lấy mật khẩu đã mã hóa (hash) từ Database
                 String storedHash = rs.getString("password_hash");
-
-                // Bước 3: Dùng BCrypt để kiểm tra mật khẩu nhập vào có khớp với hash không
                 boolean isVerified = BCrypt.checkpw(password, storedHash);
 
                 if (isVerified) {
-                    // Nếu đúng mật khẩu -> Tạo object User trả về
                     User user = new User();
                     user.setId(rs.getInt("id"));
                     user.setUsername(rs.getString("username"));
@@ -39,7 +35,19 @@ public class UserDAO {
                     user.setFirstName(rs.getString("first_name"));
                     user.setLastName(rs.getString("last_name"));
                     user.setPhone(rs.getString("phone"));
-                    // Xử lý Role (Enum) an toàn hơn
+                    java.sql.Timestamp ts = rs.getTimestamp("dateOfBirth"); // Lưu ý: tên cột trong DB của bạn là 'dateOfBirth' (theo file SQL bạn gửi)
+                    if (ts != null) {
+                        user.setDateOfBirth(ts.toLocalDateTime());
+                    }
+                    String genderStr = rs.getString("gender");
+                    if (genderStr != null) {
+                        try {
+                            // Database lưu chữ thường ('male'), Enum Java chữ hoa ('MALE') -> Cần toUpperCase()
+                            user.setGender(UserGender.valueOf(genderStr.toUpperCase()));
+                        } catch (IllegalArgumentException e) {
+                            user.setGender(UserGender.OTHER);
+                        }
+                    }
                     try {
                         user.setRole(UserRole.valueOf(rs.getString("role").toUpperCase()));
                     } catch (Exception e) {
@@ -52,7 +60,7 @@ public class UserDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null; // Trả về null nếu sai tên đăng nhập hoặc sai mật khẩu
+        return null;
     }
 
     // 2. Kiểm tra user tồn tại (Giữ nguyên)

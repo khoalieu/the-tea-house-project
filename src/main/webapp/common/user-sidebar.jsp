@@ -29,7 +29,7 @@
 
             <%-- Mục 3: Địa chỉ --%>
             <li class="${param.activePage == 'dia-chi' ? 'active' : ''}">
-                <a href="dia-chi-nguoi-dung.jsp"><i class="fa-solid fa-location-dot"></i> Địa chỉ</a>
+                <a href="user-address"><i class="fa-solid fa-location-dot"></i> Địa chỉ</a>
             </li>
 
             <%-- Mục 4: Đơn hàng --%>
