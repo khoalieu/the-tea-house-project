@@ -65,8 +65,11 @@ public class UserAddressServlet extends HttpServlet {
             addr.setLabel(label);
 
             List<UserAddress> existing = dao.getListAddress(user.getId());
-            if (existing.isEmpty()) addr.setIsDefault(true);
-
+            if (existing.isEmpty()) {
+                addr.setIsDefault(true);
+            } else {
+                addr.setIsDefault(false);
+            }
             dao.addAddress(addr);
 
         } else if ("delete".equals(action)) {
