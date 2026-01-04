@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -376,5 +377,57 @@ public class BlogPostDAO {
 
         return list;
     }
+    // admin add blogs
+    public boolean slugExists(String slug) {
+        String sql = "SELECT 1 FROM blog_posts WHERE slug = ? LIMIT 1";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, slug);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public int insertForAdmin(BlogPost p, LocalDateTime createdAt) {
+        String sql = "INSERT INTO blog_posts " +
+                        "(title, slug, excerpt, content, featured_image, author_id, category_id, status, views_count, meta_title, meta_description, created_at) " +
+                        "VALUES (?,?,?,?,?,?,?,?,?,?,?, COALESCE(?, NOW()))";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, p.getTitle());
+            ps.setString(2, p.getSlug());
+            ps.setString(3, p.getExcerpt());
+            ps.setString(4, p.getContent());
+            ps.setString(5, p.getFeaturedImage());
+            ps.setObject(6, p.getAuthorId());
+            ps.setObject(7, p.getCategoryId());
+            ps.setString(8, p.getStatus() == null ? "draft" : p.getStatus().name().toLowerCase());
+            ps.setInt(9, 0);
+            ps.setString(10, p.getMetaTitle());
+            ps.setString(11, p.getMetaDescription());
+
+            if (createdAt != null) ps.setTimestamp(12, Timestamp.valueOf(createdAt));
+            else ps.setNull(12, java.sql.Types.TIMESTAMP);
+
+            int ok = ps.executeUpdate();
+            if (ok > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) return rs.getInt(1);
+                }
+                return 1; // fallback
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }
 

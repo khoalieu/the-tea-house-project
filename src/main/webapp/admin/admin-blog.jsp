@@ -123,7 +123,7 @@
                     <p>Quản lý tất cả bài viết blog và nội dung website</p>
                 </div>
                 <div class="page-actions">
-                    <a href="admin-blog-add.jsp" class="btn btn-primary">
+                    <a href="${pageContext.request.contextPath}/admin/blog/add" class="btn btn-primary">
                         <i class="fas fa-plus"></i>
                         Thêm bài viết mới
                     </a>
@@ -331,10 +331,7 @@
                                 </c:if>
                             </c:url>
 
-                            <a href="${pageContext.request.contextPath}${pageUrl}"
-                               class="page-link ${currentPage == i ? 'active' : ''}">
-                                    ${i}
-                            </a>
+                            <a href="${pageUrl}" class="page-link ${currentPage == i ? 'active' : ''}">${i}</a>
                         </c:forEach>
                     </div>
 

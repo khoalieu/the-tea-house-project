@@ -1,26 +1,37 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="vi">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý Blog - Mộc Trà Admin</title>
-    <link rel="stylesheet" href="../assets/css/base.css">
-    <link rel="stylesheet" href="../assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/admin.css">
-    <link rel="stylesheet" href="assets/css/admin-add-product.css">
+
+    <!-- ROOT assets -->
+    <link rel="stylesheet" href="${ctx}/assets/css/base.css">
+    <link rel="stylesheet" href="${ctx}/assets/css/components.css">
+
+    <!-- ADMIN assets (nằm trong /admin/assets/...) -->
+    <link rel="stylesheet" href="${ctx}/admin/assets/css/admin.css">
+    <link rel="stylesheet" href="${ctx}/admin/assets/css/admin-add-product.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
+
 <body>
 <div class="admin-container">
     <!-- Sidebar -->
     <aside class="admin-sidebar">
         <div class="sidebar-header">
             <div class="admin-logo">
-                <img src="../assets/images/logoweb.png" alt="Mộc Trà">
+                <img src="${ctx}/assets/images/logoweb.png" alt="Mộc Trà">
                 <h2>Mộc Trà Admin</h2>
             </div>
         </div>
@@ -108,8 +119,12 @@
             
             <!-- Content -->
             <div class="admin-content">
-                <form class="form-container" action="#" method="POST" enctype="multipart/form-data">
+                <form class="form-container" action="${pageContext.request.contextPath}/admin/blog/add" method="POST" enctype="multipart/form-data">
                     <div class="form-header">
+                        <c:if test="${not empty error}">
+                            <p style="color:#c00; margin:10px 0;">${error}</p>
+                        </c:if>
+
                         <h2>Tạo bài viết mới</h2>
                         <p>Viết và xuất bản nội dung blog cho website</p>
                     </div>
@@ -127,19 +142,19 @@
                                     
                                     <div class="form-group">
                                         <label for="title">Tiêu đề bài viết <span class="required">*</span></label>
-                                        <input type="text" id="title" name="title" class="form-control" required>
+                                        <input type="text" id="title" name="title" class="form-control" required value="${param.title}">
                                         <div class="help-text">Tiêu đề hấp dẫn sẽ thu hút nhiều người đọc hơn</div>
                                     </div>
                                     
                                     <div class="form-group">
                                         <label for="slug">Slug (URL thân thiện)</label>
-                                        <input type="text" id="slug" name="slug" class="form-control">
+                                        <input type="text" id="slug" name="slug" class="form-control" value="${param.slug}">
                                         <div class="help-text">Để trống sẽ tự động tạo từ tiêu đề</div>
                                     </div>
                                     
                                     <div class="form-group">
                                         <label for="excerpt">Mô tả ngắn (Excerpt) <span class="required">*</span></label>
-                                        <textarea id="excerpt" name="excerpt" class="form-control textarea" rows="4" required></textarea>
+                                        <textarea id="excerpt" name="excerpt" class="form-control textarea" rows="4" required>${param.excerpt}</textarea>
                                         <div class="word-count">
                                             <span id="excerpt-count">0</span>/160 ký tự
                                         </div>
@@ -178,8 +193,8 @@
                                                 <i class="fas fa-link"></i>
                                             </button>
                                         </div>
-                                        
-                                        <textarea id="content" name="content" class="form-control textarea xlarge" rows="15" required></textarea>
+
+                                        <textarea id="content" name="content" class="form-control textarea xlarge" rows="15" required>${param.content}</textarea>
                                         <div class="word-count">
                                             <span id="content-count">0</span> từ
                                         </div>
@@ -201,9 +216,9 @@
                                         <label for="status">Trạng thái <span class="required">*</span></label>
                                         <select id="status" name="status" class="form-control" required>
                                             <option value="">-- Chọn trạng thái --</option>
-                                            <option value="draft">Bản nháp</option>
-                                            <option value="published">Xuất bản ngay</option>
-                                            <option value="archived">Lưu trữ</option>
+                                            <option value="draft" ${param.status == 'draft' ? 'selected' : ''}>Bản nháp</option>
+                                            <option value="published" ${param.status == 'published' ? 'selected' : ''}>Xuất bản ngay</option>
+                                            <option value="archived" ${param.status == 'archived' ? 'selected' : ''}>Lưu trữ</option>
                                         </select>
                                     </div>
                                     
@@ -211,15 +226,17 @@
                                         <label for="author_id">Tác giả <span class="required">*</span></label>
                                         <select id="author_id" name="author_id" class="form-control" required>
                                             <option value="">-- Chọn tác giả --</option>
-                                            <option value="1" selected>Admin (Bạn)</option>
-                                            <option value="2">Editor 1</option>
-                                            <option value="3">Editor 2</option>
+                                            <c:forEach var="a" items="${allAuthors}">
+                                                <option value="${a.id}" ${param.author_id == a.id ? 'selected' : ''}>
+                                                        ${a.displayName}
+                                                </option>
+                                            </c:forEach>
                                         </select>
                                     </div>
                                     
                                     <div class="form-group">
                                         <label for="created_at">Ngày xuất bản</label>
-                                        <input type="datetime-local" id="created_at" name="created_at" class="form-control">
+                                        <input type="datetime-local" id="created_at" name="created_at" class="form-control" value="${param.created_at}">
                                         <div class="help-text">Để trống sẽ sử dụng thời gian hiện tại</div>
                                     </div>
                                 </div>
@@ -235,11 +252,13 @@
                                         <label for="category_id">Danh mục <span class="required">*</span></label>
                                         <select id="category_id" name="category_id" class="form-control" required>
                                             <option value="">-- Chọn danh mục --</option>
-                                            <option value="1">Kiến thức trà</option>
-                                            <option value="2">Cách pha chế</option>
-                                            <option value="3">Sức khỏe</option>
-                                            <option value="4">Tin tức</option>
+                                            <c:forEach var="c" items="${allCategories}">
+                                                <option value="${c.id}" ${param.category_id == c.id ? 'selected' : ''}>
+                                                        ${c.name}
+                                                </option>
+                                            </c:forEach>
                                         </select>
+
                                     </div>
                                 </div>
                                 
@@ -271,7 +290,7 @@
                                     
                                     <div class="form-group">
                                         <label for="meta_title">Meta Title</label>
-                                        <input type="text" id="meta_title" name="meta_title" class="form-control">
+                                        <input type="text" id="meta_title" name="meta_title" class="form-control" value="${param.meta_title}">
                                         <div class="word-count">
                                             <span id="meta-title-count">0</span>/60 ký tự
                                         </div>
@@ -280,7 +299,7 @@
                                     
                                     <div class="form-group">
                                         <label for="meta_description">Meta Description</label>
-                                        <textarea id="meta_description" name="meta_description" class="form-control textarea" rows="3"></textarea>
+                                        <textarea id="meta_description" name="meta_description" class="form-control textarea" rows="3">${param.meta_description}</textarea>
                                         <div class="word-count">
                                             <span id="meta-desc-count">0</span>/160 ký tự
                                         </div>
