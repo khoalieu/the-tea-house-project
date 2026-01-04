@@ -59,7 +59,6 @@ public class BlogCategoryDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return map(rs);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -93,6 +92,4 @@ public class BlogCategoryDAO {
         }
         return list;
     }
-
 }
-

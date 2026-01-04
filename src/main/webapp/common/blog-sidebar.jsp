@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <aside class="blog-sidebar">
 
@@ -48,7 +49,7 @@
                 <img src="${empty r.featuredImage ? 'https://placehold.co/70x70' : r.featuredImage}" alt="thumb">
                 <div class="recent-post-info">
                     <a href="${pageContext.request.contextPath}/chi-tiet-blog?slug=${r.slug}">${r.title}</a>
-                    <span>${recent[r.id]}</span>
+                    <span><fmt:formatDate value="${r.createdAtDate}" pattern="dd/mm/yyyy"/></span>
                 </div>
             </div>
         </c:forEach>

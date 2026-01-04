@@ -30,10 +30,10 @@ public class BlogPostDAO {
         List<BlogPost> list = new ArrayList<>();
 
         String sql = "SELECT id, title, slug, excerpt, featured_image, views_count, created_at "
-                      +"FROM blog_posts "
-                    + "WHERE status = 'published' "
-                    + "ORDER BY created_at DESC "
-                    + "LIMIT ? OFFSET ?";
+                +"FROM blog_posts "
+                + "WHERE status = 'published' "
+                + "ORDER BY created_at DESC "
+                + "LIMIT ? OFFSET ?";
 
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -53,9 +53,9 @@ public class BlogPostDAO {
 
     public int countPublishedByCategorySlug(String catSlug) {
         String sql = "SELECT COUNT(*) "
-                    + "FROM blog_posts bp "
-                    + "JOIN blog_categories bc ON bc.id = bp.category_id "
-                    + "WHERE bp.status = 'published' " + "AND bc.slug = ?";
+                + "FROM blog_posts bp "
+                + "JOIN blog_categories bc ON bc.id = bp.category_id "
+                + "WHERE bp.status = 'published' " + "AND bc.slug = ?";
 
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -72,11 +72,11 @@ public class BlogPostDAO {
         List<BlogPost> list = new ArrayList<>();
 
         String sql = "SELECT bp.id, bp.title, bp.slug, bp.excerpt, bp.featured_image, bp.views_count, bp.created_at "
-                    + "FROM blog_posts bp "
-                   +  "JOIN blog_categories bc ON bc.id = bp.category_id "
-                   + "WHERE bp.status = 'published' "   +    "AND bc.slug = ? "
-                    + "ORDER BY bp.created_at DESC "
-                     +"LIMIT ? OFFSET ?";
+                + "FROM blog_posts bp "
+                +  "JOIN blog_categories bc ON bc.id = bp.category_id "
+                + "WHERE bp.status = 'published' "   +    "AND bc.slug = ? "
+                + "ORDER BY bp.created_at DESC "
+                +"LIMIT ? OFFSET ?";
 
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -94,9 +94,9 @@ public class BlogPostDAO {
 
     public int countSearchPublished(String q) {
         String sql = "SELECT COUNT(*) "
-                    + "FROM blog_posts "
-                    + "WHERE status = 'published' "
-                    + "AND (title LIKE ? OR excerpt LIKE ? OR content LIKE ?)";
+                + "FROM blog_posts "
+                + "WHERE status = 'published' "
+                + "AND (title LIKE ? OR excerpt LIKE ? OR content LIKE ?)";
 
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -117,11 +117,11 @@ public class BlogPostDAO {
         List<BlogPost> list = new ArrayList<>();
 
         String sql = "SELECT id, title, slug, excerpt, featured_image, views_count, created_at "
-                    + "FROM blog_posts "
-                    + "WHERE status = 'published' "
-                    + "AND (title LIKE ? OR excerpt LIKE ? OR content LIKE ?) "
-                    + "ORDER BY created_at DESC "
-                    + "LIMIT ? OFFSET ?";
+                + "FROM blog_posts "
+                + "WHERE status = 'published' "
+                + "AND (title LIKE ? OR excerpt LIKE ? OR content LIKE ?) "
+                + "ORDER BY created_at DESC "
+                + "LIMIT ? OFFSET ?";
 
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -144,10 +144,10 @@ public class BlogPostDAO {
         List<BlogPost> list = new ArrayList<>();
 
         String sql = "SELECT id, title, slug, featured_image, created_at " +
-                        "FROM blog_posts " +
-                        "WHERE status = 'published' " +
-                        "ORDER BY created_at DESC " +
-                        "LIMIT ?";
+                "FROM blog_posts " +
+                "WHERE status = 'published' " +
+                "ORDER BY created_at DESC " +
+                "LIMIT ?";
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, limit);
@@ -242,53 +242,112 @@ public class BlogPostDAO {
         if (ts != null) b.setCreatedAt(ts.toLocalDateTime());
         return b;
     }
-    public List<BlogPost> getPostsForAdmin() {
-        List<BlogPost> list = new ArrayList<>();
 
-        String sql =
-                "SELECT bp.*, u.username, u.email, u.first_name, u.last_name, u.avatar " +
-                        "FROM blog_posts bp " +
-                        "LEFT JOIN users u ON u.id = bp.author_id " +
-                        "ORDER BY bp.created_at DESC " +
-                        "LIMIT 6";
+    public int countPostsForAdmin(Integer categoryId, BlogStatus status, Integer authorId) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM blog_posts WHERE 1=1");
+
+        if (categoryId != null) sql.append(" AND category_id = ?");
+        if (status != null)     sql.append(" AND status = ?");
+        if (authorId != null)   sql.append(" AND author_id = ?");
 
         try (Connection conn = DBConnect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
-            while (rs.next()) {
-                BlogPost p = new BlogPost();
-                p.setId(rs.getInt("id"));
-                p.setTitle(rs.getString("title"));
-                p.setSlug(rs.getString("slug"));
-                p.setExcerpt(rs.getString("excerpt"));
-                p.setFeaturedImage(rs.getString("featured_image"));
-                p.setViewsCount(rs.getInt("views_count"));
+            int idx = 1;
+            if (categoryId != null) ps.setInt(idx++, categoryId);
+            if (status != null)     ps.setString(idx++, status.name().toLowerCase()); // draft/published/archived
+            if (authorId != null)   ps.setInt(idx++, authorId);
 
-                String st = rs.getString("status");
-                if (st != null) p.setStatus(BlogStatus.valueOf(st.toUpperCase()));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
 
-                Integer aid = (Integer) rs.getObject("author_id");
-                p.setAuthorId(aid);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public List<BlogPost> getPostsForAdmin(Integer categoryId, BlogStatus status, Integer authorId, String sort, int page, int size) {
+        List<BlogPost> list = new ArrayList<>();
 
-                if (aid != null) {
-                    User au = new User();
-                    au.setId(aid);
-                    au.setUsername(rs.getString("username"));
-                    au.setEmail(rs.getString("email"));
-                    au.setFirstName(rs.getString("first_name"));
-                    au.setLastName(rs.getString("last_name"));
-                    au.setAvatar(rs.getString("avatar"));
-                    p.setAuthor(au);
+        StringBuilder sql = new StringBuilder(  "SELECT bp.*, " +
+                "u.username , u.email , u.first_name , u.last_name , u.avatar  " +
+                "FROM blog_posts bp " +
+                "LEFT JOIN users u ON u.id = bp.author_id " +
+                "WHERE 1=1"
+        );
+
+        if (categoryId != null) sql.append(" AND bp.category_id = ?");
+        if (status != null)     sql.append(" AND bp.status = ?");
+        if (authorId != null)   sql.append(" AND bp.author_id = ?");
+
+
+        if (sort == null) sort = "date_desc";
+        switch (sort) {
+            case "title_asc":  sql.append(" ORDER BY bp.title ASC"); break;
+            case "title_desc": sql.append(" ORDER BY bp.title DESC"); break;
+            case "views_asc":  sql.append(" ORDER BY bp.views_count ASC"); break;
+            case "views_desc": sql.append(" ORDER BY bp.views_count DESC"); break;
+            case "date_asc":   sql.append(" ORDER BY bp.created_at ASC"); break;
+            case "date_desc":
+            default:           sql.append(" ORDER BY bp.created_at DESC"); break;
+        }
+
+        sql.append(" LIMIT ? OFFSET ?");
+
+        // page
+        if (page < 1) page = 1;
+        int offset = (page - 1) * size;
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            int idx = 1;
+            if (categoryId != null) ps.setInt(idx++, categoryId);
+            if (status != null)     ps.setString(idx++, status.name().toLowerCase());
+            if (authorId != null)   ps.setInt(idx++, authorId);
+
+            ps.setInt(idx++, size);
+            ps.setInt(idx++, offset);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    BlogPost p = new BlogPost();
+                    p.setId(rs.getInt("id"));
+                    p.setTitle(rs.getString("title"));
+                    p.setSlug(rs.getString("slug"));
+
+                    p.setExcerpt(rs.getString("excerpt"));
+
+
+                    String st = rs.getString("status");
+                    if (st != null) p.setStatus(BlogStatus.valueOf(st.toUpperCase()));
+
+                    Integer aid = (Integer) rs.getObject("author_id");
+                    p.setAuthorId(aid);
+
+                    if (aid != null) {
+                        User au = new User();
+                        au.setId(aid);
+                        au.setUsername(rs.getString("username"));
+                        au.setEmail(rs.getString("email"));
+                        au.setFirstName(rs.getString("first_name"));
+                        au.setLastName(rs.getString("last_name"));
+                        au.setAvatar(rs.getString("avatar"));
+                        p.setAuthor(au);
+                    }
+
+                    int catId = rs.getInt("category_id");
+                    p.setCategoryId(rs.wasNull() ? null : catId);
+
+                    p.setViewsCount(rs.getInt("views_count"));
+                    p.setFeaturedImage(rs.getString("featured_image"));
+
+                    Timestamp ts = rs.getTimestamp("created_at");
+                    if (ts != null) p.setCreatedAt(ts.toLocalDateTime());
+
+                    list.add(p);
                 }
-
-                int catId = rs.getInt("category_id");
-                p.setCategoryId(rs.wasNull() ? null : catId);
-
-                Timestamp ts = rs.getTimestamp("created_at");
-                if (ts != null) p.setCreatedAt(ts.toLocalDateTime());
-
-                list.add(p);
             }
 
         } catch (Exception e) {
@@ -300,3 +359,5 @@ public class BlogPostDAO {
 
 
 }
+
+

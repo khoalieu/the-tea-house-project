@@ -192,4 +192,30 @@ public class UserDAO {
         }
         return false;
     }
+    public List<User> getAllAdminUsers() {
+        List<User> list = new ArrayList<>();
+        String sql =
+                "SELECT id, username, first_name, last_name , email " +
+                        "FROM users " +
+                        "WHERE role IN ('admin','editor') " +
+                        "ORDER BY username";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                User u = new User();
+                u.setId(rs.getInt("id"));
+                u.setUsername(rs.getString("username"));
+                u.setEmail(rs.getString("email"));
+                u.setFirstName(rs.getString("first_name"));
+                u.setLastName(rs.getString("last_name"));
+                list.add(u);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

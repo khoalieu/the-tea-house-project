@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -73,9 +72,10 @@
 
                 <li class="nav-item active">
                     <a href="${pageContext.request.contextPath}/admin/blog">
-                    <i class="fas fa-newspaper"></i>
+                        <i class="fas fa-newspaper"></i>
                         <span>Tất cả Bài viết</span>
                     </a>
+
                 </li>
                 <li class="nav-item">
                     <a href="admin-blog-categories.jsp">
@@ -86,7 +86,7 @@
             </ul>
         </nav>
     </aside>
-        
+
     <!-- Main Content -->
     <main class="admin-main">
         <!-- Header -->
@@ -94,20 +94,20 @@
             <div class="header-left">
                 <h1>Quản lý Blog</h1>
             </div>
-            
+
             <div class="header-right">
                 <div class="header-search">
                     <i class="fas fa-search"></i>
                     <input type="text" placeholder="Tìm kiếm bài viết...">
                 </div>
-                
+
                 <a href="../index.jsp" class="view-site-btn" target="_blank">
                     <i class="fas fa-external-link-alt"></i>
                     <span>Xem trang web</span>
                 </a>
             </div>
         </header>
-        
+
         <!-- Content -->
         <div class="admin-content">
             <!-- Page Header -->
@@ -123,55 +123,58 @@
                     </a>
                 </div>
             </div>
-            
+
             <!-- Filters -->
             <div class="filters-section">
-                <div class="filters-grid">
-                    <div class="filter-group">
-                        <label for="category-filter">Danh mục</label>
-                        <select id="category-filter" class="form-select">
-                            <option value="">Tất cả danh mục</option>
-                            <option value="1">Kiến thức trà</option>
-                            <option value="2">Cách pha chế</option>
-                            <option value="3">Sức khỏe</option>
-                            <option value="4">Tin tức</option>
-                        </select>
+                <form method="get" action="${pageContext.request.contextPath}/admin/blog" class="filter-form">
+                    <div class="filters-grid">
+                        <div class="filter-group">
+                            <label>Danh mục</label>
+                            <select id="category-filter" class="form-select" name ="category" onchange="this.form.submit()">
+                                <option value="">Tất cả danh mục</option>
+                                <c:forEach var="cat" items="${allCategories}">
+                                    <option value="${cat.id}" ${currentCategory == cat.id ? 'selected' : ''}>${cat.name}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="status-filter">Trạng thái</label>
+                            <select id="status-filter" class="form-select" name = "status" onchange="this.form.submit()">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="published" ${currentStatus == 'published' ? 'selected' : ''}>Đã xuất bản</option>
+                                <option value="draft" ${currentStatus == 'draft' ? 'selected' : ''}>Bản nháp</option>
+                                <option value="archived" ${currentStatus == 'archived' ? 'selected' : ''}>Đã lưu trữ</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="author-filter">Tác giả</label>
+                            <select id="author-filter" class="form-select" name="author" onchange="this.form.submit()">
+                                <option value="">Tất cả tác giả</option>
+                                <c:forEach var="author" items="${allAuthors}">
+                                    <option value="${author.id}" ${currentAuthor == author.id ? 'selected' : ''}>
+                                            ${author.displayName}
+                                    </option>
+                                </c:forEach>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="sort-filter">Sắp xếp</label>
+                            <select id="sort-filter" class="form-select" name="sort" onchange="this.form.submit()">
+                                <option value="date_desc" ${currentSort == 'date_desc' || empty currentSort ? 'selected' : ''}>Mới nhất</option>
+                                <option value="date_asc" ${currentSort == 'date_asc' ? 'selected' : ''}>Cũ nhất</option>
+                                <option value="title_asc" ${currentSort == 'title_asc' ? 'selected' : ''}>Tên A-Z</option>
+                                <option value="title_desc" ${currentSort == 'title_desc' ? 'selected' : ''}>Tên Z-A</option>
+                                <option value="views_desc" ${currentSort == 'views_desc' ? 'selected' : ''}>Xem nhiều nhất</option>
+                                <option value="views_asc" ${currentSort == 'views_asc' ? 'selected' : ''}>Xem ít nhất</option>
+                            </select>
+                        </div>
                     </div>
-                    
-                    <div class="filter-group">
-                        <label for="status-filter">Trạng thái</label>
-                        <select id="status-filter" class="form-select">
-                            <option value="">Tất cả trạng thái</option>
-                            <option value="published">Đã xuất bản</option>
-                            <option value="draft">Bản nháp</option>
-                            <option value="archived">Đã lưu trữ</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label for="author-filter">Tác giả</label>
-                        <select id="author-filter" class="form-select">
-                            <option value="">Tất cả tác giả</option>
-                            <option value="1">Admin</option>
-                            <option value="2">Editor 1</option>
-                            <option value="3">Editor 2</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label for="sort-filter">Sắp xếp</label>
-                        <select id="sort-filter" class="form-select">
-                            <option value="newest">Mới nhất</option>
-                            <option value="oldest">Cũ nhất</option>
-                            <option value="title-asc">Tiêu đề A-Z</option>
-                            <option value="title-desc">Tiêu đề Z-A</option>
-                            <option value="views-desc">Lượt xem cao nhất</option>
-                            <option value="views-asc">Lượt xem thấp nhất</option>
-                        </select>
-                    </div>
-                </div>
+                </form>
             </div>
-            
+
             <!-- Bulk Actions Bar -->
             <div class="bulk-actions-bar" id="bulkActionsBar">
                 <input type="checkbox" class="product-checkbox" id="selectAllPosts">
@@ -197,121 +200,117 @@
                     </button>
                 </div>
             </div>
-            
+
             <!-- Blog Posts Container -->
             <div class="products-container">
                 <div class="table-header">
-                    <div class="products-count">Tổng cộng: <strong>35 bài viết</strong></div>
+                    <div class="products-count">Tổng số bài viết : <strong>${totalPosts}</strong></div>
                 </div>
-                
+
                 <!-- Blog Posts Table -->
                 <div class="table-responsive">
                     <table class="orders-table">
                         <thead>
-                            <tr>
-                                <th style="width: 50px;">
-                                    <input type="checkbox" class="product-checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)">
-                                </th>
-                                <th style="width: 80px;">Hình ảnh</th>
-                                <th>Tiêu đề</th>
-                                <th style="width: 130px;">Danh mục</th>
-                                <th style="width: 150px;">Tác giả</th>
-                                <th style="width: 120px;">Trạng thái</th>
-                                <th style="width: 100px;">Lượt xem</th>
-                                <th style="width: 120px;">Ngày tạo</th>
-                                <th style="width: 130px; text-align: center;">Thao tác</th>
-                            </tr>
+                        <tr>
+                            <th style="width: 50px;">
+                                <input type="checkbox" class="product-checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)">
+                            </th>
+                            <th style="width: 80px;">Hình ảnh</th>
+                            <th>Tiêu đề</th>
+                            <th style="width: 130px;">Danh mục</th>
+                            <th style="width: 150px;">Tác giả</th>
+                            <th style="width: 120px;">Trạng thái</th>
+                            <th style="width: 100px;">Lượt xem</th>
+                            <th style="width: 120px;">Ngày tạo</th>
+                            <th style="width: 130px; text-align: center;">Thao tác</th>
+                        </tr>
                         </thead>
                         <tbody>
                         <c:if test="${empty posts}">
-                            <tr><td colspan="9" style="text-align:center;">Chưa có bài viết nào</td></tr>
+                            <tr>
+                                <td colspan="9" style="text-align: center;">Chưa có bài viết nào</td>
+                            </tr>
                         </c:if>
-
                         <c:forEach var="post" items="${posts}">
                             <tr>
-                                <td><input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()"></td>
+                                <td><input type="checkbox" class="product-checkbox row-checkbox" value="${post.id}" onchange="updateBulkActions()"> </td>
 
-                                <td>
-                                    <img src="${pageContext.request.contextPath}/${post.featuredImage}"
-                                         alt="Blog image" class="product-image-thumb">
-                                </td>
+                                <td> <img src="${pageContext.request.contextPath}/${post.featuredImage}" alt="Blog image" class="product-image-thumb"></td>
 
                                 <td>
                                     <div class="product-name-cell">${post.title}</div>
-                                    <div class="product-description-cell">${empty post.excerpt ? '' : post.excerpt}</div>
-                                </td>
-
-                                <td>
-                                    <span class="category-badge health">
-                                            ${empty post.categoryId ? 'Chưa phân loại' : categoryMap[post.categoryId]}
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <div class="author-info">
-                                        <strong>${empty post.author ? '---' : post.author.displayName}</strong>
-                                        <small>${empty post.author ? '' : post.author.email}</small>
+                                    <div class="product-description-cell">
+                                            ${empty post.excerpt ? '' : post.excerpt}
                                     </div>
+                                </td>
+
+                                <td>
+                                    <span class="category-badge health"> ${empty post.categoryId ? 'Chưa phân loại' : categoryMap[post.categoryId]}</span>
+                                </td>
+                                <td>
+                                    <div class="author-name">
+                                            ${empty post.author ? '---' : post.author.displayName}
+                                    </div>
+                                    <small class="author-email">
+                                            ${empty post.author ? '' : post.author.email}
+                                    </small>
                                 </td>
 
                                 <td>
                                     <c:choose>
                                         <c:when test="${post.status.name() == 'PUBLISHED'}">
-                                            <span class="status-badge published">Đã xuất bản</span>
+                                            <span class="status-badge published">ĐÃ XUẤT BẢN</span>
                                         </c:when>
                                         <c:when test="${post.status.name() == 'DRAFT'}">
-                                            <span class="status-badge draft">Bản nháp</span>
+                                            <span class="status-badge status-pending">BẢN NHÁP</span>
                                         </c:when>
                                         <c:otherwise>
-                                            <span class="status-badge archived">Đã lưu trữ</span>
+                                            <span class="status-badge status-cancelled">LƯU TRỮ</span>
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
-
                                 <td>
                                     <div class="views-count">
                                         <i class="fas fa-eye"></i>
                                         <span><fmt:formatNumber value="${post.viewsCount}" pattern="#,###"/></span>
                                     </div>
                                 </td>
-
                                 <td>
-                                    <div class="date-info">
-                                        <strong><fmt:formatDate value="${post.createdAtDate}" pattern="dd/MM/yyyy"/></strong>
-                                        <small><fmt:formatDate value="${post.createdAtDate}" pattern="HH:mm"/></small>
-                                    </div>
+                                    <div><fmt:formatDate value="${post.createdAtDate}" pattern="dd/MM/yyyy"/></div>
+                                    <small><fmt:formatDate value="${post.createdAtDate}" pattern="HH:mm"/></small>
                                 </td>
 
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết"><i class="fas fa-eye"></i></button>
-                                        <button class="btn-action" title="Chỉnh sửa"><i class="fas fa-edit"></i></button>
-                                        <button class="btn-action danger" title="Xóa"><i class="fas fa-trash"></i></button>
+                                        <button class="btn-action" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-action danger" title="Xóa">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
                         </c:forEach>
                         </tbody>
-
                     </table>
                 </div>
-                
+
                 <!-- Pagination -->
                 <div class="pagination-container">
                     <div class="pagination-info">
-                        Hiển thị <strong>1-3</strong> trong tổng số <strong>35</strong> bài viết
+                        Hiển thị <strong>${fromItem}-${toItem}</strong> trong tổng số <strong>${totalPosts}</strong> bài viết
                     </div>
                     <div class="pagination">
-                        <a href="#" class="page-btn disabled">
-                            <i class="fas fa-chevron-left"></i>
-                        </a>
-                        <a href="#" class="page-btn active">1</a>
-                        <a href="#" class="page-btn">2</a>
-                        <a href="#" class="page-btn">3</a>
-                        <a href="#" class="page-btn">4</a>
-                        <a href="#" class="page-btn">
-                            <i class="fas fa-chevron-right"></i>
-                        </a>
+                        <c:forEach begin="1" end="${totalPages}" var="i">
+                            <a href="${pageContext.request.contextPath}/admin/blog?page=${i}&category=${currentCategory}&status=${currentStatus}&author=${currentAuthor}&sort=${currentSort}"
+                               class="page-link ${currentPage == i ? 'active' : ''}">
+                                    ${i}
+                            </a>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
@@ -324,15 +323,15 @@
     function toggleSelectAll(checkbox) {
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const bulkActionsCheckbox = document.getElementById('selectAllPosts');
-        
+
         rowCheckboxes.forEach(cb => {
             cb.checked = checkbox.checked;
         });
-        
+
         bulkActionsCheckbox.checked = checkbox.checked;
         updateBulkActions();
     }
-    
+
     // Update bulk actions bar
     function updateBulkActions() {
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
@@ -340,20 +339,20 @@
         const bulkActionsCheckbox = document.getElementById('selectAllPosts');
         const bulkActionsBar = document.getElementById('bulkActionsBar');
         const selectedCount = document.getElementById('selectedCount');
-        
+
         const checkedCount = Array.from(rowCheckboxes).filter(cb => cb.checked).length;
         const totalCount = rowCheckboxes.length;
-        
+
         // Update count
         selectedCount.textContent = checkedCount;
-        
+
         // Show/hide bulk actions bar
         if (checkedCount > 0) {
             bulkActionsBar.classList.add('active');
         } else {
             bulkActionsBar.classList.remove('active');
         }
-        
+
         // Update select all checkbox state
         if (checkedCount === totalCount) {
             selectAllCheckbox.checked = true;
@@ -369,19 +368,19 @@
             selectAllCheckbox.indeterminate = false;
         }
     }
-    
+
     // Sync bulk actions bar checkbox with table header checkbox
     document.getElementById('selectAllPosts').addEventListener('change', function() {
         const selectAllCheckbox = document.getElementById('selectAllCheckbox');
         selectAllCheckbox.checked = this.checked;
         toggleSelectAll(this);
     });
-    
+
     // Bulk actions functions
     function bulkPublish() {
         const selectedPosts = getSelectedPosts();
         if (selectedPosts.length === 0) return;
-        
+
         if (confirm(`Bạn có chắc muốn xuất bản ${selectedPosts.length} bài viết đã chọn?`)) {
             console.log('Publishing posts:', selectedPosts);
             // Add your publish logic here
@@ -389,11 +388,11 @@
             cancelSelection();
         }
     }
-    
+
     function bulkArchive() {
         const selectedPosts = getSelectedPosts();
         if (selectedPosts.length === 0) return;
-        
+
         if (confirm(`Bạn có chắc muốn lưu trữ ${selectedPosts.length} bài viết đã chọn?`)) {
             console.log('Archiving posts:', selectedPosts);
             // Add your archive logic here
@@ -401,11 +400,11 @@
             cancelSelection();
         }
     }
-    
+
     function bulkDelete() {
         const selectedPosts = getSelectedPosts();
         if (selectedPosts.length === 0) return;
-        
+
         if (confirm(`CẢNH BÁO: Bạn có chắc muốn xóa ${selectedPosts.length} bài viết đã chọn? Hành động này không thể hoàn tác!`)) {
             console.log('Deleting posts:', selectedPosts);
             // Add your deletion logic here
@@ -413,34 +412,35 @@
             cancelSelection();
         }
     }
-    
+
     function cancelSelection() {
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const selectAllCheckbox = document.getElementById('selectAllCheckbox');
         const bulkActionsCheckbox = document.getElementById('selectAllPosts');
-        
+
         rowCheckboxes.forEach(cb => {
             cb.checked = false;
         });
-        
+
         selectAllCheckbox.checked = false;
         bulkActionsCheckbox.checked = false;
         selectAllCheckbox.indeterminate = false;
         updateBulkActions();
     }
-    
+
     function getSelectedPosts() {
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const selected = [];
-        
+
         rowCheckboxes.forEach((checkbox, index) => {
             if (checkbox.checked) {
                 selected.push(index);
             }
         });
-        
+
         return selected;
     }
 </script>
 </body>
 </html>
+
