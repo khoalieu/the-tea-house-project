@@ -41,6 +41,11 @@ public class AdminBlogServlet extends HttpServlet {
         String sortParam = request.getParameter("sort");
         String pageParam = request.getParameter("page");
 
+        String q = request.getParameter("q");
+        if (q != null) q = q.trim();
+        if (q != null && q.isEmpty()) q = null;
+
+
         Integer categoryId = null;
         if (categoryParam != null && !categoryParam.isEmpty()) {
             try {
@@ -69,14 +74,14 @@ public class AdminBlogServlet extends HttpServlet {
                 if (page < 1) page = 1;
             } catch (Exception e) {}
         }
-        int totalPosts = postDAO.countPostsForAdmin(categoryId, status, authorId);
+        int totalPosts = postDAO.countPostsForAdmin(q, categoryId, status, authorId);
         int totalPages = (int) Math.ceil((double) totalPosts / PAGE_SIZE);
 
         if (totalPages > 0 && page > totalPages) {
             page = totalPages;
         }
 
-        List<BlogPost> posts = postDAO.getPostsForAdmin(categoryId, status, authorId, sortParam, page, PAGE_SIZE);
+        List<BlogPost> posts = postDAO.getPostsForAdmin(q, categoryId, status, authorId, sortParam, page, PAGE_SIZE);
 
         Map<Integer, String> categoryMap = new HashMap<>();
         List<BlogCategory> allCategories = catDAO.getAllCategories();
@@ -103,6 +108,9 @@ public class AdminBlogServlet extends HttpServlet {
         request.setAttribute("currentStatus", statusParam);
         request.setAttribute("currentAuthor", authorId);
 
+        request.setAttribute("currentQ", q);
+
+
         if (sortParam == null || sortParam.isEmpty()) sortParam = "date_desc";
         request.setAttribute("currentSort", sortParam);
 
@@ -112,3 +120,4 @@ public class AdminBlogServlet extends HttpServlet {
         request.getRequestDispatcher("/admin/admin-blog.jsp").forward(request, response);
     }
 }
+

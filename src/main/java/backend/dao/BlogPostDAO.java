@@ -243,19 +243,32 @@ public class BlogPostDAO {
         return b;
     }
 
-    public int countPostsForAdmin(Integer categoryId, BlogStatus status, Integer authorId) {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM blog_posts WHERE 1=1");
+    public int countPostsForAdmin(String q, Integer categoryId, BlogStatus status, Integer authorId) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM blog_posts bp WHERE 1=1");
 
-        if (categoryId != null) sql.append(" AND category_id = ?");
-        if (status != null)     sql.append(" AND status = ?");
-        if (authorId != null)   sql.append(" AND author_id = ?");
+        boolean hasQ = (q != null && !q.isEmpty());
+        if (hasQ) {
+            sql.append(" AND (bp.title LIKE ? OR bp.slug LIKE ? OR IFNULL(bp.excerpt,'') LIKE ? OR IFNULL(bp.content,'') LIKE ?)");
+        }
+        if (categoryId != null) sql.append(" AND bp.category_id = ?");
+        if (status != null)     sql.append(" AND bp.status = ?");
+        if (authorId != null)   sql.append(" AND bp.author_id = ?");
 
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
             int idx = 1;
+
+            if (hasQ) {
+                String kw = "%" + q + "%";
+                ps.setString(idx++, kw);
+                ps.setString(idx++, kw);
+                ps.setString(idx++, kw);
+                ps.setString(idx++, kw);
+            }
+
             if (categoryId != null) ps.setInt(idx++, categoryId);
-            if (status != null)     ps.setString(idx++, status.name().toLowerCase()); // draft/published/archived
+            if (status != null)     ps.setString(idx++, status.name().toLowerCase());
             if (authorId != null)   ps.setInt(idx++, authorId);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -267,20 +280,21 @@ public class BlogPostDAO {
         }
         return 0;
     }
-    public List<BlogPost> getPostsForAdmin(Integer categoryId, BlogStatus status, Integer authorId, String sort, int page, int size) {
+    public List<BlogPost> getPostsForAdmin(String q, Integer categoryId, BlogStatus status, Integer authorId, String sort, int page, int size) {
         List<BlogPost> list = new ArrayList<>();
-
-        StringBuilder sql = new StringBuilder(  "SELECT bp.*, " +
-                "u.username , u.email , u.first_name , u.last_name , u.avatar  " +
-                "FROM blog_posts bp " +
-                "LEFT JOIN users u ON u.id = bp.author_id " +
-                "WHERE 1=1"
+        StringBuilder sql = new StringBuilder(
+                "SELECT bp.*, u.username, u.email, u.first_name, u.last_name, u.avatar " +
+                        "FROM blog_posts bp " +
+                        "LEFT JOIN users u ON u.id = bp.author_id " +
+                        "WHERE 1=1"
         );
-
+        boolean hasQ = (q != null && !q.isEmpty());
+        if (hasQ) {
+            sql.append(" AND (bp.title LIKE ? OR bp.slug LIKE ? OR IFNULL(bp.excerpt,'') LIKE ? OR IFNULL(bp.content,'') LIKE ?)");
+        }
         if (categoryId != null) sql.append(" AND bp.category_id = ?");
         if (status != null)     sql.append(" AND bp.status = ?");
         if (authorId != null)   sql.append(" AND bp.author_id = ?");
-
 
         if (sort == null) sort = "date_desc";
         switch (sort) {
@@ -295,7 +309,6 @@ public class BlogPostDAO {
 
         sql.append(" LIMIT ? OFFSET ?");
 
-        // page
         if (page < 1) page = 1;
         int offset = (page - 1) * size;
 
@@ -303,6 +316,15 @@ public class BlogPostDAO {
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
             int idx = 1;
+
+            if (hasQ) {
+                String kw = "%" + q + "%";
+                ps.setString(idx++, kw);
+                ps.setString(idx++, kw);
+                ps.setString(idx++, kw);
+                ps.setString(idx++, kw);
+            }
+
             if (categoryId != null) ps.setInt(idx++, categoryId);
             if (status != null)     ps.setString(idx++, status.name().toLowerCase());
             if (authorId != null)   ps.setInt(idx++, authorId);
@@ -316,9 +338,7 @@ public class BlogPostDAO {
                     p.setId(rs.getInt("id"));
                     p.setTitle(rs.getString("title"));
                     p.setSlug(rs.getString("slug"));
-
                     p.setExcerpt(rs.getString("excerpt"));
-
 
                     String st = rs.getString("status");
                     if (st != null) p.setStatus(BlogStatus.valueOf(st.toUpperCase()));
@@ -356,8 +376,5 @@ public class BlogPostDAO {
 
         return list;
     }
-
-
 }
-
 

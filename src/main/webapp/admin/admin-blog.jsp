@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -98,8 +100,12 @@
             <div class="header-right">
                 <div class="header-search">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Tìm kiếm bài viết...">
+                    <input id="adminBlogSearch" type="text" name="q" form="blogFilterForm"
+                           value="${fn:escapeXml(currentQ)}"
+                           placeholder="Tìm kiếm bài viết..."
+                           autocomplete="off">
                 </div>
+
 
                 <a href="../index.jsp" class="view-site-btn" target="_blank">
                     <i class="fas fa-external-link-alt"></i>
@@ -126,7 +132,7 @@
 
             <!-- Filters -->
             <div class="filters-section">
-                <form method="get" action="${pageContext.request.contextPath}/admin/blog" class="filter-form">
+                <form id="blogFilterForm" method="get" action="${pageContext.request.contextPath}/admin/blog" class="filter-form">
                     <div class="filters-grid">
                         <div class="filter-group">
                             <label>Danh mục</label>
@@ -306,12 +312,32 @@
                     </div>
                     <div class="pagination">
                         <c:forEach begin="1" end="${totalPages}" var="i">
-                            <a href="${pageContext.request.contextPath}/admin/blog?page=${i}&category=${currentCategory}&status=${currentStatus}&author=${currentAuthor}&sort=${currentSort}"
+                            <c:url var="pageUrl" value="/admin/blog">
+                                <c:param name="page" value="${i}" />
+                                <c:if test="${not empty currentQ}">
+                                    <c:param name="q" value="${currentQ}" />
+                                </c:if>
+                                <c:if test="${not empty currentCategory}">
+                                    <c:param name="category" value="${currentCategory}" />
+                                </c:if>
+                                <c:if test="${not empty currentStatus}">
+                                    <c:param name="status" value="${currentStatus}" />
+                                </c:if>
+                                <c:if test="${not empty currentAuthor}">
+                                    <c:param name="author" value="${currentAuthor}" />
+                                </c:if>
+                                <c:if test="${not empty currentSort}">
+                                    <c:param name="sort" value="${currentSort}" />
+                                </c:if>
+                            </c:url>
+
+                            <a href="${pageContext.request.contextPath}${pageUrl}"
                                class="page-link ${currentPage == i ? 'active' : ''}">
                                     ${i}
                             </a>
                         </c:forEach>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -429,17 +455,28 @@
     }
 
     function getSelectedPosts() {
-        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-        const selected = [];
-
-        rowCheckboxes.forEach((checkbox, index) => {
-            if (checkbox.checked) {
-                selected.push(index);
-            }
-        });
-
-        return selected;
+        return Array.from(document.querySelectorAll('.row-checkbox:checked'))
+            .map(cb => parseInt(cb.value, 10))
+            .filter(id => !isNaN(id));
     }
+    (function () {
+        const input = document.getElementById('adminBlogSearch');
+        const form  = document.getElementById('blogFilterForm');
+        if (!input || !form) return;
+
+        let t;
+
+        input.addEventListener('input', function () {
+            clearTimeout(t);
+
+            const v = input.value;
+            // đang ở khoảng trắng thì chưa submit
+            if (/\s$/.test(v)) return;
+
+            t = setTimeout(() => form.submit(), 900);
+        });
+    })();
+
 </script>
 </body>
 </html>
