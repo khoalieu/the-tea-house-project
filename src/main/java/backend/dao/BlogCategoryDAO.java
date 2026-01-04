@@ -15,8 +15,8 @@ public class BlogCategoryDAO {
         List<BlogCategory> list = new ArrayList<>();
 
         String sql = "SELECT * FROM blog_categories "
-                    + "WHERE is_active = 1 "
-                    + "ORDER BY name ASC";
+                + "WHERE is_active = 1 "
+                + "ORDER BY name ASC";
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -32,9 +32,9 @@ public class BlogCategoryDAO {
     public Map<Integer, Integer> getPublishedCountMap() {
         Map<Integer, Integer> map = new HashMap<>();
         String sql = "SELECT category_id, COUNT(*) AS cnt " +
-                        "FROM blog_posts " +
-                        "WHERE status = 'published' AND category_id IS NOT NULL " +
-                        "GROUP BY category_id";
+                "FROM blog_posts " +
+                "WHERE status = 'published' AND category_id IS NOT NULL " +
+                "GROUP BY category_id";
 
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -76,4 +76,23 @@ public class BlogCategoryDAO {
         c.setIsActive(rs.getBoolean("is_active"));
         return c;
     }
+
+    public List<BlogCategory> getAllCategories() {
+        List<BlogCategory> list = new ArrayList<>();
+        String sql = "SELECT * FROM blog_categories ORDER BY name ASC";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(map(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }
+

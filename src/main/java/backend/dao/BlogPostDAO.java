@@ -2,6 +2,7 @@ package backend.dao;
 
 import backend.db.DBConnect;
 import backend.model.BlogPost;
+import backend.model.User;
 import backend.model.enums.BlogStatus;
 
 import java.sql.Connection;
@@ -241,4 +242,61 @@ public class BlogPostDAO {
         if (ts != null) b.setCreatedAt(ts.toLocalDateTime());
         return b;
     }
+    public List<BlogPost> getPostsForAdmin() {
+        List<BlogPost> list = new ArrayList<>();
+
+        String sql =
+                "SELECT bp.*, u.username, u.email, u.first_name, u.last_name, u.avatar " +
+                        "FROM blog_posts bp " +
+                        "LEFT JOIN users u ON u.id = bp.author_id " +
+                        "ORDER BY bp.created_at DESC " +
+                        "LIMIT 6";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                BlogPost p = new BlogPost();
+                p.setId(rs.getInt("id"));
+                p.setTitle(rs.getString("title"));
+                p.setSlug(rs.getString("slug"));
+                p.setExcerpt(rs.getString("excerpt"));
+                p.setFeaturedImage(rs.getString("featured_image"));
+                p.setViewsCount(rs.getInt("views_count"));
+
+                String st = rs.getString("status");
+                if (st != null) p.setStatus(BlogStatus.valueOf(st.toUpperCase()));
+
+                Integer aid = (Integer) rs.getObject("author_id");
+                p.setAuthorId(aid);
+
+                if (aid != null) {
+                    User au = new User();
+                    au.setId(aid);
+                    au.setUsername(rs.getString("username"));
+                    au.setEmail(rs.getString("email"));
+                    au.setFirstName(rs.getString("first_name"));
+                    au.setLastName(rs.getString("last_name"));
+                    au.setAvatar(rs.getString("avatar"));
+                    p.setAuthor(au);
+                }
+
+                int catId = rs.getInt("category_id");
+                p.setCategoryId(rs.wasNull() ? null : catId);
+
+                Timestamp ts = rs.getTimestamp("created_at");
+                if (ts != null) p.setCreatedAt(ts.toLocalDateTime());
+
+                list.add(p);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+
 }

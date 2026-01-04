@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -69,8 +72,8 @@
                 </li>
 
                 <li class="nav-item active">
-                    <a href="admin-blog.html">
-                        <i class="fas fa-newspaper"></i>
+                    <a href="${pageContext.request.contextPath}/admin/blog">
+                    <i class="fas fa-newspaper"></i>
                         <span>Tất cả Bài viết</span>
                     </a>
                 </li>
@@ -220,159 +223,76 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Post 1 -->
+                        <c:if test="${empty posts}">
+                            <tr><td colspan="9" style="text-align:center;">Chưa có bài viết nào</td></tr>
+                        </c:if>
+
+                        <c:forEach var="post" items="${posts}">
                             <tr>
+                                <td><input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()"></td>
+
                                 <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
+                                    <img src="${pageContext.request.contextPath}/${post.featuredImage}"
+                                         alt="Blog image" class="product-image-thumb">
                                 </td>
+
                                 <td>
-                                    <img src="../assets/images/loi-ich-tra-hoa-cuc.jpg" alt="Blog image" class="product-image-thumb">
+                                    <div class="product-name-cell">${post.title}</div>
+                                    <div class="product-description-cell">${empty post.excerpt ? '' : post.excerpt}</div>
                                 </td>
+
                                 <td>
-                                    <div class="product-name-cell">Lợi ích tuyệt vời của trà hoa cúc đối với sức khỏe</div>
-                                    <div class="product-description-cell">Trà hoa cúc không chỉ có hương vị thơm ngon mà còn mang lại nhiều lợi ích cho sức khỏe...</div>
+                                    <span class="category-badge health">
+                                            ${empty post.categoryId ? 'Chưa phân loại' : categoryMap[post.categoryId]}
+                                    </span>
                                 </td>
-                                <td>
-                                    <span class="category-badge health">Sức khỏe</span>
-                                </td>
+
                                 <td>
                                     <div class="author-info">
-                                        <strong>Admin</strong>
-                                        <small>admin@moctra.com</small>
+                                        <strong>${empty post.author ? '---' : post.author.displayName}</strong>
+                                        <small>${empty post.author ? '' : post.author.email}</small>
                                     </div>
                                 </td>
+
                                 <td>
-                                    <span class="status-badge published">Đã xuất bản</span>
+                                    <c:choose>
+                                        <c:when test="${post.status.name() == 'PUBLISHED'}">
+                                            <span class="status-badge published">Đã xuất bản</span>
+                                        </c:when>
+                                        <c:when test="${post.status.name() == 'DRAFT'}">
+                                            <span class="status-badge draft">Bản nháp</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="status-badge archived">Đã lưu trữ</span>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </td>
+
                                 <td>
                                     <div class="views-count">
                                         <i class="fas fa-eye"></i>
-                                        <span>1,245</span>
+                                        <span><fmt:formatNumber value="${post.viewsCount}" pattern="#,###"/></span>
                                     </div>
                                 </td>
+
                                 <td>
                                     <div class="date-info">
-                                        <strong>15/11/2025</strong>
-                                        <small>09:30</small>
+                                        <strong><fmt:formatDate value="${post.createdAtDate}" pattern="dd/MM/yyyy"/></strong>
+                                        <small><fmt:formatDate value="${post.createdAtDate}" pattern="HH:mm"/></small>
                                     </div>
                                 </td>
+
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
+                                        <button class="btn-action" title="Xem chi tiết"><i class="fas fa-eye"></i></button>
+                                        <button class="btn-action" title="Chỉnh sửa"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-action danger" title="Xóa"><i class="fas fa-trash"></i></button>
                                     </div>
                                 </td>
                             </tr>
-                            
-                            <!-- Post 2 -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <img src="../assets/images/san-pham-tra-gung-mat-ong.jpg" alt="Blog image" class="product-image-thumb">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Cách pha trà gừng mật ong chuẩn vị thơm ngon</div>
-                                    <div class="product-description-cell">Hướng dẫn chi tiết cách pha trà gừng mật ong với tỷ lệ hoàn hảo...</div>
-                                </td>
-                                <td>
-                                    <span class="category-badge recipe">Cách pha chế</span>
-                                </td>
-                                <td>
-                                    <div class="author-info">
-                                        <strong>Editor 1</strong>
-                                        <small>editor1@moctra.com</small>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status-badge draft">Bản nháp</span>
-                                </td>
-                                <td>
-                                    <div class="views-count">
-                                        <i class="fas fa-eye"></i>
-                                        <span>0</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="date-info">
-                                        <strong>14/11/2025</strong>
-                                        <small>14:15</small>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Post 3 -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <img src="../assets/images/san-pham-tra-atiso.jpg" alt="Blog image" class="product-image-thumb">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Trà atiso - Thần dược cho gan và hệ tiêu hóa</div>
-                                    <div class="product-description-cell">Khám phá những công dụng tuyệt vời của trà atiso đối với sức khỏe...</div>
-                                </td>
-                                <td>
-                                    <span class="category-badge knowledge">Kiến thức trà</span>
-                                </td>
-                                <td>
-                                    <div class="author-info">
-                                        <strong>Editor 2</strong>
-                                        <small>editor2@moctra.com</small>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status-badge published">Đã xuất bản</span>
-                                </td>
-                                <td>
-                                    <div class="views-count">
-                                        <i class="fas fa-eye"></i>
-                                        <span>856</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="date-info">
-                                        <strong>13/11/2025</strong>
-                                        <small>16:42</small>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                        </c:forEach>
                         </tbody>
+
                     </table>
                 </div>
                 
