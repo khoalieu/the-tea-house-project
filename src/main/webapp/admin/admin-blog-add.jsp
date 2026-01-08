@@ -27,95 +27,32 @@
 <body>
 <div class="admin-container">
     <!-- Sidebar -->
-    <aside class="admin-sidebar">
-        <div class="sidebar-header">
-            <div class="admin-logo">
-                <img src="${ctx}/assets/images/logoweb.png" alt="Mộc Trà">
-                <h2>Mộc Trà Admin</h2>
-            </div>
-        </div>
+    <jsp:include page="/common/admin-sidebar.jsp">
+        <jsp:param name="activePage" value="blog" />
+    </jsp:include>
 
-        <nav class="admin-nav">
-            <ul>
-                <li class="nav-item">
-                    <a href="admin-dashboard.jsp">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
 
-                <li class="nav-item">
-                    <a href="admin-products.jsp">
-                        <i class="fas fa-box"></i>
-                        <span>Tất cả Sản phẩm</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-banners.jsp">
-                        <i class="fas fa-images"></i>
-                        <span>Quản lý Banner</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-categories.jsp">
-                        <i class="fas fa-sitemap"></i>
-                        <span>Danh mục Sản phẩm</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-orders.jsp">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Đơn hàng</span>
-                        <span class="badge">23</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-customers.jsp">
-                        <i class="fas fa-users"></i>
-                        <span>Khách hàng</span>
-                    </a>
-                </li>
-
-                <li class="nav-item active">
-                    <a href="admin-blog.jsp">
-                        <i class="fas fa-newspaper"></i>
-                        <span>Tất cả Bài viết</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-blog-categories.jsp">
-                        <i class="fas fa-folder"></i>
-                        <span>Danh mục Blog</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-        
-        <!-- Main Content -->
+    <!-- Main Content -->
         <main class="admin-main">
             <!-- Header -->
             <header class="admin-header">
                 <div class="header-left">
                     <h1>Thêm bài viết mới</h1>
                 </div>
-                
+
                 <div class="header-right">
                     <a href="admin-blog.jsp" class="btn btn-outline">
                         <i class="fas fa-arrow-left"></i>
                         <span>Quay lại danh sách</span>
                     </a>
-                    
-                    <a href="../index.jsp" class="view-site-btn" target="_blank">
+
+                    <a href="${ctx}/index.jsp" class="view-site-btn" target="_blank">
                         <i class="fas fa-external-link-alt"></i>
                         <span>Xem trang web</span>
                     </a>
                 </div>
             </header>
-            
+
             <!-- Content -->
             <div class="admin-content">
                 <form class="form-container" action="${pageContext.request.contextPath}/admin/blog/add" method="POST" enctype="multipart/form-data">
@@ -127,7 +64,7 @@
                         <h2>Tạo bài viết mới</h2>
                         <p>Viết và xuất bản nội dung blog cho website</p>
                     </div>
-                    
+
                     <div class="form-content">
                         <div class="form-grid">
                             <!-- Left Column -->
@@ -138,39 +75,39 @@
                                         <i class="fas fa-edit"></i>
                                         Nội dung bài viết
                                     </h3>
-                                    
+
                                     <div class="form-group">
-                                        <label for="title">Tiêu đề bài viết <span class="required">*</span></label>
-                                        <input type="text" id="title" name="title" class="form-control" required value="${param.title}">
+                                        <label for="title">Tiêu đề bài viết <span class="">*</span></label>
+                                        <input type="text" id="title" name="title" class="form-control"  value="${param.title}">
                                         <div class="help-text">Tiêu đề hấp dẫn sẽ thu hút nhiều người đọc hơn</div>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="slug">Slug (URL thân thiện)</label>
                                         <input type="text" id="slug" name="slug" class="form-control" value="${param.slug}">
                                         <div class="help-text">Để trống sẽ tự động tạo từ tiêu đề</div>
                                     </div>
-                                    
+
                                     <div class="form-group">
-                                        <label for="excerpt">Mô tả ngắn (Excerpt) <span class="required">*</span></label>
-                                        <textarea id="excerpt" name="excerpt" class="form-control textarea" rows="4" required>${param.excerpt}</textarea>
+                                        <label for="excerpt">Mô tả ngắn (Excerpt) <span class="">*</span></label>
+                                        <textarea id="excerpt" name="excerpt" class="form-control textarea" rows="4" >${param.excerpt}</textarea>
                                         <div class="word-count">
                                             <span id="excerpt-count">0</span>/160 ký tự
                                         </div>
                                         <div class="help-text">Mô tả ngắn gọn về nội dung bài viết (hiển thị trong danh sách)</div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Nội dung chi tiết -->
                                 <div class="form-section">
                                     <h3>
                                         <i class="fas fa-align-left"></i>
                                         Nội dung chi tiết
                                     </h3>
-                                    
+
                                     <div class="form-group">
-                                        <label for="content">Nội dung bài viết <span class="required">*</span></label>
-                                        
+                                        <label for="content">Nội dung bài viết <span class="">*</span></label>
+
                                         <!-- Simple Editor Toolbar -->
                                         <div class="editor-toolbar">
                                             <button type="button" class="editor-btn" data-command="bold" title="In đậm">
@@ -193,7 +130,7 @@
                                             </button>
                                         </div>
 
-                                        <textarea id="content" name="content" class="form-control textarea xlarge" rows="15" required>${param.content}</textarea>
+                                        <textarea id="content" name="content" class="form-control textarea xlarge" rows="15" >${param.content}</textarea>
                                         <div class="word-count">
                                             <span id="content-count">0</span> từ
                                         </div>
@@ -201,7 +138,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Right Column -->
                             <div class="form-right">
                                 <!-- Xuất bản -->
@@ -210,20 +147,20 @@
                                         <i class="fas fa-cog"></i>
                                         Cài đặt xuất bản
                                     </h3>
-                                    
+
                                     <div class="form-group">
-                                        <label for="status">Trạng thái <span class="required">*</span></label>
-                                        <select id="status" name="status" class="form-control" required>
+                                        <label for="status">Trạng thái <span class="">*</span></label>
+                                        <select id="status" name="status" class="form-control" >
                                             <option value="">-- Chọn trạng thái --</option>
                                             <option value="draft" ${param.status == 'draft' ? 'selected' : ''}>Bản nháp</option>
                                             <option value="published" ${param.status == 'published' ? 'selected' : ''}>Xuất bản ngay</option>
                                             <option value="archived" ${param.status == 'archived' ? 'selected' : ''}>Lưu trữ</option>
                                         </select>
                                     </div>
-                                    
+
                                     <div class="form-group">
-                                        <label for="author_id">Tác giả <span class="required">*</span></label>
-                                        <select id="author_id" name="author_id" class="form-control" required>
+                                        <label for="author_id">Tác giả <span class="">*</span></label>
+                                        <select id="author_id" name="author_id" class="form-control" >
                                             <option value="">-- Chọn tác giả --</option>
                                             <c:forEach var="a" items="${allAuthors}">
                                                 <option value="${a.id}" ${param.author_id == a.id ? 'selected' : ''}>
@@ -232,24 +169,24 @@
                                             </c:forEach>
                                         </select>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="created_at">Ngày xuất bản</label>
                                         <input type="datetime-local" id="created_at" name="created_at" class="form-control" value="${param.created_at}">
                                         <div class="help-text">Để trống sẽ sử dụng thời gian hiện tại</div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Phân loại -->
                                 <div class="form-section">
                                     <h3>
                                         <i class="fas fa-folder"></i>
                                         Phân loại
                                     </h3>
-                                    
+
                                     <div class="form-group">
-                                        <label for="category_id">Danh mục <span class="required">*</span></label>
-                                        <select id="category_id" name="category_id" class="form-control" required>
+                                        <label for="category_id">Danh mục <span class="">*</span></label>
+                                        <select id="category_id" name="category_id" class="form-control" >
                                             <option value="">-- Chọn danh mục --</option>
                                             <c:forEach var="c" items="${allCategories}">
                                                 <option value="${c.id}" ${param.category_id == c.id ? 'selected' : ''}>
@@ -260,33 +197,37 @@
 
                                     </div>
                                 </div>
-                                
+
                                 <!-- Hình ảnh -->
                                 <div class="form-section">
                                     <h3>
                                         <i class="fas fa-image"></i>
                                         Hình ảnh đại diện
                                     </h3>
-                                    
+
                                     <div class="form-group">
-                                        <label for="featured_image">Hình ảnh chính <span class="required">*</span></label>
+                                        <label for="featured_image">Hình ảnh chính <span class="">*</span></label>
                                         <div class="image-upload" onclick="document.getElementById('featured_image').click()">
+                                            <img id="imagePreview"
+                                                 alt="Preview"
+                                                 style="max-width:100%; border-radius:10px; display:none; margin:0 auto 10px;">
                                             <i class="fas fa-cloud-upload-alt"></i>
                                             <p>Nhấp để tải lên hình ảnh</p>
                                             <small>JPG, PNG, GIF tối đa 2MB<br>Khuyến nghị: 800x450px</small>
                                         </div>
-                                        <input type="file" id="featured_image" name="featured_image" accept="image/*" style="display: none;" required>
+                                        <input type="file" id="featured_image" name="featured_image" accept="image/*" style="display: none;" >
+
                                         <div class="help-text">Hình ảnh sẽ hiển thị ở đầu bài viết và trong danh sách</div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- SEO -->
                                 <div class="form-section">
                                     <h3>
                                         <i class="fas fa-search"></i>
                                         Tối ưu SEO
                                     </h3>
-                                    
+
                                     <div class="form-group">
                                         <label for="meta_title">Meta Title</label>
                                         <input type="text" id="meta_title" name="meta_title" class="form-control" value="${param.meta_title}">
@@ -295,7 +236,7 @@
                                         </div>
                                         <div class="help-text">Tiêu đề hiển thị trên Google (để trống sẽ dùng tiêu đề bài viết)</div>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="meta_description">Meta Description</label>
                                         <textarea id="meta_description" name="meta_description" class="form-control textarea" rows="3">${param.meta_description}</textarea>
@@ -308,29 +249,24 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="form-actions">
                         <div class="help-text">
                             <i class="fas fa-info-circle"></i>
-                            Các trường có dấu <span class="required">*</span> là bắt buộc
+                            Các trường có dấu <span class="">*</span> là bắt buộc
                         </div>
-                        
+
                         <div class="btn-group">
-                            <a href="admin-blog.jsp" class="btn btn-outline">
+                            <a href="${ctx}/admin/blog" class="btn btn-outline">
                                 <i class="fas fa-times"></i>
                                 Hủy bỏ
                             </a>
-                            
-                            <button type="button" class="btn btn-secondary" onclick="saveDraft()">
-                                <i class="fas fa-save"></i>
-                                Lưu nháp
-                            </button>
-                            
+
                             <button type="button" class="btn btn-success" onclick="previewPost()">
                                 <i class="fas fa-eye"></i>
                                 Xem trước
                             </button>
-                            
+
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-paper-plane"></i>
                                 Xuất bản
@@ -342,4 +278,49 @@
         </main>
     </div>
 </body>
+<script>
+    (function () {
+        const fileInput = document.getElementById('featured_image');
+        const box = document.querySelector('.image-upload');
+        const preview = document.getElementById('imagePreview');
+
+        if (!fileInput || !box || !preview) return;
+
+        fileInput.addEventListener('change', function () {
+            const f = this.files && this.files[0];
+            if (!f) {
+                preview.src = '';
+                preview.style.display = 'none';
+                return;
+            }
+
+            // Validate cơ bản (đúng yêu cầu UI: ảnh + <= 2MB)
+            if (!f.type || !f.type.startsWith('image/')) {
+                alert('Vui lòng chọn đúng file ảnh.');
+                this.value = '';
+                preview.src = '';
+                preview.style.display = 'none';
+                return;
+            }
+            if (f.size > 2 * 1024 * 1024) {
+                alert('Ảnh tối đa 2MB. Vui lòng chọn ảnh nhỏ hơn.');
+                this.value = '';
+                preview.src = '';
+                preview.style.display = 'none';
+                return;
+            }
+
+            preview.src = URL.createObjectURL(f);
+            preview.style.display = 'block';
+
+            // (Tuỳ bạn) Ẩn icon khi đã có preview + đổi text cho rõ
+            const icon = box.querySelector('i');
+            if (icon) icon.style.display = 'none';
+
+            const p = box.querySelector('p');
+            if (p) p.textContent = 'Đã chọn ảnh. Nhấp để đổi ảnh';
+        });
+    })();
+</script>
+
 </html>

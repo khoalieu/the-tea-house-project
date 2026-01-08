@@ -1,16 +1,75 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 08/01/2026
-  Time: 10:38 SA
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-  <head>
-    <title>$Title$</title>
-  </head>
-  <body>
-  $END$
-  </body>
-</html>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
+
+<aside class="admin-sidebar">
+  <div class="sidebar-header">
+    <div class="admin-logo">
+      <img src="${ctx}/assets/images/logoweb.png" alt="Mộc Trà">
+      <h2>Mộc Trà Admin</h2>
+    </div>
+  </div>
+
+  <nav class="admin-nav">
+    <ul>
+      <li class="nav-item ${param.activePage == 'dashboard' ? 'active' : ''}">
+        <a href="${ctx}/admin/admin-dashboard.jsp">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+
+      <li class="nav-item ${param.activePage == 'products' ? 'active' : ''}">
+        <a href="${ctx}/admin/admin-products.jsp">
+          <i class="fas fa-box"></i>
+          <span>Tất cả Sản phẩm</span>
+        </a>
+      </li>
+
+      <li class="nav-item ${param.activePage == 'banners' ? 'active' : ''}">
+        <a href="${ctx}/admin/admin-banners.jsp">
+          <i class="fas fa-images"></i>
+          <span>Quản lý Banner</span>
+        </a>
+      </li>
+
+      <li class="nav-item ${param.activePage == 'categories' ? 'active' : ''}">
+        <a href="${ctx}/admin/admin-categories.jsp">
+          <i class="fas fa-sitemap"></i>
+          <span>Danh mục Sản phẩm</span>
+        </a>
+      </li>
+
+      <li class="nav-item ${param.activePage == 'orders' ? 'active' : ''}">
+        <a href="${ctx}/admin/admin-orders.jsp">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Đơn hàng</span>
+          <%-- nếu sau này có count động thì thay 23 bằng biến --%>
+          <span class="badge">23</span>
+        </a>
+      </li>
+
+      <li class="nav-item ${param.activePage == 'customers' ? 'active' : ''}">
+        <a href="${ctx}/admin/admin-customers.jsp">
+          <i class="fas fa-users"></i>
+          <span>Khách hàng</span>
+        </a>
+      </li>
+
+      <li class="nav-item ${param.activePage == 'blog' ? 'active' : ''}">
+        <a href="${ctx}/admin/blog">
+          <i class="fas fa-newspaper"></i>
+          <span>Tất cả Bài viết</span>
+        </a>
+      </li>
+
+      <li class="nav-item ${param.activePage == 'blog-categories' ? 'active' : ''}">
+        <a href="${ctx}/admin/admin-blog-categories.jsp">
+          <i class="fas fa-folder"></i>
+          <span>Danh mục Blog</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>

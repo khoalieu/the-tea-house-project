@@ -20,74 +20,10 @@
 <body>
 <div class="admin-container">
     <!-- Sidebar -->
-    <aside class="admin-sidebar">
-        <div class="sidebar-header">
-            <div class="admin-logo">
-                <img src="../assets/images/logoweb.png" alt="Mộc Trà">
-                <h2>Mộc Trà Admin</h2>
-            </div>
-        </div>
+    <jsp:include page="/common/admin-sidebar.jsp">
+        <jsp:param name="activePage" value="blog" />
+    </jsp:include>
 
-        <nav class="admin-nav">
-            <ul>
-                <li class="nav-item">
-                    <a href="admin-dashboard.jsp">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-products.jsp">
-                        <i class="fas fa-box"></i>
-                        <span>Tất cả Sản phẩm</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-banners.jsp">
-                        <i class="fas fa-images"></i>
-                        <span>Quản lý Banner</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-categories.jsp">
-                        <i class="fas fa-sitemap"></i>
-                        <span>Danh mục Sản phẩm</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-orders.jsp">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Đơn hàng</span>
-                        <span class="badge">23</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-customers.jsp">
-                        <i class="fas fa-users"></i>
-                        <span>Khách hàng</span>
-                    </a>
-                </li>
-
-                <li class="nav-item active">
-                    <a href="${pageContext.request.contextPath}/admin/blog">
-                        <i class="fas fa-newspaper"></i>
-                        <span>Tất cả Bài viết</span>
-                    </a>
-
-                </li>
-                <li class="nav-item">
-                    <a href="admin-blog-categories.jsp">
-                        <i class="fas fa-folder"></i>
-                        <span>Danh mục Blog</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
 
     <!-- Main Content -->
     <main class="admin-main">
@@ -107,7 +43,7 @@
                 </div>
 
 
-                <a href="../index.jsp" class="view-site-btn" target="_blank">
+                <a href="${ctx}/index.jsp" class="view-site-btn" target="_blank">
                     <i class="fas fa-external-link-alt"></i>
                     <span>Xem trang web</span>
                 </a>
@@ -291,9 +227,10 @@
                                         <button class="btn-action" title="Xem chi tiết">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
+                                        <a class="btn-action" title="Chỉnh sửa"
+                                           href="${pageContext.request.contextPath}/admin/blog/edit?id=${post.id}">
                                             <i class="fas fa-edit"></i>
-                                        </button>
+                                        </a>
                                         <button class="btn-action danger" title="Xóa">
                                             <i class="fas fa-trash"></i>
                                         </button>

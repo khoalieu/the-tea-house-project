@@ -428,6 +428,138 @@ public class BlogPostDAO {
         }
         return 0;
     }
+    // BlogPostDAO.java
+    public BlogPost getByIdForAdmin(int id) {
+        String sql =
+                "SELECT bp.*, u.username, u.email, u.first_name, u.last_name, u.avatar " +
+                        "FROM blog_posts bp " +
+                        "LEFT JOIN users u ON u.id = bp.author_id " +
+                        "WHERE bp.id = ? " +
+                        "LIMIT 1";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) return null;
+
+                BlogPost p = new BlogPost();
+                p.setId(rs.getInt("id"));
+                p.setTitle(rs.getString("title"));
+                p.setSlug(rs.getString("slug"));
+                p.setExcerpt(rs.getString("excerpt"));
+                p.setContent(rs.getString("content"));
+                p.setFeaturedImage(rs.getString("featured_image"));
+
+                Integer aid = (Integer) rs.getObject("author_id");
+                p.setAuthorId(aid);
+
+                if (aid != null) {
+                    User au = new User();
+                    au.setId(aid);
+                    au.setUsername(rs.getString("username"));
+                    au.setEmail(rs.getString("email"));
+                    au.setFirstName(rs.getString("first_name"));
+                    au.setLastName(rs.getString("last_name"));
+                    au.setAvatar(rs.getString("avatar"));
+                    p.setAuthor(au);
+                }
+
+                Integer cid = (Integer) rs.getObject("category_id");
+                p.setCategoryId(cid);
+
+                String st = rs.getString("status");
+                if (st != null) p.setStatus(BlogStatus.valueOf(st.toUpperCase()));
+
+                p.setViewsCount(rs.getInt("views_count"));
+                p.setMetaTitle(rs.getString("meta_title"));
+                p.setMetaDescription(rs.getString("meta_description"));
+
+                Timestamp ts = rs.getTimestamp("created_at");
+                if (ts != null) p.setCreatedAt(ts.toLocalDateTime());
+
+                return p;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    public boolean updateForAdmin(BlogPost p, boolean keepOldImage) {
+        StringBuilder sql = new StringBuilder(
+                "UPDATE blog_posts SET " +
+                        "title = ?, " +
+                        "slug = ?, " +
+                        "excerpt = ?, " +
+                        "content = ?, "
+        );
+
+        if (!keepOldImage) {
+            sql.append("featured_image = ?, ");
+        }
+
+        sql.append(
+                "author_id = ?, " +
+                        "category_id = ?, " +
+                        "status = ?, " +
+                        "meta_title = ?, " +
+                        "meta_description = ? " +
+                        "WHERE id = ? " +
+                        "LIMIT 1"
+        );
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            int idx = 1;
+
+            ps.setString(idx++, p.getTitle());
+            ps.setString(idx++, p.getSlug());
+            ps.setString(idx++, p.getExcerpt());
+            ps.setString(idx++, p.getContent());
+
+            if (!keepOldImage) {
+                ps.setString(idx++, p.getFeaturedImage());
+            }
+
+            ps.setObject(idx++, p.getAuthorId());
+            ps.setObject(idx++, p.getCategoryId());
+            ps.setString(idx++, p.getStatus() == null ? "draft" : p.getStatus().name().toLowerCase());
+            ps.setString(idx++, p.getMetaTitle());
+            ps.setString(idx++, p.getMetaDescription());
+
+            ps.setInt(idx++, p.getId());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    // BlogPostDAO.java
+    public boolean slugExistsExceptId(String slug, int excludeId) {
+        String sql = "SELECT 1 FROM blog_posts WHERE slug = ? AND id <> ? LIMIT 1";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, slug);
+            ps.setInt(2, excludeId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
 
 }
 

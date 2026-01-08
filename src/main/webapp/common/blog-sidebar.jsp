@@ -49,7 +49,7 @@
                 <img src="${empty r.featuredImage ? 'https://placehold.co/70x70' : r.featuredImage}" alt="thumb">
                 <div class="recent-post-info">
                     <a href="${pageContext.request.contextPath}/chi-tiet-blog?slug=${r.slug}">${r.title}</a>
-                    <span><fmt:formatDate value="${r.createdAtDate}" pattern="dd/mm/yyyy"/></span>
+                    <span><fmt:formatDate value="${r.createdAtDate}" pattern="dd/MM/yyyy"/></span>
                 </div>
             </div>
         </c:forEach>

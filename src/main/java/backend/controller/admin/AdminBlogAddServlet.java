@@ -7,6 +7,7 @@ import backend.model.BlogCategory;
 import backend.model.BlogPost;
 import backend.model.User;
 import backend.model.enums.BlogStatus;
+import backend.model.enums.UserRole;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,14 +16,10 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
-import java.text.Normalizer;
-import backend.model.enums.UserRole;
-
 
 @WebServlet("/admin/blog/add")
 @MultipartConfig(
@@ -39,18 +36,8 @@ public class AdminBlogAddServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // auth admin
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
-        User u = (User) session.getAttribute("user");
-        if (u.getRole() == null || !(u.getRole() == UserRole.ADMIN || u.getRole() == UserRole.EDITOR)) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
-
+        User u = requireAdminOrEditor(request, response);
+        if (u == null) return;
 
         BlogCategoryDAO catDAO = new BlogCategoryDAO();
         UserDAO userDAO = new UserDAO();
@@ -70,53 +57,49 @@ public class AdminBlogAddServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
 
-        // auth admin
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+        User u = requireAdminOrEditor(request, response);
+        if (u == null) return;
+
+        // ====== READ PARAMS (trimOrNull) ======
+        String title = trimOrNull(request.getParameter("title"));
+        String slugInput = trimOrNull(request.getParameter("slug"));
+        String excerpt = trimOrNull(request.getParameter("excerpt"));
+        String content = trimOrNull(request.getParameter("content"));
+
+        String statusStr = trimOrNull(request.getParameter("status"));
+        String categoryStr = trimOrNull(request.getParameter("category_id"));
+        String authorStr = trimOrNull(request.getParameter("author_id"));
+
+        String metaTitle = trimOrNull(request.getParameter("meta_title"));
+        String metaDesc = trimOrNull(request.getParameter("meta_description"));
+        String createdAtStr = trimOrNull(request.getParameter("created_at"));
+
+        // ====== VALIDATE REQUIRED TEXT ======
+        if (title == null) {
+            forwardWithData(request, response, "Vui lòng nhập Tiêu đề.");
             return;
         }
-        User u = (User) session.getAttribute("user");
-        if (u.getRole() == null || !(u.getRole() == UserRole.ADMIN || u.getRole() == UserRole.EDITOR)) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        if (excerpt == null) {
+            forwardWithData(request, response, "Vui lòng nhập Mô tả ngắn (Excerpt).");
+            return;
+        }
+        if (content == null) {
+            forwardWithData(request, response, "Vui lòng nhập Nội dung bài viết.");
             return;
         }
 
-
-        // lấy dữ liệu
-        String title = request.getParameter("title");
-        String slug = request.getParameter("slug");
-        String excerpt = request.getParameter("excerpt");
-        String content = request.getParameter("content");
-        String statusStr = request.getParameter("status");
-        String authorStr = request.getParameter("author_id");
-        String categoryStr = request.getParameter("category_id");
-        String metaTitle = request.getParameter("meta_title");
-        String metaDesc = request.getParameter("meta_description");
-        String createdAtStr = request.getParameter("created_at");
-
-        if (title != null) title = title.trim();
-        if (slug != null) slug = slug.trim();
-        if (excerpt != null) excerpt = excerpt.trim();
-        if (content != null) content = content.trim();
-        if (metaTitle != null) metaTitle = metaTitle.trim();
-        if (metaDesc != null) metaDesc = metaDesc.trim();
-        if (createdAtStr != null) createdAtStr = createdAtStr.trim();
-
-        // validate tối thiểu
-        if (title == null || title.isEmpty()
-                || excerpt == null || excerpt.isEmpty()
-                || content == null || content.isEmpty()
-                || statusStr == null || statusStr.isEmpty()
-                || categoryStr == null || categoryStr.isEmpty()) {
-
-            forwardWithData(request, response, "Vui lòng nhập đủ các trường bắt buộc.");
+        if (statusStr == null) {
+            forwardWithData(request, response, "Vui lòng chọn Trạng thái.");
+            return;
+        }
+        if (categoryStr == null) {
+            forwardWithData(request, response, "Vui lòng chọn Danh mục.");
             return;
         }
 
         BlogStatus status;
         try {
-            status = BlogStatus.valueOf(statusStr.trim().toUpperCase());
+            status = BlogStatus.valueOf(statusStr.toUpperCase());
         } catch (Exception e) {
             forwardWithData(request, response, "Trạng thái không hợp lệ.");
             return;
@@ -132,103 +115,64 @@ public class AdminBlogAddServlet extends HttpServlet {
 
         Integer authorId = null;
         try {
-            if (authorStr != null && !authorStr.trim().isEmpty()) {
-                authorId = Integer.parseInt(authorStr);
-            }
+            if (authorStr != null) authorId = Integer.parseInt(authorStr);
         } catch (Exception ignored) {}
+        if (authorId == null) authorId = u.getId(); // default
 
-        // nếu không chọn author -> mặc định user đang login
-        if (authorId == null) authorId = u.getId();
-
-        // created_at optional
         LocalDateTime createdAt = null;
-        if (createdAtStr != null && !createdAtStr.isEmpty()) {
+        if (createdAtStr != null) {
             try {
                 createdAt = LocalDateTime.parse(createdAtStr, DT_LOCAL);
             } catch (Exception e) {
                 forwardWithData(request, response, "Ngày xuất bản không hợp lệ.");
                 return;
             }
+            if (createdAt.isAfter(LocalDateTime.now())) {
+                forwardWithData(request, response, "Ngày xuất bản phải nhỏ hơn hoặc bằng thời gian hiện tại.");
+                return;
+            }
         }
 
         BlogPostDAO postDAO = new BlogPostDAO();
 
-        // slug
-        String finalSlug;
-        if (slug == null || slug.isEmpty()) {
-            finalSlug = slugify(title);
-        } else {
-            finalSlug = slugify(slug);
-        }
-        if (finalSlug.isEmpty()) finalSlug = "blog";
+        //  slug
+        String rawForSlug = (slugInput == null) ? title : slugInput;
+        String finalSlug = ensureUniqueSlug(postDAO, rawForSlug, null);
 
-        if (postDAO.slugExists(finalSlug)) {
-            // đơn giản: append random để tránh trùng UNIQUE
-            finalSlug = finalSlug + "-" + System.currentTimeMillis();
-        }
-
-        // upload ảnh
-        Part imgPart = request.getPart("featured_image");
-        if (imgPart == null || imgPart.getSize() <= 0) {
-            forwardWithData(request, response, "Vui lòng chọn ảnh đại diện.");
+        // imgae upload
+        String imagePath;
+        try {
+            Part imgPart = request.getPart("featured_image");
+            imagePath = saveBlogImage(imgPart, true);
+        } catch (IllegalArgumentException ex) {
+            forwardWithData(request, response, ex.getMessage());
             return;
         }
 
-        String relDir = "assets/images/blog";
-        String absDir = getServletContext().getRealPath("/" + relDir);
-        if (absDir == null) {
-            forwardWithData(request, response, "Không lấy được đường dẫn lưu file (getRealPath null).");
-            return;
-        }
-
-        Files.createDirectories(Paths.get(absDir));
-
-        String submitted = Paths.get(imgPart.getSubmittedFileName()).getFileName().toString();
-        String ext = "";
-        int dot = submitted.lastIndexOf('.');
-        if (dot >= 0) ext = submitted.substring(dot);
-
-        String fileName = UUID.randomUUID().toString().replace("-", "") + ext;
-        Path target = Paths.get(absDir, fileName);
-
-        try (InputStream in = imgPart.getInputStream()) {
-            Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
-        }
-
-        String dbImagePath = relDir + "/" + fileName; // lưu DB (tương đối)
-
-        // build object
         BlogPost p = new BlogPost();
         p.setTitle(title);
         p.setSlug(finalSlug);
         p.setExcerpt(excerpt);
         p.setContent(content);
-        p.setFeaturedImage(dbImagePath);
+        p.setFeaturedImage(imagePath);
         p.setAuthorId(authorId);
         p.setCategoryId(categoryId);
         p.setStatus(status);
-
-        if (metaTitle != null && metaTitle.isEmpty()) metaTitle = null;
-        if (metaDesc != null && metaDesc.isEmpty()) metaDesc = null;
-
         p.setMetaTitle(metaTitle);
         p.setMetaDescription(metaDesc);
 
         int newId = postDAO.insertForAdmin(p, createdAt);
-
         if (newId <= 0) {
             forwardWithData(request, response, "Thêm bài viết thất bại. Vui lòng thử lại.");
             return;
         }
 
-        // xong -> list blos
         response.sendRedirect(request.getContextPath() + "/admin/blog");
     }
 
     private void forwardWithData(HttpServletRequest request, HttpServletResponse response, String error)
             throws ServletException, IOException {
 
-        // load lại dropdown
         BlogCategoryDAO catDAO = new BlogCategoryDAO();
         UserDAO userDAO = new UserDAO();
         request.setAttribute("allCategories", catDAO.getAllCategories());
@@ -238,14 +182,84 @@ public class AdminBlogAddServlet extends HttpServlet {
         request.getRequestDispatcher("/admin/admin-blog-add.jsp").forward(request, response);
     }
 
+
+    private User requireAdminOrEditor(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return null;
+        }
+        User u = (User) session.getAttribute("user");
+        if (u.getRole() == null || !(u.getRole() == UserRole.ADMIN || u.getRole() == UserRole.EDITOR)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return null;
+        }
+        return u;
+    }
+
+    private String trimOrNull(String s) {
+        if (s == null) return null;
+        s = s.trim();
+        return s.isEmpty() ? null : s;
+    }
+
+    private String ensureUniqueSlug(BlogPostDAO dao, String raw, Integer excludeId) {
+        String base = slugify(raw);
+        if (base.isEmpty()) base = "blog";
+
+        String candidate = base;
+        int i = 2;
+
+        while (excludeId == null
+                ? dao.slugExists(candidate)
+                : dao.slugExistsExceptId(candidate, excludeId)) {
+            candidate = base + "-" + (i++);
+        }
+        return candidate;
+    }
+
     private String slugify(String input) {
         if (input == null) return "";
         String s = input.trim().toLowerCase();
 
-        s = Normalizer.normalize(s, Normalizer.Form.NFD);
+        s = java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD);
         s = s.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        s = s.replace("đ", "d");
+
         s = s.replaceAll("[^a-z0-9]+", "-");
         s = s.replaceAll("(^-+|-+$)", "");
         return s;
     }
+
+    private String saveBlogImage(Part part, boolean required) {
+        try {
+            if (part == null || part.getSize() == 0) {
+                if (required) throw new IllegalArgumentException("Vui lòng chọn ảnh.");
+                return null; // edit: không chọn ảnh -> giữ ảnh cũ
+            }
+
+            String relDir = "assets/images/blog";
+            String absDir = getServletContext().getRealPath("/" + relDir);
+            Files.createDirectories(Paths.get(absDir));
+
+            String submitted = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+            String ext = "";
+            int dot = submitted.lastIndexOf('.');
+            if (dot >= 0) ext = submitted.substring(dot);
+
+            String fileName = System.currentTimeMillis() + ext;
+            Path target = Paths.get(absDir, fileName);
+
+            try (java.io.InputStream in = part.getInputStream()) {
+                Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            return relDir + "/" + fileName;
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Upload ảnh lỗi.");
+        }
+    }
+
 }
