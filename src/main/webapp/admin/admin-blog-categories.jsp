@@ -1,88 +1,37 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Blog - Mộc Trà Admin</title>
+    <title>Quản lý Danh mục Blog - Mộc Trà Admin</title>
     <link rel="stylesheet" href="../assets/css/base.css">
     <link rel="stylesheet" href="../assets/css/components.css">
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="assets/css/admin-add-product.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <style>
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: block;
+        }
+        .form-control.error {
+            border-color: #dc3545;
+        }
+    </style>
 </head>
 <body>
 <div class="admin-container">
-    <!-- Sidebar -->
-    <aside class="admin-sidebar">
-        <div class="sidebar-header">
-            <div class="admin-logo">
-                <img src="../assets/images/logoweb.png" alt="Mộc Trà">
-                <h2>Mộc Trà Admin</h2>
-            </div>
-        </div>
+    <jsp:include page="/common/admin-sidebar.jsp">
+        <jsp:param name="activePage" value="blog-categories" />
+    </jsp:include>
 
-        <nav class="admin-nav">
-            <ul>
-                <li class="nav-item">
-                    <a href="admin-dashboard.jsp">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-products.jsp">
-                        <i class="fas fa-box"></i>
-                        <span>Tất cả Sản phẩm</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-banners.jsp">
-                        <i class="fas fa-images"></i>
-                        <span>Quản lý Banner</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-categories.jsp">
-                        <i class="fas fa-sitemap"></i>
-                        <span>Danh mục Sản phẩm</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-orders.jsp">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Đơn hàng</span>
-                        <span class="badge">23</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-customers.jsp">
-                        <i class="fas fa-users"></i>
-                        <span>Khách hàng</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-blog.jsp">
-                        <i class="fas fa-newspaper"></i>
-                        <span>Tất cả Bài viết</span>
-                    </a>
-                </li>
-                <li class="nav-item active">
-                    <a href="admin-blog-categories.html">
-                        <i class="fas fa-folder"></i>
-                        <span>Danh mục Blog</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
     <main class="admin-main">
         <header class="admin-header">
             <div class="header-left">
@@ -91,33 +40,58 @@
         </header>
 
         <div class="admin-content">
+            <c:if test="${not empty param.msg}">
+                <div class="alert alert-success">
+                    <c:choose>
+                        <c:when test="${param.msg == 'added'}">Thêm danh mục thành công!</c:when>
+                        <c:when test="${param.msg == 'updated'}">Cập nhật danh mục thành công!</c:when>
+                        <c:when test="${param.msg == 'deleted'}">Xóa danh mục thành công!</c:when>
+                    </c:choose>
+                </div>
+            </c:if>
 
             <div class="form-grid">
-
                 <div class="form-left">
                     <div class="form-section">
                         <h3>Thêm danh mục mới</h3>
-                        <form action="/src/main/webapp/admin/blog-categories/add" method="POST">
+                        <form action="${pageContext.request.contextPath}/admin/blog-categories" method="POST">
+                            <input type="hidden" name="action" value="add">
+
                             <div class="form-group">
                                 <label for="name">Tên danh mục <span class="required">*</span></label>
-                                <input type="text" id="name" name="name" class="form-control" required>
+                                <input type="text"
+                                       id="name"
+                                       name="name"
+                                       class="form-control ${not empty error ? 'error' : ''}"
+                                       value="${inputName}">
+                                <c:if test="${not empty error}">
+                                    <span class="error-message">${error}</span>
+                                </c:if>
                             </div>
 
                             <div class="form-group">
                                 <label for="slug">Slug (URL)</label>
-                                <input type="text" id="slug" name="slug" class="form-control">
+                                <input type="text"
+                                       id="slug"
+                                       name="slug"
+                                       class="form-control"
+                                       placeholder="Tự động nếu để trống"
+                                       value="${inputSlug}">
                             </div>
 
                             <div class="form-group">
                                 <label for="description">Mô tả</label>
-                                <textarea id="description" name="description" class="form-control textarea" rows="4"></textarea>
+                                <textarea id="description"
+                                          name="description"
+                                          class="form-control textarea"
+                                          rows="4">${inputDescription}</textarea>
                             </div>
 
                             <div class="form-group">
                                 <label for="is_active">Trạng thái</label>
                                 <select id="is_active" name="is_active" class="form-control">
-                                    <option value="true">Hiển thị</option>
-                                    <option value="false">Ẩn</option>
+                                    <option value="true" ${inputIsActive == 'true' || empty inputIsActive ? 'selected' : ''}>Hiển thị</option>
+                                    <option value="false" ${inputIsActive == 'false' ? 'selected' : ''}>Ẩn</option>
                                 </select>
                             </div>
 
@@ -132,43 +106,75 @@
                     <div class="form-section">
                         <h3>Danh sách hiện có</h3>
                         <div class="table-responsive">
-                            <table class="category-table"> <thead>
-                            <tr>
-                                <th>Tên danh mục</th>
-                                <th>Slug</th>
-                                <th>Thao tác</th>
-                            </tr>
-                            </thead>
+                            <table class="category-table">
+                                <thead>
+                                <tr>
+                                    <th>Tên danh mục</th>
+                                    <th>Slug</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                                </thead>
                                 <tbody>
-                                <tr>
-                                    <td><strong>Kiến Thức Trà</strong></td>
-                                    <td>/kien-thuc-tra</td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
-                                            <button class="btn-action delete" title="Xóa"><i class="fas fa-trash"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Công Thức Pha Chế</strong></td>
-                                    <td>/cong-thuc-pha-che</td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
-                                            <button class="btn-action delete" title="Xóa"><i class="fas fa-trash"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <c:if test="${empty categories}">
+                                    <tr>
+                                        <td colspan="4" style="text-align: center;">Chưa có danh mục nào</td>
+                                    </tr>
+                                </c:if>
+                                <c:forEach var="cat" items="${categories}">
+                                    <tr>
+                                        <td><strong><c:out value="${cat.name}"/></strong></td>
+                                        <td><c:out value="${cat.slug}"/></td>
+                                        <td>
+                                            <span class="badge ${cat.isActive ? 'badge-success' : 'badge-secondary'}">
+                                                    ${cat.isActive ? 'Hiển thị' : 'Ẩn'}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <a href="${ctx}/admin/blog-categories/edit?id=${cat.id}" class="btn-edit" title="Sửa">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </a>
+                                                <button class="btn-action delete" onclick="deleteCategory(${cat.id}, '${cat.name}')" title="Xóa">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </main>
 </div>
+
+<script>
+    function deleteCategory(id, name) {
+        if (confirm('Xác nhận xóa danh mục: ' + name + '?')) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '${pageContext.request.contextPath}/admin/blog-categories';
+
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = 'delete';
+            form.appendChild(actionInput);
+
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = 'id';
+            idInput.value = id;
+            form.appendChild(idInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
 </body>
 </html>

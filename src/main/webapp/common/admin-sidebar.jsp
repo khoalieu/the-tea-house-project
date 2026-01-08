@@ -65,7 +65,7 @@
       </li>
 
       <li class="nav-item ${param.activePage == 'blog-categories' ? 'active' : ''}">
-        <a href="${ctx}/admin/admin-blog-categories.jsp">
+        <a href="${ctx}/admin/blog-categories">
           <i class="fas fa-folder"></i>
           <span>Danh mục Blog</span>
         </a>
