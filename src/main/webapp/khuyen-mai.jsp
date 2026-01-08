@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -18,164 +20,55 @@
 <jsp:include page="common/header.jsp"></jsp:include>
 <main class="main-content">
 
-    <section class="promo-hero">
-        <div class="promo-hero__overlay">
-            <h1>Săn Deal Giá Hời</h1>
-            <p>Tổng hợp các chương trình khuyến mãi hot nhất tại Mộc Trà</p>
-        </div>
-    </section>
+    <c:forEach var="entry" items="${promoMap}">
+        <c:set var="promo" value="${entry.key}" />
+        <c:set var="productList" value="${entry.value}" />
 
-    <section class="campaign-section">
-        <div class="container">
-            <div class="campaign-header">
-                <div class="campaign-header__left">
-                    <h2>🎉 Mừng Lễ 8/3 - Ngọt Ngào Hương Trà</h2>
-                    <div class="campaign-timer">
-                        <i class="fa-regular fa-clock"></i> Kết thúc: 02 ngày 10:30:00
+        <section class="campaign-section">
+            <div class="container">
+                <div class="campaign-header">
+                    <div class="campaign-header__left">
+                        <h2>🎉 ${promo.name}</h2>
+                        <div class="campaign-timer">
+                            <i class="fa-regular fa-clock"></i>
+                            Kết thúc: <fmt:parseDate value="${promo.endDate}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" type="both" />
+                            <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
+                        </div>
+                    </div>
+                    <div class="campaign-header__right">
+                        <a href="san-pham?promotionId=${promo.id}" class="btn-view-all">
+                            Xem tất cả <i class="fa-solid fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
-                <div class="campaign-header__right">
-                    <a href="san-pham.jsp?promotionId=1" class="btn-view-all">
-                        Xem tất cả <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
 
-            <div class="product-grid">
-                <div class="product-card">
-                    <span class="sale-tag">-20%</span>
-                    <img src="assets/images/san-pham-tra-hoa-cuc.jpg" alt="Trà Hoa Cúc">
-                    <h3>500g Trà Hoa Cúc Vàng</h3>
-                    <p class="price">
-                        <span class="new-price">96.000 VNĐ</span> <span class="old-price">120.000 VNĐ</span>
-                    </p>
-                    <a href="chi-tiet-san-pham-tra-hoa-cuc.jsp" class="cta-button">Xem Chi Tiết</a>
-                </div>
-                <div class="product-card">
-                    <span class="sale-tag">-15%</span>
-                    <img src="assets/images/san-pham-tra-atiso.jpg" alt="Trà Atiso">
-                    <h3>Trà Atiso Túi Lọc</h3>
-                    <p class="price">
-                        <span class="new-price">60.000 VNĐ</span> <span class="old-price">70.000 VNĐ</span>
-                    </p>
-                    <a href="chi-tiet-san-pham-tra-atiso.jsp" class="cta-button">Xem Chi Tiết</a>
-                </div>
-                <div class="product-card">
-                    <span class="sale-tag">-10%</span>
-                    <img src="assets/images/san-pham-tra-lai.jpg" alt="Trà Lài">
-                    <h3>Trà Lài Thượng Hạng</h3>
-                    <p class="price">
-                        <span class="new-price">90.000 VNĐ</span> <span class="old-price">100.000 VNĐ</span>
-                    </p>
-                    <a href="chi-tiet-san-pham-tra-lai.jsp" class="cta-button">Xem Chi Tiết</a>
-                </div>
-                <div class="product-card">
-                    <span class="sale-tag">-5%</span>
-                    <img src="assets/images/san-pham-tra-bac-ha.jpg" alt="Trà Bạc Hà">
-                    <h3>Trà Bạc Hà Sấy Lạnh</h3>
-                    <p class="price">
-                        <span class="new-price">55.000 VNĐ</span> <span class="old-price">58.000 VNĐ</span>
-                    </p>
-                    <a href="chi-tiet-san-pham-tra-bac-ha.jsp" class="cta-button">Xem Chi Tiết</a>
-                </div>
-            </div>
-        </div>
-    </section>
+                <div class="product-grid">
+                    <c:forEach var="p" items="${productList}">
+                        <div class="product-card">
+                            <c:if test="${p.price > p.salePrice}">
+                                <span class="sale-tag">
+                                    -<fmt:formatNumber value="${(p.price - p.salePrice) / p.price * 100}" maxFractionDigits="0"/>%
+                                </span>
+                            </c:if>
 
-    <section class="campaign-section bg-light">
-        <div class="container">
-            <div class="campaign-header">
-                <div class="campaign-header__left">
-                    <h2>📦 Xả Kho Nguyên Liệu</h2>
-                    <p class="campaign-sub">Giảm giá cực sâu các loại trân châu, bột sữa.</p>
-                </div>
-                <div class="campaign-header__right">
-                    <a href="san-pham.jsp?promotionId=2" class="btn-view-all">
-                        Xem tất cả <i class="fa-solid fa-arrow-right"></i>
-                    </a>
+                            <img src="${p.imageUrl}" alt="${p.name}">
+                            <h3>${p.name}</h3>
+                            <p class="price">
+                                <span class="new-price">
+                                    <fmt:formatNumber value="${p.salePrice}" pattern="#,###"/> VNĐ
+                                </span>
+                                <span class="old-price">
+                                    <fmt:formatNumber value="${p.price}" pattern="#,###"/> VNĐ
+                                </span>
+                            </p>
+                            <a href="chi-tiet-san-pham.jsp?id=${p.id}" class="cta-button">Xem Chi Tiết</a>
+                        </div>
+                    </c:forEach>
                 </div>
             </div>
+        </section>
+    </c:forEach>
 
-            <div class="product-grid">
-                <div class="product-card">
-                    <span class="sale-tag">-30%</span>
-                    <img src="assets/images/san-pham-tran-chau-den-1.jpg" alt="Trân châu">
-                    <h3>Trân Châu Đường Đen</h3>
-                    <p class="price">
-                        <span class="new-price">35.000 VNĐ</span> <span class="old-price">50.000 VNĐ</span>
-                    </p>
-                    <a href="chi-tiet-san-pham-tran-chau-den.jsp" class="cta-button">Xem Chi Tiết</a>
-                </div>
-                <div class="product-card">
-                    <span class="sale-tag">-25%</span>
-                    <img src="assets/images/san-pham-bot-sua-beo.jpg" alt="Bột sữa">
-                    <h3>Bột Sữa Béo B-One</h3>
-                    <p class="price">
-                        <span class="new-price">45.000 VNĐ</span> <span class="old-price">60.000 VNĐ</span>
-                    </p>
-                    <a href="chi-tiet-san-pham-bot-sua-beo.jsp" class="cta-button">Xem Chi Tiết</a>
-                </div>
-                <div class="product-card">
-                    <span class="sale-tag">-20%</span>
-                    <img src="assets/images/san-pham-bot-milk-foam.jpg" alt="Milk Foam">
-                    <h3>Bột Milk Foam</h3>
-                    <p class="price">
-                        <span class="new-price">80.000 VNĐ</span> <span class="old-price">100.000 VNĐ</span>
-                    </p>
-                    <a href="chi-tiet-san-pham-bot-milk-foam-trung-muoi.jsp" class="cta-button">Xem Chi Tiết</a>
-                </div>
-                <div class="product-card">
-                    <span class="sale-tag">-15%</span>
-                    <img src="assets/images/san-pham-hong-tra.jpg" alt="Hồng Trà">
-                    <h3>Hồng Trà Đặc Biệt</h3>
-                    <p class="price">
-                        <span class="new-price">85.000 VNĐ</span> <span class="old-price">100.000 VNĐ</span>
-                    </p>
-                    <a href="chi-tiet-san-pham-hong-tra.jsp" class="cta-button">Xem Chi Tiết</a>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="campaign-section">
-        <div class="container">
-            <div class="campaign-header">
-                <div class="campaign-header__left">
-                    <h2>🔥 Deal Hot Mỗi Ngày</h2>
-                    <p class="campaign-sub">Săn ngay kẻo lỡ, giá tốt chỉ trong 24h</p>
-                </div>
-            </div>
-
-            <div class="product-grid">
-                <div class="product-card">
-                    <span class="sale-tag">-50%</span>
-                    <img src="assets/images/san-pham-bot-milk-foam.jpg" alt="Milk Foam">
-                    <h3>Bột Milk Foam (Deal Sốc)</h3>
-                    <p class="price">
-                        <span class="new-price">50.000 VNĐ</span> <span class="old-price">100.000 VNĐ</span>
-                    </p>
-                    <a href="#" class="cta-button">Xem Chi Tiết</a>
-                </div>
-                <div class="product-card">
-                    <span class="sale-tag">-50%</span>
-                    <img src="assets/images/san-pham-bot-milk-foam.jpg" alt="Milk Foam">
-                    <h3>Bột Milk Foam (Deal Sốc)</h3>
-                    <p class="price">
-                        <span class="new-price">50.000 VNĐ</span> <span class="old-price">100.000 VNĐ</span>
-                    </p>
-                    <a href="#" class="cta-button">Xem Chi Tiết</a>
-                </div>
-                <div class="product-card">
-                    <span class="sale-tag">-50%</span>
-                    <img src="assets/images/san-pham-bot-milk-foam.jpg" alt="Milk Foam">
-                    <h3>Bột Milk Foam (Deal Sốc)</h3>
-                    <p class="price">
-                        <span class="new-price">50.000 VNĐ</span> <span class="old-price">100.000 VNĐ</span>
-                    </p>
-                    <a href="#" class="cta-button">Xem Chi Tiết</a>
-                </div>
-            </div>
-        </div>
-    </section>
 </main>
 <jsp:include page="common/footer.jsp"></jsp:include>
 <button id="backToTop" class="back-to-top" title="Lên đầu trang">
