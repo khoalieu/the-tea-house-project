@@ -24,7 +24,6 @@
         <jsp:param name="activePage" value="blog" />
     </jsp:include>
 
-
     <!-- Main Content -->
     <main class="admin-main">
         <!-- Header -->
@@ -42,8 +41,7 @@
                            autocomplete="off">
                 </div>
 
-
-                <a href="${ctx}/index.jsp" class="view-site-btn" target="_blank">
+                <a href="${pageContext.request.contextPath}/index.jsp" class="view-site-btn" target="_blank">
                     <i class="fas fa-external-link-alt"></i>
                     <span>Xem trang web</span>
                 </a>
@@ -72,7 +70,7 @@
                     <div class="filters-grid">
                         <div class="filter-group">
                             <label>Danh mục</label>
-                            <select id="category-filter" class="form-select" name ="category" onchange="this.form.submit()">
+                            <select id="category-filter" class="form-select" name="category" onchange="this.form.submit()">
                                 <option value="">Tất cả danh mục</option>
                                 <c:forEach var="cat" items="${allCategories}">
                                     <option value="${cat.id}" ${currentCategory == cat.id ? 'selected' : ''}>${cat.name}</option>
@@ -82,7 +80,7 @@
 
                         <div class="filter-group">
                             <label for="status-filter">Trạng thái</label>
-                            <select id="status-filter" class="form-select" name = "status" onchange="this.form.submit()">
+                            <select id="status-filter" class="form-select" name="status" onchange="this.form.submit()">
                                 <option value="">Tất cả trạng thái</option>
                                 <option value="published" ${currentStatus == 'published' ? 'selected' : ''}>Đã xuất bản</option>
                                 <option value="draft" ${currentStatus == 'draft' ? 'selected' : ''}>Bản nháp</option>
@@ -175,9 +173,9 @@
                         </c:if>
                         <c:forEach var="post" items="${posts}">
                             <tr>
-                                <td><input type="checkbox" class="product-checkbox row-checkbox" value="${post.id}" onchange="updateBulkActions()"> </td>
+                                <td><input type="checkbox" class="product-checkbox row-checkbox" value="${post.id}" onchange="updateBulkActions()"></td>
 
-                                <td> <img src="${pageContext.request.contextPath}/${post.featuredImage}" alt="Blog image" class="product-image-thumb"></td>
+                                <td><img src="${pageContext.request.contextPath}/${post.featuredImage}" alt="Blog image" class="product-image-thumb"></td>
 
                                 <td>
                                     <div class="product-name-cell">${post.title}</div>
@@ -187,7 +185,7 @@
                                 </td>
 
                                 <td>
-                                    <span class="category-badge health"> ${empty post.categoryId ? 'Chưa phân loại' : categoryMap[post.categoryId]}</span>
+                                    <span class="category-badge health">${empty post.categoryId ? 'Chưa phân loại' : categoryMap[post.categoryId]}</span>
                                 </td>
                                 <td>
                                     <div class="author-name">
@@ -224,14 +222,17 @@
 
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
+                                        <a class="btn-action" title="Xem chi tiết"
+                                           href="${pageContext.request.contextPath}/chi-tiet-blog?slug=${post.slug}"
+                                           target="_blank">
                                             <i class="fas fa-eye"></i>
-                                        </button>
+                                        </a>
                                         <a class="btn-action" title="Chỉnh sửa"
                                            href="${pageContext.request.contextPath}/admin/blog/edit?id=${post.id}">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <button class="btn-action danger" title="Xóa">
+                                        <button class="btn-action danger" title="Xóa"
+                                                onclick="deleteSinglePost(${post.id})">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -271,7 +272,6 @@
                             <a href="${pageUrl}" class="page-link ${currentPage == i ? 'active' : ''}">${i}</a>
                         </c:forEach>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -279,7 +279,6 @@
 </div>
 
 <script>
-    // Toggle select all checkboxes
     function toggleSelectAll(checkbox) {
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const bulkActionsCheckbox = document.getElementById('selectAllPosts');
@@ -292,7 +291,6 @@
         updateBulkActions();
     }
 
-    // Update bulk actions bar
     function updateBulkActions() {
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const selectAllCheckbox = document.getElementById('selectAllCheckbox');
@@ -303,17 +301,14 @@
         const checkedCount = Array.from(rowCheckboxes).filter(cb => cb.checked).length;
         const totalCount = rowCheckboxes.length;
 
-        // Update count
         selectedCount.textContent = checkedCount;
 
-        // Show/hide bulk actions bar
         if (checkedCount > 0) {
             bulkActionsBar.classList.add('active');
         } else {
             bulkActionsBar.classList.remove('active');
         }
 
-        // Update select all checkbox state
         if (checkedCount === totalCount) {
             selectAllCheckbox.checked = true;
             bulkActionsCheckbox.checked = true;
@@ -329,23 +324,37 @@
         }
     }
 
-    // Sync bulk actions bar checkbox with table header checkbox
     document.getElementById('selectAllPosts').addEventListener('change', function() {
         const selectAllCheckbox = document.getElementById('selectAllCheckbox');
         selectAllCheckbox.checked = this.checked;
         toggleSelectAll(this);
     });
 
-    // Bulk actions functions
     function bulkPublish() {
         const selectedPosts = getSelectedPosts();
         if (selectedPosts.length === 0) return;
 
-        if (confirm(`Bạn có chắc muốn xuất bản ${selectedPosts.length} bài viết đã chọn?`)) {
-            console.log('Publishing posts:', selectedPosts);
-            // Add your publish logic here
-            alert(`Đã xuất bản ${selectedPosts.length} bài viết!`);
-            cancelSelection();
+        if (confirm(`Bạn có chắc muốn xuất bản \${selectedPosts.length} bài viết đã chọn?`)) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '${pageContext.request.contextPath}/admin/blog/change-status';
+
+            selectedPosts.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids';
+                input.value = id;
+                form.appendChild(input);
+            });
+
+            const statusInput = document.createElement('input');
+            statusInput.type = 'hidden';
+            statusInput.name = 'status';
+            statusInput.value = 'published';
+            form.appendChild(statusInput);
+
+            document.body.appendChild(form);
+            form.submit();
         }
     }
 
@@ -353,24 +362,69 @@
         const selectedPosts = getSelectedPosts();
         if (selectedPosts.length === 0) return;
 
-        if (confirm(`Bạn có chắc muốn lưu trữ ${selectedPosts.length} bài viết đã chọn?`)) {
-            console.log('Archiving posts:', selectedPosts);
-            // Add your archive logic here
-            alert(`Đã lưu trữ ${selectedPosts.length} bài viết!`);
-            cancelSelection();
+        if (confirm(`Bạn có chắc muốn lưu trữ \${selectedPosts.length} bài viết đã chọn?`)) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '${pageContext.request.contextPath}/admin/blog/change-status';
+
+            selectedPosts.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids';
+                input.value = id;
+                form.appendChild(input);
+            });
+
+            const statusInput = document.createElement('input');
+            statusInput.type = 'hidden';
+            statusInput.name = 'status';
+            statusInput.value = 'archived';
+            form.appendChild(statusInput);
+
+            document.body.appendChild(form);
+            form.submit();
         }
+    }
+
+    function deleteSinglePost(postId) {
+        if (!confirm('Bạn có chắc muốn xóa bài viết này?')) return;
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '${pageContext.request.contextPath}/admin/blog/delete';
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'ids';
+        input.value = postId;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
     }
 
     function bulkDelete() {
         const selectedPosts = getSelectedPosts();
         if (selectedPosts.length === 0) return;
 
-        if (confirm(`CẢNH BÁO: Bạn có chắc muốn xóa ${selectedPosts.length} bài viết đã chọn? Hành động này không thể hoàn tác!`)) {
-            console.log('Deleting posts:', selectedPosts);
-            // Add your deletion logic here
-            alert(`Đã xóa ${selectedPosts.length} bài viết!`);
-            cancelSelection();
+        if (!confirm(`CẢNH BÁO: Bạn có chắc muốn xóa \${selectedPosts.length} bài viết đã chọn?`)) {
+            return;
         }
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '${pageContext.request.contextPath}/admin/blog/delete';
+
+        selectedPosts.forEach(id => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'ids';
+            input.value = id;
+            form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
     }
 
     function cancelSelection() {
@@ -393,6 +447,7 @@
             .map(cb => parseInt(cb.value, 10))
             .filter(id => !isNaN(id));
     }
+
     (function () {
         const input = document.getElementById('adminBlogSearch');
         const form  = document.getElementById('blogFilterForm');
@@ -404,14 +459,11 @@
             clearTimeout(t);
 
             const v = input.value;
-            // đang ở khoảng trắng thì chưa submit
             if (/\s$/.test(v)) return;
 
             t = setTimeout(() => form.submit(), 900);
         });
     })();
-
 </script>
 </body>
 </html>
-

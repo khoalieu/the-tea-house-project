@@ -559,7 +559,58 @@ public class BlogPostDAO {
         return false;
     }
 
+// delete
+public boolean deleteByIds(List<Integer> ids) {
+    if (ids == null || ids.isEmpty()) return false;
 
+    StringBuilder sql = new StringBuilder("DELETE FROM blog_posts WHERE id IN (");
+    for (int i = 0; i < ids.size(); i++) {
+        sql.append("?");
+        if (i < ids.size() - 1) sql.append(",");
+    }
+    sql.append(")");
+
+    try (Connection conn = DBConnect.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+        for (int i = 0; i < ids.size(); i++) {
+            ps.setInt(i + 1, ids.get(i));
+        }
+
+        return ps.executeUpdate() > 0;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+    // update status of list blogs
+    public boolean updateStatusByIds(List<Integer> ids, BlogStatus newStatus) {
+        if (ids == null || ids.isEmpty() || newStatus == null) return false;
+
+        StringBuilder sql = new StringBuilder("UPDATE blog_posts SET status = ? WHERE id IN (");
+        for (int i = 0; i < ids.size(); i++) {
+            sql.append("?");
+            if (i < ids.size() - 1) sql.append(",");
+        }
+        sql.append(")");
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            ps.setString(1, newStatus.name().toLowerCase());
+
+            for (int i = 0; i < ids.size(); i++) {
+                ps.setInt(i + 2, ids.get(i));
+            }
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 }
 
