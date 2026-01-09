@@ -166,8 +166,12 @@ public class AdminBlogAddServlet extends HttpServlet {
             forwardWithData(request, response, "Thêm bài viết thất bại. Vui lòng thử lại.");
             return;
         }
-
-        response.sendRedirect(request.getContextPath() + "/admin/blog");
+        boolean preview = "preview".equalsIgnoreCase(request.getParameter("action"));
+        if (preview) {
+            response.sendRedirect(request.getContextPath() + "/admin/blog/detail?id=" + newId);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/admin/blog");
+        }
     }
 
     private void forwardWithData(HttpServletRequest request, HttpServletResponse response, String error)

@@ -14,11 +14,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 
 @WebServlet("/admin/blog/edit")
 @MultipartConfig(
@@ -85,7 +83,6 @@ public class AdminBlogEditServlet extends HttpServlet {
             return;
         }
 
-        // ====== READ PARAMS (trimOrNull) ======
         String title = trimOrNull(request.getParameter("title"));
         String slugInput = trimOrNull(request.getParameter("slug"));
         String excerpt = trimOrNull(request.getParameter("excerpt"));
@@ -98,10 +95,8 @@ public class AdminBlogEditServlet extends HttpServlet {
         String metaTitle = trimOrNull(request.getParameter("meta_title"));
         String metaDesc = trimOrNull(request.getParameter("meta_description"));
 
-        // (Nếu sau này bạn bật created_at ở edit, vẫn dùng được)
         String createdAtStr = request.getParameter("created_at");
 
-        // ====== VALIDATE REQUIRED TEXT ======
         if (title == null) {
             request.setAttribute("error", "Vui lòng nhập Tiêu đề.");
             doGet(request, response);
@@ -198,12 +193,16 @@ public class AdminBlogEditServlet extends HttpServlet {
 
         boolean ok = postDAO.updateForAdmin(updated, keepOldImage);
         if (!ok) {
-            request.setAttribute("error", "Cập nhật thất bại. (Có thể slug bị trùng do UNIQUE trong DB)");
+            request.setAttribute("error", "Cập nhật thất bại");
             doGet(request, response);
             return;
         }
-
-        response.sendRedirect(request.getContextPath() + "/admin/blog");
+        boolean preview = "preview".equalsIgnoreCase(request.getParameter("action"));
+        if (preview) {
+            response.sendRedirect(request.getContextPath() + "/admin/blog/detail?id=" + id);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/admin/blog");
+        }
     }
 
     private User requireAdminOrEditor(HttpServletRequest request, HttpServletResponse response) throws IOException {

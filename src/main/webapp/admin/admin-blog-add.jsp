@@ -56,6 +56,9 @@
             <!-- Content -->
             <div class="admin-content">
                 <form class="form-container" action="${pageContext.request.contextPath}/admin/blog/add" method="POST" enctype="multipart/form-data">
+
+                    <input type="hidden" id="formAction" name="formAction" value="save">
+
                     <div class="form-header">
                         <c:if test="${not empty error}">
                             <p style="color:#c00; margin:10px 0;">${error}</p>
@@ -262,9 +265,9 @@
                                 Hủy bỏ
                             </a>
 
-                            <button type="button" class="btn btn-success" onclick="previewPost()">
+                            <button type="submit" class="btn btn-success" name="action" value="preview">
                                 <i class="fas fa-eye"></i>
-                                Xem trước
+                                Lưu & Xem
                             </button>
 
                             <button type="submit" class="btn btn-primary">

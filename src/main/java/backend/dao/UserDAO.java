@@ -218,4 +218,54 @@ public class UserDAO {
         }
         return list;
     }
+    public User getById(int id) {
+        String sql = "SELECT id, username, email, first_name, last_name, avatar, role FROM users WHERE id=? LIMIT 1";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return map(rs);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return null;
+    }
+
+    public Map<Integer, User> getMapByIds(Collection<Integer> ids) {
+        Map<Integer, User> map = new HashMap<>();
+        if (ids == null || ids.isEmpty()) return map;
+
+        StringJoiner sj = new StringJoiner(",", "(", ")");
+        for (int i = 0; i < ids.size(); i++) sj.add("?");
+
+        String sql = "SELECT id, username, email, first_name, last_name, avatar, role FROM users WHERE id IN " + sj;
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            int idx = 1;
+            for (Integer id : ids) ps.setInt(idx++, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    User u = map(rs);
+                    map.put(u.getId(), u);
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return map;
+    }
+
+    private User map(ResultSet rs) throws Exception {
+        User u = new User();
+        u.setId(rs.getInt("id"));
+        u.setUsername(rs.getString("username"));
+        u.setEmail(rs.getString("email"));
+        u.setFirstName(rs.getString("first_name"));
+        u.setLastName(rs.getString("last_name"));
+        u.setAvatar(rs.getString("avatar"));
+
+        String role = rs.getString("role");
+        if (role != null) u.setRole(UserRole.valueOf(role.trim().toUpperCase()));
+
+        return u;
+    }
 }

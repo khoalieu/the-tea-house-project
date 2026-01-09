@@ -121,7 +121,7 @@
                         <span>Quản lý khách hàng</span>
                     </a>
 
-                    <a href="admin-blog-add.jsp" class="action-card">
+                    <a href="${pageContext.request.contextPath}/admin/blog/add" class="action-card">
                         <i class="fas fa-pen"></i>
                         <span>Viết bài blog</span>
                     </a>

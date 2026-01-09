@@ -222,8 +222,8 @@
 
                                 <td>
                                     <div class="action-buttons">
-                                        <a class="btn-action" title="Xem chi tiết"
-                                           href="${pageContext.request.contextPath}/chi-tiet-blog?slug=${post.slug}"
+                                        <a class="btn-action" title="Xem chi tiết (Admin)"
+                                           href="${pageContext.request.contextPath}/admin/blog/detail?id=${post.id}"
                                            target="_blank">
                                             <i class="fas fa-eye"></i>
                                         </a>

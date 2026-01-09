@@ -283,10 +283,9 @@
                             Hủy bỏ
                         </a>
 
-                        <!-- Preview tạm thời: mở bài public theo slug (nếu cần preview nội bộ sẽ làm sau) -->
-                        <button type="button" class="btn btn-success" onclick="previewPost('${post.slug}')">
+                        <button type="submit" class="btn btn-success" name="action" value="preview">
                             <i class="fas fa-eye"></i>
-                            Xem trước
+                            Lưu & Xem
                         </button>
 
                         <button type="submit" class="btn btn-primary">
@@ -301,7 +300,7 @@
 </div>
 
 <script>
-    // Preview ảnh khi chọn file mới (giữ UX giống add)
+    // Preview ảnh khi chọn file mới ( giống add)
     (function () {
         const fileInput = document.getElementById('featured_image');
         if (!fileInput) return;
