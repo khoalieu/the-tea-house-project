@@ -2,7 +2,9 @@ package backend.model;
 
 import backend.model.enums.BlogStatus;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class BlogPost {
     private Integer id;
@@ -18,6 +20,9 @@ public class BlogPost {
     private String metaTitle;
     private String metaDescription;
     private LocalDateTime createdAt;
+
+    private  BlogCategory category;
+    private  User author;
 
     public BlogPost() {}
 
@@ -77,4 +82,14 @@ public class BlogPost {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public Date getCreatedAtDate() {
+        return createdAt == null ? null : Timestamp.valueOf(createdAt);
+    }
+    public BlogCategory getCategory() { return category; }
+    public void setCategory(BlogCategory category) { this.category = category; }
+
+    public User getAuthor() { return author; }
+    public void setAuthor(User author) { this.author = author; }
 }
+

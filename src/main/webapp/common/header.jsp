@@ -53,7 +53,7 @@
                         </div>
                     </li>
 
-                    <li><a href="${pageContext.request.contextPath}/blog.jsp">CÔNG THỨC & BLOG</a></li>
+                    <li><a href="${pageContext.request.contextPath}/blog">CÔNG THỨC & BLOG</a></li>
 
                     <li class="has-dropdown">
                         <a href="${pageContext.request.contextPath}/ve-chung-toi.jsp">VỀ CHÚNG TÔI</a>
@@ -155,3 +155,4 @@
         </div>
     </div>
 </header>
+

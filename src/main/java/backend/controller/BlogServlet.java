@@ -10,9 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,8 +18,6 @@ import java.util.Map;
 public class BlogServlet extends HttpServlet {
 
     private static final int PAGE_SIZE = 6;
-    private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -44,13 +40,12 @@ public class BlogServlet extends HttpServlet {
             return;
         }
         int page = 1;
-        try { page = Integer.parseInt(request.getParameter("page")); } catch (Exception e) {}
+        try { page = Integer.parseInt(request.getParameter("page")); } catch (Exception ignored) {}
         if (page < 1) page = 1;
 
         // count + pages + list theo mode
         int total = 0;
         List<BlogPost> blogs;
-
         // search
         if (hasQ) {
             total = postDAO.countSearchPublished(q);
@@ -93,33 +88,18 @@ public class BlogServlet extends HttpServlet {
             request.setAttribute("activeCatSlug", null);
             request.setAttribute("totalPages", totalPages);
         }
-
         // message rỗng
         String emptyMessage = "Chưa có bài viết nào.";
         if (blogs.isEmpty() && (hasQ || hasCat)) emptyMessage = "Không tìm thấy bài viết phù hợp!";
-
-        // dateMap
-        Map<Integer, String> dateMap = new HashMap<>();
-        for (BlogPost b : blogs) {
-            if (b.getCreatedAt() != null) dateMap.put(b.getId(), b.getCreatedAt().format(DF));
-        }
         // sidebar data
         List<BlogCategory> categories = catDAO.getActiveCategories();
         Map<Integer, Integer> categoryCountMap = catDAO.getPublishedCountMap();
         List<BlogPost> recentPosts = postDAO.getRecentPublishedPosts(3);
 
-        Map<Integer, String> recent = new HashMap<>();
-        for (BlogPost p : recentPosts) {
-            if (p.getCreatedAt() != null) recent.put(p.getId(), p.getCreatedAt().format(DF));
-        }
-
         request.setAttribute("blogs", blogs);
-        request.setAttribute("dateMap", dateMap);
         request.setAttribute("categories", categories);
         request.setAttribute("categoryCountMap", categoryCountMap);
         request.setAttribute("recentPosts", recentPosts);
-        request.setAttribute("recent", recent);
-
         request.setAttribute("currentPage", page);
         request.setAttribute("emptyMessage", emptyMessage);
 

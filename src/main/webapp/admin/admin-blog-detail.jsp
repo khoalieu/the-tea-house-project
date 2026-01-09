@@ -1,248 +1,227 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
+
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
+<c:set var="p" value="${post}" />
+<c:set var="cat" value="${category}" />
+<c:set var="au" value="${p.author}" />
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi tiết Bài viết - Mộc Trà Admin</title>
-    <link rel="stylesheet" href="../assets/css/base.css">
-    <link rel="stylesheet" href="../assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/admin.css">
+
+    <link rel="stylesheet" href="${ctx}/assets/css/base.css">
+    <link rel="stylesheet" href="${ctx}/assets/css/components.css">
+
+    <link rel="stylesheet" href="${ctx}/admin/assets/css/admin.css">
+    <link rel="stylesheet" href="${ctx}/admin/assets/css/admin-blog-detail.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/admin-blog-detail.css">
 </head>
+
 <body>
 <div class="admin-container">
-    <!-- Sidebar -->
-    <aside class="admin-sidebar">
-        <div class="sidebar-header">
-            <div class="admin-logo">
-                <img src="../assets/images/logoweb.png" alt="Mộc Trà">
-                <h2>Mộc Trà Admin</h2>
-            </div>
-        </div>
 
-        <nav class="admin-nav">
-            <ul>
-                <li class="nav-item">
-                    <a href="admin-dashboard.jsp">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
+    <!-- Sidebar (dùng include cho đúng hệ thống bạn) -->
+    <jsp:include page="/common/admin-sidebar.jsp">
+        <jsp:param name="activePage" value="blog" />
+    </jsp:include>
 
-                <li class="nav-item">
-                    <a href="admin-products.jsp">
-                        <i class="fas fa-box"></i>
-                        <span>Tất cả Sản phẩm</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-categories.jsp">
-                        <i class="fas fa-sitemap"></i>
-                        <span>Danh mục Sản phẩm</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-orders.jsp">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Đơn hàng</span>
-                        <span class="badge">23</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-customers.jsp">
-                        <i class="fas fa-users"></i>
-                        <span>Khách hàng</span>
-                    </a>
-                </li>
-
-                <li class="nav-item active">
-                    <a href="admin-blog.jsp">
-                        <i class="fas fa-newspaper"></i>
-                        <span>Tất cả Bài viết</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-blog-categories.jsp">
-                        <i class="fas fa-folder"></i>
-                        <span>Danh mục Blog</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-        
-    <!-- Main Content -->
     <main class="admin-main">
-        <!-- Header -->
         <header class="admin-header">
             <div class="header-left">
                 <h1>Chi tiết Bài viết</h1>
             </div>
-            
+
             <div class="header-right">
-                <a href="../index.jsp" class="view-site-btn" target="_blank">
+                <a href="${ctx}/index.jsp" class="view-site-btn" target="_blank">
                     <i class="fas fa-external-link-alt"></i>
                     <span>Xem trang web</span>
                 </a>
             </div>
         </header>
-        
-        <!-- Content -->
+
         <div class="admin-content">
             <!-- Blog Detail Header -->
             <div class="blog-detail-header">
                 <div class="blog-meta">
-                    <h2>Lợi ích tuyệt vời của trà hoa cúc đối với sức khỏe</h2>
+                    <h2><c:out value="${p.title}"/></h2>
+
                     <div class="blog-meta-info">
                         <span class="meta-item">
                             <i class="fas fa-user"></i>
-                            <strong>Admin</strong>
+                            <strong><c:out value="${empty au ? '---' : au.displayName}"/></strong>
                         </span>
+
                         <span class="meta-item">
                             <i class="fas fa-folder"></i>
-                            <strong>Sức khỏe</strong>
+                            <strong><c:out value="${empty cat ? 'Chưa phân loại' : cat.name}"/></strong>
                         </span>
+
                         <span class="meta-item">
                             <i class="fas fa-calendar"></i>
-                            15/11/2025 09:30
+                            <fmt:formatDate value="${p.createdAtDate}" pattern="dd/MM/yyyy HH:mm"/>
                         </span>
+
                         <span class="meta-item">
                             <i class="fas fa-eye"></i>
-                            <strong>1,245 lượt xem</strong>
+                            <strong><fmt:formatNumber value="${p.viewsCount}" pattern="#,###"/> lượt xem</strong>
                         </span>
+
                         <span class="meta-item">
-                            <span class="status-badge published">Đã xuất bản</span>
+                            <c:choose>
+                                <c:when test="${p.status.name() == 'PUBLISHED'}">
+                                    <span class="status-badge published">Đã xuất bản</span>
+                                </c:when>
+                                <c:when test="${p.status.name() == 'DRAFT'}">
+                                    <span class="status-badge status-pending">Bản nháp</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="status-badge status-cancelled">Lưu trữ</span>
+                                </c:otherwise>
+                            </c:choose>
                         </span>
                     </div>
                 </div>
+
                 <div class="blog-actions-top">
-                    <a href="admin-blog.jsp" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i>
-                        Quay lại
+                    <a href="${ctx}/admin/blog" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Quay lại
                     </a>
-                    <button class="btn btn-success" onclick="editPost()">
-                        <i class="fas fa-edit"></i>
-                        Chỉnh sửa
-                    </button>
-                    <button class="btn btn-danger" onclick="deletePost()">
-                        <i class="fas fa-trash"></i>
-                        Xóa
-                    </button>
+
+                    <a class="btn btn-success" href="${ctx}/admin/blog/edit?id=${p.id}">
+                        <i class="fas fa-edit"></i> Chỉnh sửa
+                    </a>
+
+                    <!-- Xóa bài viết (dùng route delete bạn đang dùng ở admin-blog.jsp) -->
+                    <form method="post" action="${ctx}/admin/blog/delete" style="display:inline;"
+                          onsubmit="return confirm('CẢNH BÁO: Bạn có chắc muốn xóa bài viết này?');">
+                        <input type="hidden" name="ids" value="${p.id}">
+                        <button class="btn btn-danger" type="submit">
+                            <i class="fas fa-trash"></i> Xóa
+                        </button>
+                    </form>
                 </div>
             </div>
-            
+
             <!-- Detail Grid -->
             <div class="detail-grid">
+
                 <!-- Main Content Column -->
-                <div style="display: flex; flex-direction: column; gap: 30px;">
+                <div style="display:flex; flex-direction:column; gap:30px;">
+
                     <!-- Featured Image -->
-                    <div class="detail-card">
-                        <h3 class="card-title">
-                            <i class="fas fa-image"></i> Ảnh đại diện
-                        </h3>
-                        <img src="../assets/images/loi-ich-tra-hoa-cuc.jpg" alt="Featured" class="featured-image">
-                    </div>
+                    <c:if test="${not empty p.featuredImage}">
+                        <div class="detail-card">
+                            <h3 class="card-title"><i class="fas fa-image"></i> Ảnh đại diện</h3>
+
+                            <c:set var="img" value="${p.featuredImage}" />
+                            <c:choose>
+                                <c:when test="${fn:startsWith(img,'http://') or fn:startsWith(img,'https://')}">
+                                    <img src="${img}" alt="Featured" class="featured-image">
+                                </c:when>
+                                <c:otherwise>
+                                    <img src="${ctx}/${img}" alt="Featured" class="featured-image">
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </c:if>
 
                     <!-- Excerpt -->
                     <div class="detail-card">
-                        <h3 class="card-title">
-                            <i class="fas fa-quote-left"></i> Trích đoạn
-                        </h3>
+                        <h3 class="card-title"><i class="fas fa-quote-left"></i> Trích đoạn</h3>
                         <div class="excerpt-box">
-                            Trà hoa cúc không chỉ có hương vị thơm ngon mà còn mang lại nhiều lợi ích cho sức khỏe. Bài viết này sẽ giúp bạn hiểu rõ hơn về công dụng tuyệt vời của loại trà này.
+                            <c:out value="${empty p.excerpt ? '(Chưa có mô tả)' : p.excerpt}"/>
                         </div>
                     </div>
 
                     <!-- Content -->
                     <div class="detail-card">
-                        <h3 class="card-title">
-                            <i class="fas fa-file-alt"></i> Nội dung bài viết
-                        </h3>
+                        <h3 class="card-title"><i class="fas fa-file-alt"></i> Nội dung bài viết</h3>
                         <div class="blog-content">
-                            <p><strong>Trà hoa cúc</strong> là một loại đồ uống thảo dược phổ biến được ưa chuộng bởi hương vị nhẹ nhàng và nhiều lợi ích sức khỏe. Từ xa xưa, người ta đã sử dụng hoa cúc không chỉ để pha trà mà còn làm thuốc chữa bệnh.</p>
-
-                            <h3>1. Giúp thư giãn và giảm stress</h3>
-                            <p>Trà hoa cúc có tác dụng진정 thần kinh, giúp bạn thư giãn sau những giờ làm việc căng thẳng. Một tách trà hoa cúc ấm trước khi đi ngủ có thể giúp bạn ngủ ngon hơn.</p>
-
-                            <h3>2. Tăng cường hệ miễn dịch</h3>
-                            <p>Hoa cúc chứa nhiều chất chống oxi hóa giúp tăng cường hệ miễn dịch, bảo vệ cơ thể khỏi các tác nhân gây bệnh.</p>
-
-                            <h3>3. Hỗ trợ tiêu hóa</h3>
-                            <p>Trà hoa cúc có tác dụng kháng viêm, giúp giảm đau dạ dày, đầy hơi và các vấn đề tiêu hóa khác.</p>
-
-                            <h3>4. Làm đẹp da</h3>
-                            <p>Với đặc tính chống oxi hóa và kháng viêm, trà hoa cúc giúp làm sạch da, giảm mụn và làm chậm quá trình lão hóa.</p>
-
-                            <h3>Cách pha trà hoa cúc đúng cách</h3>
-                            <ul>
-                                <li>Cho 2-3 bông hoa cúc khô vào tách</li>
-                                <li>Rót nước sôi 85-90°C vào</li>
-                                <li>Đậy nắp và để ủ 5-7 phút</li>
-                                <li>Có thể thêm mật ong để tăng hương vị</li>
-                            </ul>
-
-                            <p><strong>Lưu ý:</strong> Không nên uống quá 2-3 tách trà hoa cúc mỗi ngày. Người bị dị ứng với cúc hoặc đang mang thai nên tham khảo ý kiến bác sĩ trước khi sử dụng.</p>
+                            <c:out value="${p.content}" escapeXml="false"/>
                         </div>
                     </div>
 
                     <!-- SEO Information -->
                     <div class="detail-card">
-                        <h3 class="card-title">
-                            <i class="fas fa-search"></i> Thông tin SEO
-                        </h3>
+                        <h3 class="card-title"><i class="fas fa-search"></i> Thông tin SEO</h3>
+
                         <div class="seo-info">
                             <div class="seo-title">
-                                Meta Title: Lợi ích của trà hoa cúc | Mộc Trà Blog
+                                Meta Title:
+                                <c:out value="${empty p.metaTitle ? p.title : p.metaTitle}"/>
                             </div>
                             <div class="seo-description">
-                                Meta Description: Khám phá những lợi ích tuyệt vời của trà hoa cúc đối với sức khỏe. Hướng dẫn cách pha trà hoa cúc đúng cách để đạt hiệu quả tốt nhất cho cơ thể.
+                                Meta Description:
+                                <c:out value="${empty p.metaDescription ? p.excerpt : p.metaDescription}"/>
                             </div>
                         </div>
+
                         <div class="info-row">
                             <span class="info-label">Slug:</span>
-                            <span class="info-value">loi-ich-tra-hoa-cuc</span>
+                            <span class="info-value"><c:out value="${p.slug}"/></span>
                         </div>
+
+                        <!-- giữ style giống template, không cần tính đúng/đủ nếu bạn chưa muốn -->
                         <div class="info-row">
                             <span class="info-label">Meta Title Length:</span>
-                            <span class="info-value" style="color: #28a745;">45 ký tự ✓</span>
+                            <span class="info-value" style="color:#28a745;">${fn:length(empty p.metaTitle ? p.title : p.metaTitle)} ký tự</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Meta Description Length:</span>
-                            <span class="info-value" style="color: #28a745;">155 ký tự ✓</span>
+                            <span class="info-value" style="color:#28a745;">${fn:length(empty p.metaDescription ? p.excerpt : p.metaDescription)} ký tự</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Sidebar Column -->
-                <div style="display: flex; flex-direction: column; gap: 30px;">
+                <div style="display:flex; flex-direction:column; gap:30px;">
+
                     <!-- Basic Info -->
                     <div class="detail-card">
-                        <h3 class="card-title">
-                            <i class="fas fa-info-circle"></i> Thông tin cơ bản
-                        </h3>
+                        <h3 class="card-title"><i class="fas fa-info-circle"></i> Thông tin cơ bản</h3>
+
                         <div class="info-row">
                             <span class="info-label">Trạng thái:</span>
                             <span class="info-value">
-                                <span class="status-badge published">Đã xuất bản</span>
+                                <c:choose>
+                                    <c:when test="${p.status.name() == 'PUBLISHED'}">
+                                        <span class="status-badge published">Đã xuất bản</span>
+                                    </c:when>
+                                    <c:when test="${p.status.name() == 'DRAFT'}">
+                                        <span class="status-badge status-pending">Bản nháp</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="status-badge status-cancelled">Lưu trữ</span>
+                                    </c:otherwise>
+                                </c:choose>
                             </span>
                         </div>
+
                         <div class="info-row">
                             <span class="info-label">Danh mục:</span>
                             <span class="info-value">
-                                <span class="category-badge health">Sức khỏe</span>
+                                <span class="category-badge health">
+                                    <c:out value="${empty cat ? 'Chưa phân loại' : cat.name}"/>
+                                </span>
                             </span>
                         </div>
+
                         <div class="info-row">
                             <span class="info-label">Ngày tạo:</span>
-                            <span class="info-value">15/11/2025 09:30</span>
+                            <span class="info-value"><fmt:formatDate value="${p.createdAtDate}" pattern="dd/MM/yyyy HH:mm"/></span>
                         </div>
+
+                        <!-- GIỮ NGUYÊN theo yêu cầu -->
                         <div class="info-row">
                             <span class="info-label">Cập nhật cuối:</span>
                             <span class="info-value">16/11/2025 14:20</span>
@@ -251,33 +230,36 @@
 
                     <!-- Author Info -->
                     <div class="detail-card">
-                        <h3 class="card-title">
-                            <i class="fas fa-user-edit"></i> Tác giả
-                        </h3>
+                        <h3 class="card-title"><i class="fas fa-user-edit"></i> Tác giả</h3>
+
+                        <c:set var="dn" value="${empty au ? 'NA' : au.displayName}" />
+                        <c:set var="init" value="${fn:toUpperCase(fn:substring(dn,0,2))}" />
+
                         <div class="author-card">
-                            <div class="author-avatar">AD</div>
+                            <div class="author-avatar">${init}</div>
                             <div class="author-info">
-                                <h4>Admin</h4>
-                                <p>admin@moctra.com</p>
-                                <p style="color: #107e84; font-weight: 600;">Vai trò: Quản trị viên</p>
+                                <h4><c:out value="${empty au ? '---' : au.displayName}"/></h4>
+                                <p><c:out value="${empty au ? '' : au.email}"/></p>
+                                <p style="color:#107e84; font-weight:600;">
+                                    Vai trò: <c:out value="${empty au || empty au.role ? '---' : au.role}"/>
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Statistics -->
                     <div class="detail-card">
-                        <h3 class="card-title">
-                            <i class="fas fa-chart-line"></i> Thống kê
-                        </h3>
+                        <h3 class="card-title"><i class="fas fa-chart-line"></i> Thống kê</h3>
                         <div class="stats-grid">
                             <div class="stat-box">
-                                <div class="stat-number">1,245</div>
+                                <div class="stat-number"><fmt:formatNumber value="${p.viewsCount}" pattern="#,###"/></div>
                                 <div class="stat-label">Lượt xem</div>
                             </div>
                             <div class="stat-box">
-                                <div class="stat-number">5</div>
+                                <div class="stat-number">${commentsCount}</div>
                                 <div class="stat-label">Bình luận</div>
                             </div>
+                            <!-- GIỮ placeholder -->
                             <div class="stat-box">
                                 <div class="stat-number">89</div>
                                 <div class="stat-label">Lượt thích</div>
@@ -289,34 +271,26 @@
                         </div>
                     </div>
 
-                    <!-- Status History -->
+                    <!-- Status History (GIỮ NGUYÊN theo yêu cầu) -->
                     <div class="detail-card">
-                        <h3 class="card-title">
-                            <i class="fas fa-history"></i> Lịch sử trạng thái
-                        </h3>
+                        <h3 class="card-title"><i class="fas fa-history"></i> Lịch sử trạng thái</h3>
                         <div class="status-timeline">
                             <div class="timeline-item">
-                                <div class="timeline-icon">
-                                    <i class="fas fa-check"></i>
-                                </div>
+                                <div class="timeline-icon"><i class="fas fa-check"></i></div>
                                 <div class="timeline-content">
                                     <div class="timeline-title">Đã xuất bản</div>
                                     <div class="timeline-date">15/11/2025 10:00</div>
                                 </div>
                             </div>
                             <div class="timeline-item">
-                                <div class="timeline-icon" style="background: #ffc107;">
-                                    <i class="fas fa-edit"></i>
-                                </div>
+                                <div class="timeline-icon" style="background:#ffc107;"><i class="fas fa-edit"></i></div>
                                 <div class="timeline-content">
                                     <div class="timeline-title">Bản nháp</div>
                                     <div class="timeline-date">15/11/2025 09:30</div>
                                 </div>
                             </div>
                             <div class="timeline-item">
-                                <div class="timeline-icon" style="background: #6c757d;">
-                                    <i class="fas fa-plus"></i>
-                                </div>
+                                <div class="timeline-icon" style="background:#6c757d;"><i class="fas fa-plus"></i></div>
                                 <div class="timeline-content">
                                     <div class="timeline-title">Tạo mới</div>
                                     <div class="timeline-date">15/11/2025 09:00</div>
@@ -324,144 +298,100 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
             <!-- Comments Section (Full Width) -->
             <div class="detail-card full-width-card">
                 <h3 class="card-title">
-                    <i class="fas fa-comments"></i> Bình luận (5 bình luận)
+                    <i class="fas fa-comments"></i>
+                    Bình luận (${commentsCount} bình luận)
                 </h3>
+
+                <c:if test="${param.err == 'empty'}">
+                    <p style="color:#c00; margin:10px 0;">Nội dung trả lời không được để trống.</p>
+                </c:if>
+
                 <div class="comments-list">
-                    <div class="comment-item">
-                        <div class="comment-header">
-                            <span class="comment-author">
-                                <i class="fas fa-user-circle"></i> Nguyễn Văn A
-                            </span>
-                        </div>
-                        <div class="comment-text">
-                            Bài viết rất hữu ích! Mình đã thử uống trà hoa cúc theo hướng dẫn và cảm thấy rất tốt. Cảm ơn admin đã chia sẻ!
-                        </div>
-                        <div class="comment-date">
-                            <i class="far fa-clock"></i> 16/11/2025 08:30
-                        </div>
-                        <div class="comment-actions">
-                            <button class="comment-btn approve">
-                                <i class="fas fa-reply"></i> Trả lời
-                            </button>
-                            <button class="comment-btn delete">
-                                <i class="fas fa-trash"></i> Xóa
-                            </button>
-                        </div>
-                    </div>
+                    <c:if test="${empty comments}">
+                        <p>Chưa có bình luận nào.</p>
+                    </c:if>
 
-                    <div class="comment-item">
-                        <div class="comment-header">
-                            <span class="comment-author">
-                                <i class="fas fa-user-circle"></i> Trần Thị B
-                            </span>
-                        </div>
-                        <div class="comment-text">
-                            Mình muốn hỏi là uống trà hoa cúc lúc nào trong ngày là tốt nhất ạ? Cảm ơn admin!
-                        </div>
-                        <div class="comment-date">
-                            <i class="far fa-clock"></i> 16/11/2025 10:15
-                        </div>
-                        <div class="comment-actions">
-                            <button class="comment-btn approve">
-                                <i class="fas fa-reply"></i> Trả lời
-                            </button>
-                            <button class="comment-btn delete">
-                                <i class="fas fa-trash"></i> Xóa
-                            </button>
-                        </div>
-                    </div>
+                    <c:forEach var="cm" items="${comments}">
+                        <c:set var="u" value="${commentUserMap[cm.userId]}" />
+                        <c:set var="uname" value="${empty u ? ('User ' += cm.userId) : u.displayName}" />
 
-                    <div class="comment-item">
-                        <div class="comment-header">
-                            <span class="comment-author">
-                                <i class="fas fa-user-circle"></i> Lê Văn C
-                            </span>
-                        </div>
-                        <div class="comment-text">
-                            Thông tin rất chi tiết và dễ hiểu. Mình sẽ thử ngay. Bài viết 5 sao!
-                        </div>
-                        <div class="comment-date">
-                            <i class="far fa-clock"></i> 16/11/2025 14:45
-                        </div>
-                        <div class="comment-actions">
-                            <button class="comment-btn approve">
-                                <i class="fas fa-reply"></i> Trả lời
-                            </button>
-                            <button class="comment-btn delete">
-                                <i class="fas fa-trash"></i> Xóa
-                            </button>
-                        </div>
-                    </div>
+                        <div class="comment-item">
+                            <div class="comment-header">
+                                <span class="comment-author">
+                                    <i class="fas fa-user-circle"></i>
+                                    <c:out value="${uname}"/>
+                                </span>
+                            </div>
 
-                    <div class="comment-item">
-                        <div class="comment-header">
-                            <span class="comment-author">
-                                <i class="fas fa-user-circle"></i> Phạm Thị D
-                            </span>
-                        </div>
-                        <div class="comment-text">
-                            Mình có bị dị ứng phấn hoa, không biết có uống được trà hoa cúc không ạ?
-                        </div>
-                        <div class="comment-date">
-                            <i class="far fa-clock"></i> 17/11/2025 09:20
-                        </div>
-                        <div class="comment-actions">
-                            <button class="comment-btn approve">
-                                <i class="fas fa-reply"></i> Trả lời
-                            </button>
-                            <button class="comment-btn delete">
-                                <i class="fas fa-trash"></i> Xóa
-                            </button>
-                        </div>
-                    </div>
+                            <div class="comment-text">
+                                <c:out value="${cm.commentText}"/>
+                            </div>
 
-                    <div class="comment-item">
-                        <div class="comment-header">
-                            <span class="comment-author">
-                                <i class="fas fa-user-circle"></i> Hoàng Văn E
-                            </span>
+                            <div class="comment-date">
+                                <i class="far fa-clock"></i>
+                                <fmt:formatDate value="${cm.createdAtDate}" pattern="dd/MM/yyyy HH:mm"/>
+                            </div>
+
+                            <div class="comment-actions">
+                                <!-- Reply: dùng prompt gọn -->
+                                <button class="comment-btn approve" type="button"
+                                        onclick="replyComment(${p.id}, ${cm.id}, '${fn:escapeXml(uname)}')">
+                                    <i class="fas fa-reply"></i> Trả lời
+                                </button>
+
+                                <!-- Delete comment -->
+                                <form method="post" action="${ctx}/admin/blog/comment" style="display:inline;"
+                                      onsubmit="return confirm('Xóa bình luận này?');">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="postId" value="${p.id}">
+                                    <input type="hidden" name="commentId" value="${cm.id}">
+                                    <button class="comment-btn delete" type="submit">
+                                        <i class="fas fa-trash"></i> Xóa
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-                        <div class="comment-text">
-                            Cảm ơn bài viết! Shop có bán hoa cúc khô không ạ? Mình muốn mua về pha thử.
-                        </div>
-                        <div class="comment-date">
-                            <i class="far fa-clock"></i> 17/11/2025 11:00
-                        </div>
-                        <div class="comment-actions">
-                            <button class="comment-btn approve">
-                                <i class="fas fa-reply"></i> Trả lời
-                            </button>
-                            <button class="comment-btn delete">
-                                <i class="fas fa-trash"></i> Xóa
-                            </button>
-                        </div>
-                    </div>
+                    </c:forEach>
                 </div>
             </div>
+
         </div>
     </main>
 </div>
 
 <script>
-    function editPost() {
-        alert('Chức năng chỉnh sửa bài viết');
-        // Redirect to edit page
-        // window.location.href = 'admin-blog-edit.html';
-    }
-
-    function deletePost() {
-        if (confirm('CẢNH BÁO: Bạn có chắc muốn xóa bài viết này? Hành động này không thể hoàn tác!')) {
-            console.log('Deleting post...');
-            alert('Đã xóa bài viết thành công!');
-            window.location.href = 'admin-blog.html';
+    function replyComment(postId, commentId, userName) {
+        const txt = prompt('Trả lời @' + userName + ':', '');
+        if (txt == null) return; // cancel
+        const v = (txt || '').trim();
+        if (!v) {
+            location.href = '${ctx}/admin/blog/detail?id=' + postId + '&err=empty';
+            return;
         }
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '${ctx}/admin/blog/comment';
+
+        form.innerHTML =
+            '<input type="hidden" name="action" value="reply">' +
+            '<input type="hidden" name="postId" value="' + postId + '">' +
+            '<input type="hidden" name="commentId" value="' + commentId + '">' +
+            '<input type="hidden" name="text" value="">';
+
+        form.querySelector('input[name="text"]').value = v;
+
+        document.body.appendChild(form);
+        form.submit();
     }
 </script>
+
 </body>
 </html>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -50,7 +51,7 @@
 
                                     <span class="meta-item">
                                         <i class="fa-solid fa-calendar"></i>
-                                        <span>${dateMap[b.id]}</span>
+                                        <span><fmt:formatDate value="${b.createdAtDate}" pattern="dd/MM/yyyy"/></span>
                                     </span>
 
                                     <span class="meta-item">
