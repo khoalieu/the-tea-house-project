@@ -15,6 +15,34 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+    <style>
+        .selection-alert {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #d2e3fc;
+            text-align: center;
+            font-size: 14px;
+        }
+        .selection-alert a {
+            font-weight: bold;
+            color: #1a73e8;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        .selection-alert-success {
+            background-color: #e6fffa;
+            color: #047481;
+            border-color: #b2f5ea;
+        }
+        .selection-alert-success a {
+            color: #047481;
+        }
+    </style>
 </head>
 <body>
 <div class="admin-container">
@@ -68,10 +96,10 @@
                         <label for="orders-filter">Số đơn hàng</label>
                         <select id="orders-filter" name="orders" class="form-select" onchange="this.form.submit()">
                             <option value="">Tất cả</option>
-                            <option value="0" ${param.orders == '0' ? 'selected' : ''}>Chưa mua hàng</option>
-                            <option value="1-5" ${param.orders == '1-5' ? 'selected' : ''}>1-5 đơn</option>
-                            <option value="6-10" ${param.orders == '6-10' ? 'selected' : ''}>6-10 đơn</option>
-                            <option value="10+" ${param.orders == '10+' ? 'selected' : ''}>Trên 10 đơn</option>
+                            <option value="0" ${paramOrders == '0' ? 'selected' : ''}>Chưa mua hàng</option>
+                            <option value="1-5" ${paramOrders == '1-5' ? 'selected' : ''}>1-5 đơn</option>
+                            <option value="6-10" ${paramOrders == '6-10' ? 'selected' : ''}>6-10 đơn</option>
+                            <option value="10+" ${paramOrders == '10+' ? 'selected' : ''}>Trên 10 đơn</option>
                         </select>
                     </div>
 
@@ -124,6 +152,17 @@
                 </div>
             </div>
 
+            <div id="selectPageAlert" class="selection-alert" style="display:none;">
+                Bạn đã chọn tất cả <strong><span id="currentPageCount">0</span></strong> khách hàng trên trang này.
+                <c:if test="${totalCustomers > customers.size()}">
+                    <a onclick="switchToSelectAllMode()">Chọn tất cả <strong>${totalCustomers}</strong> khách hàng trong danh sách?</a>
+                </c:if>
+            </div>
+
+            <div id="selectAllAlert" class="selection-alert selection-alert-success" style="display:none;">
+                Tất cả <strong>${totalCustomers}</strong> khách hàng trong danh sách đã được chọn.
+                <a onclick="cancelSelection()">Hủy chọn</a>
+            </div>
             <div class="products-container">
                 <div class="table-header">
                     <div class="products-count">Tổng cộng: <strong>${totalCustomers} khách hàng</strong></div>
@@ -272,127 +311,184 @@
 </div>
 
 <script>
-    // Toggle select all checkboxes
+    const TOTAL_CUSTOMERS = ${totalCustomers};
+    const CURRENT_PAGE_SIZE = document.querySelectorAll('.row-checkbox').length;
+    // Kiểm tra xem người dùng có đang ở chế độ "Chọn tất cả Database" không
+    function checkSelectAllMode() {
+        const isGlobal = sessionStorage.getItem('adminCustomerSelectAllMode') === 'true';
+        if (isGlobal) {
+            // Tích hết checkbox hiện tại
+            document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = true);
+            document.getElementById('selectAllCheckbox').checked = true;
+            document.getElementById('selectAllCustomers').checked = true;
+
+            // Hiển thị thông báo "Đã chọn tất cả"
+            document.getElementById('selectAllAlert').style.display = 'block';
+            document.getElementById('selectPageAlert').style.display = 'none';
+
+            //Cập nhật số lượng hiển thị
+            document.getElementById('selectedCount').innerText = TOTAL_CUSTOMERS;
+            document.getElementById('bulkActionsBar').classList.add('active');
+        } else {
+            document.getElementById('selectAllAlert').style.display = 'none';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        checkSelectAllMode();
+    });
+
+    // 1. Khi bấm checkbox ở tiêu đề bảng
     function toggleSelectAll(checkbox) {
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const bulkActionsCheckbox = document.getElementById('selectAllCustomers');
 
+        // Tích/Bỏ tích tất cả checkbox trên trang hiện tại
         rowCheckboxes.forEach(cb => {
             cb.checked = checkbox.checked;
         });
-
         bulkActionsCheckbox.checked = checkbox.checked;
+
+        if (checkbox.checked) {
+            // Nếu tích chọn: Kiểm tra xem có cần hiện gợi ý chọn Database không
+            if (TOTAL_CUSTOMERS > CURRENT_PAGE_SIZE) {
+                // Hiện thông báo: "Bạn đã chọn 10 người. Chọn tất cả 50 người?"
+                document.getElementById('selectPageAlert').style.display = 'block';
+                document.getElementById('currentPageCount').innerText = CURRENT_PAGE_SIZE;
+            }
+        } else {
+            // Nếu bỏ tích: Hủy chế độ chọn tất cả
+            cancelSelection();
+        }
+
         updateBulkActions();
     }
 
-    // Update bulk actions bar
-    function updateBulkActions() {
+    // 2. Khi người dùng bấm vào dòng chữ "Chọn tất cả X khách hàng trong danh sách"
+    function switchToSelectAllMode() {
+        sessionStorage.setItem('adminCustomerSelectAllMode', 'true');
+        document.getElementById('selectPageAlert').style.display = 'none';
+        document.getElementById('selectAllAlert').style.display = 'block';
+        document.getElementById('selectedCount').innerText = TOTAL_CUSTOMERS;
+    }
+
+    // 3. Khi người dùng bấm Hủy chọn hoặc bỏ tích
+    function cancelSelection() {
+        // Xóa trạng thái trong Session Storage
+        sessionStorage.removeItem('adminCustomerSelectAllMode');
+
+        // Bỏ tích giao diện
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const selectAllCheckbox = document.getElementById('selectAllCheckbox');
         const bulkActionsCheckbox = document.getElementById('selectAllCustomers');
+
+        rowCheckboxes.forEach(cb => cb.checked = false);
+        selectAllCheckbox.checked = false;
+        bulkActionsCheckbox.checked = false;
+        document.getElementById('selectPageAlert').style.display = 'none';
+        document.getElementById('selectAllAlert').style.display = 'none';
+
+        updateBulkActions();
+    }
+
+    // 4. Cập nhật thanh công cụ
+    function updateBulkActions() {
+        if (sessionStorage.getItem('adminCustomerSelectAllMode') === 'true') {
+            document.getElementById('bulkActionsBar').classList.add('active');
+            return;
+        }
+
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const bulkActionsBar = document.getElementById('bulkActionsBar');
         const selectedCount = document.getElementById('selectedCount');
-
         const checkedCount = Array.from(rowCheckboxes).filter(cb => cb.checked).length;
-        const totalCount = rowCheckboxes.length;
 
-        // Update count
         selectedCount.textContent = checkedCount;
 
-        // Show/hide bulk actions bar
         if (checkedCount > 0) {
             bulkActionsBar.classList.add('active');
         } else {
             bulkActionsBar.classList.remove('active');
-        }
-
-        // Update select all checkbox state
-        if (checkedCount === totalCount && totalCount > 0) {
-            selectAllCheckbox.checked = true;
-            bulkActionsCheckbox.checked = true;
-            selectAllCheckbox.indeterminate = false;
-        } else if (checkedCount > 0) {
-            selectAllCheckbox.checked = false;
-            bulkActionsCheckbox.checked = false;
-            selectAllCheckbox.indeterminate = true;
-        } else {
-            selectAllCheckbox.checked = false;
-            bulkActionsCheckbox.checked = false;
-            selectAllCheckbox.indeterminate = false;
+            document.getElementById('selectPageAlert').style.display = 'none';
         }
     }
 
-    // Sync bulk actions bar checkbox with table header checkbox
     document.getElementById('selectAllCustomers').addEventListener('change', function() {
         const selectAllCheckbox = document.getElementById('selectAllCheckbox');
         selectAllCheckbox.checked = this.checked;
         toggleSelectAll(this);
     });
 
-    // Bulk actions functions
-    function bulkActivate() {
-        const selectedCustomers = getSelectedCustomers();
-        if (selectedCustomers.length === 0) return;
-
-        if (confirm(`Bạn có chắc muốn kích hoạt ${selectedCustomers.length} khách hàng đã chọn?`)) {
-            console.log('Activating customers:', selectedCustomers);
-            // Add your activation logic here
-            alert(`Đã kích hoạt ${selectedCustomers.length} khách hàng!`);
-            cancelSelection();
-        }
-    }
-
-    function bulkDeactivate() {
-        const selectedCustomers = getSelectedCustomers();
-        if (selectedCustomers.length === 0) return;
-
-        if (confirm(`Bạn có chắc muốn vô hiệu hóa ${selectedCustomers.length} khách hàng đã chọn?`)) {
-            console.log('Deactivating customers:', selectedCustomers);
-            // Add your deactivation logic here
-            alert(`Đã vô hiệu hóa ${selectedCustomers.length} khách hàng!`);
-            cancelSelection();
-        }
-    }
-
-    function bulkDelete() {
-        const selectedCustomers = getSelectedCustomers();
-        if (selectedCustomers.length === 0) return;
-
-        if (confirm(`CẢNH BÁO: Bạn có chắc muốn xóa ${selectedCustomers.length} khách hàng đã chọn? Hành động này không thể hoàn tác!`)) {
-            console.log('Deleting customers:', selectedCustomers);
-            // Add your deletion logic here
-            alert(`Đã xóa ${selectedCustomers.length} khách hàng!`);
-            cancelSelection();
-        }
-    }
-
-    function cancelSelection() {
-        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-        const selectAllCheckbox = document.getElementById('selectAllCheckbox');
-        const bulkActionsCheckbox = document.getElementById('selectAllCustomers');
-
-        rowCheckboxes.forEach(cb => {
-            cb.checked = false;
-        });
-
-        selectAllCheckbox.checked = false;
-        bulkActionsCheckbox.checked = false;
-        selectAllCheckbox.indeterminate = false;
-        updateBulkActions();
-    }
-
     function getSelectedCustomers() {
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const selected = [];
-
         rowCheckboxes.forEach((checkbox) => {
             if (checkbox.checked) {
-                // Thay đổi: Lấy value (ID) thay vì index
                 selected.push(checkbox.value);
             }
         });
-
         return selected;
+    }
+    // --- XỬ LÝ GỬI REQUEST AJAX ---
+    function sendBulkRequest(action, actionName) {
+        const isGlobalMode = sessionStorage.getItem('adminCustomerSelectAllMode') === 'true';
+        let count = 0;
+
+        const params = new URLSearchParams();
+        params.append('action', action);
+
+        if (isGlobalMode) {
+            count = TOTAL_CUSTOMERS;
+            params.append('selectAll', 'true');
+            params.append('search', '${paramSearch}');
+            params.append('status', '${paramStatus}');
+            params.append('spending', '${paramSpending}');
+            params.append('orders', '${paramOrders}');
+        } else {
+            const selectedIds = getSelectedCustomers();
+            if (selectedIds.length === 0) return;
+            count = selectedIds.length;
+            params.append('selectAll', 'false');
+            params.append('ids', selectedIds.join(','));
+        }
+
+        if (confirm(`Bạn có chắc muốn ${actionName} ${count} khách hàng?`)) {
+            fetch('customers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`Đã ${actionName} thành công!`);
+                        // Sau khi thành công thì nên hủy chế độ chọn tất cả
+                        sessionStorage.removeItem('adminCustomerSelectAllMode');
+                        location.reload();
+                    } else {
+                        alert('Có lỗi xảy ra: ' + (data.message || 'Lỗi không xác định'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Lỗi kết nối đến máy chủ.');
+                });
+        }
+    }
+
+    function bulkActivate() {
+        sendBulkRequest('activate', 'kích hoạt');
+    }
+
+    function bulkDeactivate() {
+        sendBulkRequest('deactivate', 'vô hiệu hóa');
+    }
+
+    function bulkDelete() {
+        if (confirm("LƯU Ý: Khách hàng sẽ được chuyển sang trạng thái 'Vô hiệu hóa' (Xóa mềm).")) {
+            sendBulkRequest('deactivate', 'vô hiệu hóa');
+        }
     }
 </script>
 </body>

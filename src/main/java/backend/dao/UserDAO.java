@@ -332,6 +332,27 @@ public class UserDAO {
                 sql.append(" AND total_spent >= ").append(min);
             }
         }
+        if (orderRange != null && !orderRange.isEmpty()) {
+            if (orderRange.equals("0")) {
+                sql.append(" AND total_orders = 0 ");
+            } else if (orderRange.contains("-")) {
+                try {
+                    String[] parts = orderRange.split("-");
+                    int min = Integer.parseInt(parts[0]);
+                    int max = Integer.parseInt(parts[1]);
+                    sql.append(" AND total_orders BETWEEN ").append(min).append(" AND ").append(max);
+                } catch (NumberFormatException e) {
+                    // Bỏ qua nếu dữ liệu rác
+                }
+            } else if (orderRange.endsWith("+")) {
+                try {
+                    int min = Integer.parseInt(orderRange.replace("+", ""));
+                    sql.append(" AND total_orders > ").append(min);
+                } catch (NumberFormatException e) {
+                    // Bỏ qua
+                }
+            }
+        }
 
         // 3. Filter Status
         if (status != null && !status.isEmpty()) {
@@ -424,4 +445,102 @@ public class UserDAO {
         }
         return 0;
     }
+    public boolean updateStatusBulk(List<Integer> ids, boolean isActive) {
+        String sql = "UPDATE users SET is_active = ? WHERE id = ?";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = DBConnect.getConnection();
+            conn.setAutoCommit(false);
+
+            ps = conn.prepareStatement(sql);
+
+            for (Integer id : ids) {
+                ps.setInt(1, isActive ? 1 : 0);
+                ps.setInt(2, id);
+                ps.addBatch(); // Thêm vào lô xử lý
+            }
+
+            ps.executeBatch(); // Thực thi toàn bộ lô
+            conn.commit();
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                if (conn != null) conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        } finally {
+            try { if (ps != null) ps.close(); if (conn != null) conn.close(); } catch (Exception e) {}
+        }
+        return false;
+    }
+    public List<Integer> getAllCustomerIds(String search, String status, String spendingRange, String orderRange) {
+        List<Integer> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder(
+                "SELECT u.id, " +
+                        "COUNT(o.id) AS total_orders, " +
+                        "COALESCE(SUM(CASE WHEN o.status = 'completed' THEN o.total_amount ELSE 0 END), 0) AS total_spent " +
+                        "FROM users u " +
+                        "LEFT JOIN orders o ON u.id = o.user_id " +
+                        "WHERE u.role = 'customer' "
+        );
+
+        if (search != null && !search.isEmpty()) {
+            sql.append(" AND (u.email LIKE ? OR u.phone LIKE ? OR CONCAT(u.last_name, ' ', u.first_name) LIKE ?) ");
+        }
+
+        sql.append(" GROUP BY u.id HAVING 1=1 ");
+
+        if (spendingRange != null && !spendingRange.isEmpty()) {
+            if (spendingRange.contains("-")) {
+                String[] parts = spendingRange.split("-");
+                sql.append(" AND total_spent BETWEEN ").append(parts[0]).append(" AND ").append(parts[1]);
+            } else if (spendingRange.endsWith("+")) {
+                sql.append(" AND total_spent >= ").append(spendingRange.replace("+", ""));
+            }
+        }
+
+        if (orderRange != null && !orderRange.isEmpty()) {
+            if (orderRange.equals("0")) {
+                sql.append(" AND total_orders = 0 ");
+            } else if (orderRange.contains("-")) {
+                String[] parts = orderRange.split("-");
+                sql.append(" AND total_orders BETWEEN ").append(parts[0]).append(" AND ").append(parts[1]);
+            } else if (orderRange.endsWith("+")) {
+                sql.append(" AND total_orders > ").append(orderRange.replace("+", ""));
+            }
+        }
+
+        if (status != null && !status.isEmpty()) {
+            switch (status) {
+                case "inactive": sql.append(" AND u.is_active = 0 "); break;
+                case "active": sql.append(" AND u.is_active = 1 "); break;
+                case "vip": sql.append(" AND total_spent > 5000000 AND u.is_active = 1 "); break;
+                case "new": sql.append(" AND DATEDIFF(NOW(), u.created_at) < 30 AND u.is_active = 1 "); break;
+            }
+        }
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            if (search != null && !search.isEmpty()) {
+                String searchPattern = "%" + search + "%";
+                ps.setString(1, searchPattern);
+                ps.setString(2, searchPattern);
+                ps.setString(3, searchPattern);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(rs.getInt("id"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }
