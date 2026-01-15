@@ -1,11 +1,12 @@
 package backend.dao;
 
 import backend.db.DBConnect;
+import backend.model.CustomerDTO;
 import backend.model.User;
 import backend.model.enums.UserGender;
 import backend.model.enums.UserRole;
 import org.mindrot.jbcrypt.BCrypt; // Import thư viện BCrypt
-import backend.model.CustomerDTO;
+
 import java.sql.*;
 import java.util.*;
 

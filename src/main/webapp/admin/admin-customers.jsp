@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -12,158 +15,118 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+    <style>
+        .selection-alert {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #d2e3fc;
+            text-align: center;
+            font-size: 14px;
+        }
+        .selection-alert a {
+            font-weight: bold;
+            color: #1a73e8;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        .selection-alert-success {
+            background-color: #e6fffa;
+            color: #047481;
+            border-color: #b2f5ea;
+        }
+        .selection-alert-success a {
+            color: #047481;
+        }
+    </style>
 </head>
 <body>
 <div class="admin-container">
-    <!-- Sidebar -->
-    <aside class="admin-sidebar">
-        <div class="sidebar-header">
-            <div class="admin-logo">
-                <img src="../assets/images/logoweb.png" alt="Mộc Trà">
-                <h2>Mộc Trà Admin</h2>
-            </div>
-        </div>
+    <jsp:include page="/common/admin-sidebar.jsp">
+        <jsp:param name="activePage" value="customers" />
+    </jsp:include>
 
-        <nav class="admin-nav">
-            <ul>
-                <li class="nav-item">
-                    <a href="admin-dashboard.jsp">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-products.jsp">
-                        <i class="fas fa-box"></i>
-                        <span>Tất cả Sản phẩm</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-banners.jsp">
-                        <i class="fas fa-images"></i>
-                        <span>Quản lý Banner</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-categories.jsp">
-                        <i class="fas fa-sitemap"></i>
-                        <span>Danh mục Sản phẩm</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-orders.jsp">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Đơn hàng</span>
-                        <span class="badge">23</span>
-                    </a>
-                </li>
-
-                <li class="nav-item active">
-                    <a href="admin-customers.html">
-                        <i class="fas fa-users"></i>
-                        <span>Khách hàng</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-blog.jsp">
-                        <i class="fas fa-newspaper"></i>
-                        <span>Tất cả Bài viết</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-blog-categories.jsp">
-                        <i class="fas fa-folder"></i>
-                        <span>Danh mục Blog</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-        
-    <!-- Main Content -->
     <main class="admin-main">
-        <!-- Header -->
         <header class="admin-header">
             <div class="header-left">
                 <h1>Quản lý Khách hàng</h1>
             </div>
-            
+
             <div class="header-right">
-                <div class="header-search">
+                <form action="customers" method="get" class="header-search">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Tìm kiếm khách hàng...">
-                </div>
-                
+                    <input type="text" name="search" value="${paramSearch}" placeholder="Tìm kiếm khách hàng...">
+                </form>
+
                 <a href="../index.jsp" class="view-site-btn" target="_blank">
                     <i class="fas fa-external-link-alt"></i>
                     <span>Xem trang web</span>
                 </a>
             </div>
         </header>
-        
-        <!-- Content -->
+
         <div class="admin-content">
-            <!-- Page Header -->
             <div class="page-header">
                 <div class="page-title">
                     <h2>Danh sách khách hàng</h2>
                     <p>Quản lý thông tin và hoạt động của khách hàng</p>
                 </div>
             </div>
-            
-            <!-- Filters -->
-            <div class="filters-section">
+
+            <form action="customers" method="get" class="filters-section">
+                <input type="hidden" name="search" value="${paramSearch}">
+
                 <div class="filters-grid">
                     <div class="filter-group">
                         <label for="status-filter">Trạng thái</label>
-                        <select id="status-filter" class="form-select">
+                        <select id="status-filter" name="status" class="form-select" onchange="this.form.submit()">
                             <option value="">Tất cả trạng thái</option>
-                            <option value="new">Khách hàng mới</option>
-                            <option value="active">Đang hoạt động</option>
-                            <option value="vip">VIP</option>
-                            <option value="inactive">Không hoạt động</option>
+                            <option value="new" ${paramStatus == 'new' ? 'selected' : ''}>Khách hàng mới</option>
+                            <option value="active" ${paramStatus == 'active' ? 'selected' : ''}>Đang hoạt động</option>
+                            <option value="vip" ${paramStatus == 'vip' ? 'selected' : ''}>VIP</option>
+                            <option value="inactive" ${paramStatus == 'inactive' ? 'selected' : ''}>Không hoạt động</option>
                         </select>
                     </div>
-                    
+
                     <div class="filter-group">
                         <label for="orders-filter">Số đơn hàng</label>
-                        <select id="orders-filter" class="form-select">
+                        <select id="orders-filter" name="orders" class="form-select" onchange="this.form.submit()">
                             <option value="">Tất cả</option>
-                            <option value="0">Chưa mua hàng</option>
-                            <option value="1-5">1-5 đơn</option>
-                            <option value="6-10">6-10 đơn</option>
-                            <option value="10+">Trên 10 đơn</option>
+                            <option value="0" ${paramOrders == '0' ? 'selected' : ''}>Chưa mua hàng</option>
+                            <option value="1-5" ${paramOrders == '1-5' ? 'selected' : ''}>1-5 đơn</option>
+                            <option value="6-10" ${paramOrders == '6-10' ? 'selected' : ''}>6-10 đơn</option>
+                            <option value="10+" ${paramOrders == '10+' ? 'selected' : ''}>Trên 10 đơn</option>
                         </select>
                     </div>
-                    
+
                     <div class="filter-group">
                         <label for="spending-filter">Tổng chi tiêu</label>
-                        <select id="spending-filter" class="form-select">
+                        <select id="spending-filter" name="spending" class="form-select" onchange="this.form.submit()">
                             <option value="">Tất cả</option>
-                            <option value="0-500000">Dưới 500.000₫</option>
-                            <option value="500000-1000000">500.000₫ - 1.000.000₫</option>
-                            <option value="1000000+">Trên 1.000.000₫</option>
+                            <option value="0-500000" ${paramSpending == '0-500000' ? 'selected' : ''}>Dưới 500.000₫</option>
+                            <option value="500000-1000000" ${paramSpending == '500000-1000000' ? 'selected' : ''}>500.000₫ - 1.000.000₫</option>
+                            <option value="1000000+" ${paramSpending == '1000000+' ? 'selected' : ''}>Trên 1.000.000₫</option>
                         </select>
                     </div>
-                    
+
                     <div class="filter-group">
                         <label for="sort-filter">Sắp xếp</label>
-                        <select id="sort-filter" class="form-select">
-                            <option value="newest">Mới nhất</option>
-                            <option value="oldest">Cũ nhất</option>
-                            <option value="name-asc">Tên A-Z</option>
-                            <option value="name-desc">Tên Z-A</option>
-                            <option value="orders-desc">Nhiều đơn hàng</option>
-                            <option value="spending-desc">Chi tiêu cao</option>
+                        <select id="sort-filter" name="sort" class="form-select" onchange="this.form.submit()">
+                            <option value="newest" ${paramSort == 'newest' ? 'selected' : ''}>Mới nhất</option>
+                            <option value="oldest" ${paramSort == 'oldest' ? 'selected' : ''}>Cũ nhất</option>
+                            <option value="name-asc" ${paramSort == 'name-asc' ? 'selected' : ''}>Tên A-Z</option>
+                            <option value="name-desc" ${paramSort == 'name-desc' ? 'selected' : ''}>Tên Z-A</option>
+                            <option value="orders-desc" ${paramSort == 'orders-desc' ? 'selected' : ''}>Nhiều đơn hàng</option>
+                            <option value="spending-desc" ${paramSort == 'spending-desc' ? 'selected' : ''}>Chi tiêu cao</option>
                         </select>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Bulk Actions Bar -->
+            </form>
+
             <div class="bulk-actions-bar" id="bulkActionsBar">
                 <input type="checkbox" class="product-checkbox" id="selectAllCustomers">
                 <span class="bulk-actions-info">
@@ -188,69 +151,100 @@
                     </button>
                 </div>
             </div>
-            
-            <!-- Customers Container -->
+
+            <div id="selectPageAlert" class="selection-alert" style="display:none;">
+                Bạn đã chọn tất cả <strong><span id="currentPageCount">0</span></strong> khách hàng trên trang này.
+                <c:if test="${totalCustomers > customers.size()}">
+                    <a onclick="switchToSelectAllMode()">Chọn tất cả <strong>${totalCustomers}</strong> khách hàng trong danh sách?</a>
+                </c:if>
+            </div>
+
+            <div id="selectAllAlert" class="selection-alert selection-alert-success" style="display:none;">
+                Tất cả <strong>${totalCustomers}</strong> khách hàng trong danh sách đã được chọn.
+                <a onclick="cancelSelection()">Hủy chọn</a>
+            </div>
             <div class="products-container">
                 <div class="table-header">
-                    <div class="products-count">Tổng cộng: <strong>348 khách hàng</strong></div>
+                    <div class="products-count">Tổng cộng: <strong>${totalCustomers} khách hàng</strong></div>
                 </div>
-                
-                <!-- Customers Table -->
+
                 <div class="table-responsive">
                     <table class="orders-table">
                         <thead>
-                            <tr>
-                                <th style="width: 50px;">
-                                    <input type="checkbox" class="product-checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)">
-                                </th>
-                                <th>Tên khách hàng</th>
-                                <th style="width: 200px;">Email / SĐT</th>
-                                <th style="width: 100px;">Đơn hàng</th>
-                                <th style="width: 130px;">Tổng chi tiêu</th>
-                                <th style="width: 150px;">Ngày tham gia</th>
-                                <th style="width: 150px;">Lần mua cuối</th>
-                                <th style="width: 120px;">Trạng thái</th>
-                                <th style="width: 130px; text-align: center;">Hành động</th>
-                            </tr>
+                        <tr>
+                            <th style="width: 50px;">
+                                <input type="checkbox" class="product-checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)">
+                            </th>
+                            <th>Tên khách hàng</th>
+                            <th style="width: 200px;">Email / SĐT</th>
+                            <th style="width: 100px;">Đơn hàng</th>
+                            <th style="width: 130px;">Tổng chi tiêu</th>
+                            <th style="width: 150px;">Ngày tham gia</th>
+                            <th style="width: 150px;">Lần mua cuối</th>
+                            <th style="width: 120px;">Trạng thái</th>
+                            <th style="width: 130px; text-align: center;">Hành động</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <!-- Customer 1 -->
+                        <c:forEach var="c" items="${customers}">
                             <tr>
                                 <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
+                                    <input type="checkbox" class="product-checkbox row-checkbox" value="${c.id}" onchange="updateBulkActions()">
                                 </td>
                                 <td>
-                                    <div class="product-name-cell">Nguyễn Văn A</div>
-                                    <div class="product-description-cell">Địa chỉ: Hà Nội</div>
+                                    <div class="product-name-cell">${c.fullName}</div>
+                                    <div class="product-description-cell">Địa chỉ: ${c.province != null ? c.province : 'Chưa cập nhật'}</div>
                                 </td>
                                 <td>
-                                    <div class="product-name-cell">nguyenvana@email.com</div>
-                                    <div class="product-description-cell">0901234567</div>
+                                    <div class="product-name-cell">${c.email}</div>
+                                    <div class="product-description-cell">${c.phone}</div>
                                 </td>
                                 <td>
-                                    <span class="product-stock-high">15</span>
+                                        <span class="${c.totalOrders > 5 ? 'product-stock-high' : 'product-stock-low'}">
+                                                ${c.totalOrders}
+                                        </span>
                                 </td>
                                 <td>
-                                    <div class="product-price-main">2,500,000₫</div>
+                                    <div class="product-price-main">${c.totalSpentFormatted}</div>
                                 </td>
                                 <td>
                                     <div class="date-info">
-                                        <strong>15/08/2024</strong>
+                                        <strong><fmt:formatDate value="${c.joinDate}" pattern="dd/MM/yyyy"/></strong>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="date-info">
-                                        <strong>12/11/2025</strong>
+                                        <strong>
+                                            <c:choose>
+                                                <c:when test="${not empty c.lastOrderDate}">
+                                                    <fmt:formatDate value="${c.lastOrderDate}" pattern="dd/MM/yyyy"/>
+                                                </c:when>
+                                                <c:otherwise>---</c:otherwise>
+                                            </c:choose>
+                                        </strong>
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="status-badge status-vip">VIP</span>
+                                    <c:choose>
+                                        <c:when test="${c.statusLabel == 'VIP'}">
+                                            <span class="status-badge status-vip">VIP</span>
+                                        </c:when>
+                                        <c:when test="${c.statusLabel == 'Mới'}">
+                                            <span class="status-badge status-new">Mới</span>
+                                        </c:when>
+                                        <c:when test="${c.statusLabel == 'Không hoạt động'}">
+                                            <span class="status-badge status-inactive">Không hoạt động</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="status-badge status-active">Hoạt động</span>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </td>
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
+                                        <a href="customer-detail?id=${c.id}" class="btn-action" title="Xem chi tiết" style="display:inline-flex; align-items:center; justify-content:center; text-decoration:none; color:inherit;">
                                             <i class="fas fa-eye"></i>
-                                        </button>
+                                        </a>
                                         <button class="btn-action" title="Chỉnh sửa">
                                             <i class="fas fa-edit"></i>
                                         </button>
@@ -260,261 +254,55 @@
                                     </div>
                                 </td>
                             </tr>
-                            
-                            <!-- Customer 2 -->
+                        </c:forEach>
+                        <c:if test="${empty customers}">
                             <tr>
-                                <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Trần Thị B</div>
-                                    <div class="product-description-cell">Địa chỉ: TP.HCM</div>
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">tranthib@email.com</div>
-                                    <div class="product-description-cell">0912345678</div>
-                                </td>
-                                <td>
-                                    <span class="product-stock-high">8</span>
-                                </td>
-                                <td>
-                                    <div class="product-price-main">1,200,000₫</div>
-                                </td>
-                                <td>
-                                    <div class="date-info">
-                                        <strong>02/10/2024</strong>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="date-info">
-                                        <strong>10/11/2025</strong>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-active">Hoạt động</span>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
+                                <td colspan="9" style="text-align: center; padding: 30px;">
+                                    Không tìm thấy khách hàng nào phù hợp với điều kiện lọc.
                                 </td>
                             </tr>
-                            
-                            <!-- Customer 3 -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Lê Văn C</div>
-                                    <div class="product-description-cell">Địa chỉ: Đà Nẵng</div>
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">levanc@email.com</div>
-                                    <div class="product-description-cell">0923456789</div>
-                                </td>
-                                <td>
-                                    <span class="product-stock-low">2</span>
-                                </td>
-                                <td>
-                                    <div class="product-price-main">320,000₫</div>
-                                </td>
-                                <td>
-                                    <div class="date-info">
-                                        <strong>01/11/2025</strong>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="date-info">
-                                        <strong>08/11/2025</strong>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-new">Mới</span>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Customer 4 -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Phạm Thị D</div>
-                                    <div class="product-description-cell">Địa chỉ: Cần Thơ</div>
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">phamthid@email.com</div>
-                                    <div class="product-description-cell">0934567890</div>
-                                </td>
-                                <td>
-                                    <span class="product-stock-high">6</span>
-                                </td>
-                                <td>
-                                    <div class="product-price-main">850,000₫</div>
-                                </td>
-                                <td>
-                                    <div class="date-info">
-                                        <strong>20/09/2024</strong>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="date-info">
-                                        <strong>05/11/2025</strong>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-active">Hoạt động</span>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Customer 5 -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Hoàng Văn E</div>
-                                    <div class="product-description-cell">Địa chỉ: Hải Phòng</div>
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">hoangvane@email.com</div>
-                                    <div class="product-description-cell">0945678901</div>
-                                </td>
-                                <td>
-                                    <span class="product-stock-low">3</span>
-                                </td>
-                                <td>
-                                    <div class="product-price-main">450,000₫</div>
-                                </td>
-                                <td>
-                                    <div class="date-info">
-                                        <strong>05/07/2024</strong>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="date-info">
-                                        <strong>15/08/2024</strong>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-inactive">Không hoạt động</span>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Customer 6 -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Ngô Thị F</div>
-                                    <div class="product-description-cell">Địa chỉ: Bình Dương</div>
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">ngothif@email.com</div>
-                                    <div class="product-description-cell">0956789012</div>
-                                </td>
-                                <td>
-                                    <span class="product-stock-high">22</span>
-                                </td>
-                                <td>
-                                    <div class="product-price-main">3,800,000₫</div>
-                                </td>
-                                <td>
-                                    <div class="date-info">
-                                        <strong>10/06/2024</strong>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="date-info">
-                                        <strong>14/11/2025</strong>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-vip">VIP</span>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                        </c:if>
+
                         </tbody>
                     </table>
                 </div>
-                
-                <!-- Pagination -->
+
                 <div class="pagination-container">
                     <div class="pagination-info">
-                        Hiển thị <strong>1-6</strong> trong tổng số <strong>348</strong> khách hàng
+                        <%-- Tính toán số thứ tự hiển thị --%>
+                        <c:set var="startIdx" value="${(currentPage - 1) * 10 + 1}" />
+                        <c:set var="endIdx" value="${startIdx + customers.size() - 1}" />
+                        <c:if test="${totalCustomers == 0}">
+                            <c:set var="startIdx" value="0" />
+                            <c:set var="endIdx" value="0" />
+                        </c:if>
+
+                        Hiển thị <strong>${startIdx}-${endIdx}</strong> trong tổng số <strong>${totalCustomers}</strong> khách hàng
                     </div>
+
                     <div class="pagination">
-                        <a href="#" class="page-btn disabled">
-                            <i class="fas fa-chevron-left"></i>
-                        </a>
-                        <a href="#" class="page-btn active">1</a>
-                        <a href="#" class="page-btn">2</a>
-                        <a href="#" class="page-btn">3</a>
-                        <a href="#" class="page-btn">4</a>
-                        <a href="#" class="page-btn">
-                            <i class="fas fa-chevron-right"></i>
-                        </a>
+                        <c:if test="${currentPage > 1}">
+                            <a href="customers?page=${currentPage - 1}&search=${paramSearch}&status=${paramStatus}&sort=${paramSort}" class="page-btn">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </c:if>
+                        <c:if test="${currentPage <= 1}">
+                            <span class="page-btn disabled"><i class="fas fa-chevron-left"></i></span>
+                        </c:if>
+
+                        <c:forEach begin="1" end="${totalPages}" var="i">
+                            <a href="customers?page=${i}&search=${paramSearch}&status=${paramStatus}&sort=${paramSort}"
+                               class="page-btn ${currentPage == i ? 'active' : ''}">${i}</a>
+                        </c:forEach>
+
+                        <c:if test="${currentPage < totalPages}">
+                            <a href="customers?page=${currentPage + 1}&search=${paramSearch}&status=${paramStatus}&sort=${paramSort}" class="page-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </c:if>
+                        <c:if test="${currentPage >= totalPages}">
+                            <span class="page-btn disabled"><i class="fas fa-chevron-right"></i></span>
+                        </c:if>
                     </div>
                 </div>
             </div>
@@ -523,126 +311,184 @@
 </div>
 
 <script>
-    // Toggle select all checkboxes
+    const TOTAL_CUSTOMERS = ${totalCustomers};
+    const CURRENT_PAGE_SIZE = document.querySelectorAll('.row-checkbox').length;
+    // Kiểm tra xem người dùng có đang ở chế độ "Chọn tất cả Database" không
+    function checkSelectAllMode() {
+        const isGlobal = sessionStorage.getItem('adminCustomerSelectAllMode') === 'true';
+        if (isGlobal) {
+            // Tích hết checkbox hiện tại
+            document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = true);
+            document.getElementById('selectAllCheckbox').checked = true;
+            document.getElementById('selectAllCustomers').checked = true;
+
+            // Hiển thị thông báo "Đã chọn tất cả"
+            document.getElementById('selectAllAlert').style.display = 'block';
+            document.getElementById('selectPageAlert').style.display = 'none';
+
+            //Cập nhật số lượng hiển thị
+            document.getElementById('selectedCount').innerText = TOTAL_CUSTOMERS;
+            document.getElementById('bulkActionsBar').classList.add('active');
+        } else {
+            document.getElementById('selectAllAlert').style.display = 'none';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        checkSelectAllMode();
+    });
+
+    // 1. Khi bấm checkbox ở tiêu đề bảng
     function toggleSelectAll(checkbox) {
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const bulkActionsCheckbox = document.getElementById('selectAllCustomers');
-        
+
+        // Tích/Bỏ tích tất cả checkbox trên trang hiện tại
         rowCheckboxes.forEach(cb => {
             cb.checked = checkbox.checked;
         });
-        
         bulkActionsCheckbox.checked = checkbox.checked;
+
+        if (checkbox.checked) {
+            // Nếu tích chọn: Kiểm tra xem có cần hiện gợi ý chọn Database không
+            if (TOTAL_CUSTOMERS > CURRENT_PAGE_SIZE) {
+                // Hiện thông báo: "Bạn đã chọn 10 người. Chọn tất cả 50 người?"
+                document.getElementById('selectPageAlert').style.display = 'block';
+                document.getElementById('currentPageCount').innerText = CURRENT_PAGE_SIZE;
+            }
+        } else {
+            // Nếu bỏ tích: Hủy chế độ chọn tất cả
+            cancelSelection();
+        }
+
         updateBulkActions();
     }
-    
-    // Update bulk actions bar
-    function updateBulkActions() {
+
+    // 2. Khi người dùng bấm vào dòng chữ "Chọn tất cả X khách hàng trong danh sách"
+    function switchToSelectAllMode() {
+        sessionStorage.setItem('adminCustomerSelectAllMode', 'true');
+        document.getElementById('selectPageAlert').style.display = 'none';
+        document.getElementById('selectAllAlert').style.display = 'block';
+        document.getElementById('selectedCount').innerText = TOTAL_CUSTOMERS;
+    }
+
+    // 3. Khi người dùng bấm Hủy chọn hoặc bỏ tích
+    function cancelSelection() {
+        // Xóa trạng thái trong Session Storage
+        sessionStorage.removeItem('adminCustomerSelectAllMode');
+
+        // Bỏ tích giao diện
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const selectAllCheckbox = document.getElementById('selectAllCheckbox');
         const bulkActionsCheckbox = document.getElementById('selectAllCustomers');
+
+        rowCheckboxes.forEach(cb => cb.checked = false);
+        selectAllCheckbox.checked = false;
+        bulkActionsCheckbox.checked = false;
+        document.getElementById('selectPageAlert').style.display = 'none';
+        document.getElementById('selectAllAlert').style.display = 'none';
+
+        updateBulkActions();
+    }
+
+    // 4. Cập nhật thanh công cụ
+    function updateBulkActions() {
+        if (sessionStorage.getItem('adminCustomerSelectAllMode') === 'true') {
+            document.getElementById('bulkActionsBar').classList.add('active');
+            return;
+        }
+
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const bulkActionsBar = document.getElementById('bulkActionsBar');
         const selectedCount = document.getElementById('selectedCount');
-        
         const checkedCount = Array.from(rowCheckboxes).filter(cb => cb.checked).length;
-        const totalCount = rowCheckboxes.length;
-        
-        // Update count
+
         selectedCount.textContent = checkedCount;
-        
-        // Show/hide bulk actions bar
+
         if (checkedCount > 0) {
             bulkActionsBar.classList.add('active');
         } else {
             bulkActionsBar.classList.remove('active');
-        }
-        
-        // Update select all checkbox state
-        if (checkedCount === totalCount) {
-            selectAllCheckbox.checked = true;
-            bulkActionsCheckbox.checked = true;
-            selectAllCheckbox.indeterminate = false;
-        } else if (checkedCount > 0) {
-            selectAllCheckbox.checked = false;
-            bulkActionsCheckbox.checked = false;
-            selectAllCheckbox.indeterminate = true;
-        } else {
-            selectAllCheckbox.checked = false;
-            bulkActionsCheckbox.checked = false;
-            selectAllCheckbox.indeterminate = false;
+            document.getElementById('selectPageAlert').style.display = 'none';
         }
     }
-    
-    // Sync bulk actions bar checkbox with table header checkbox
+
     document.getElementById('selectAllCustomers').addEventListener('change', function() {
         const selectAllCheckbox = document.getElementById('selectAllCheckbox');
         selectAllCheckbox.checked = this.checked;
         toggleSelectAll(this);
     });
-    
-    // Bulk actions functions
-    function bulkActivate() {
-        const selectedCustomers = getSelectedCustomers();
-        if (selectedCustomers.length === 0) return;
-        
-        if (confirm(`Bạn có chắc muốn kích hoạt ${selectedCustomers.length} khách hàng đã chọn?`)) {
-            console.log('Activating customers:', selectedCustomers);
-            // Add your activation logic here
-            alert(`Đã kích hoạt ${selectedCustomers.length} khách hàng!`);
-            cancelSelection();
-        }
-    }
-    
-    function bulkDeactivate() {
-        const selectedCustomers = getSelectedCustomers();
-        if (selectedCustomers.length === 0) return;
-        
-        if (confirm(`Bạn có chắc muốn vô hiệu hóa ${selectedCustomers.length} khách hàng đã chọn?`)) {
-            console.log('Deactivating customers:', selectedCustomers);
-            // Add your deactivation logic here
-            alert(`Đã vô hiệu hóa ${selectedCustomers.length} khách hàng!`);
-            cancelSelection();
-        }
-    }
-    
-    function bulkDelete() {
-        const selectedCustomers = getSelectedCustomers();
-        if (selectedCustomers.length === 0) return;
-        
-        if (confirm(`CẢNH BÁO: Bạn có chắc muốn xóa ${selectedCustomers.length} khách hàng đã chọn? Hành động này không thể hoàn tác!`)) {
-            console.log('Deleting customers:', selectedCustomers);
-            // Add your deletion logic here
-            alert(`Đã xóa ${selectedCustomers.length} khách hàng!`);
-            cancelSelection();
-        }
-    }
-    
-    function cancelSelection() {
-        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-        const selectAllCheckbox = document.getElementById('selectAllCheckbox');
-        const bulkActionsCheckbox = document.getElementById('selectAllCustomers');
-        
-        rowCheckboxes.forEach(cb => {
-            cb.checked = false;
-        });
-        
-        selectAllCheckbox.checked = false;
-        bulkActionsCheckbox.checked = false;
-        selectAllCheckbox.indeterminate = false;
-        updateBulkActions();
-    }
-    
+
     function getSelectedCustomers() {
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const selected = [];
-        
-        rowCheckboxes.forEach((checkbox, index) => {
+        rowCheckboxes.forEach((checkbox) => {
             if (checkbox.checked) {
-                selected.push(index);
+                selected.push(checkbox.value);
             }
         });
-        
         return selected;
+    }
+    // --- XỬ LÝ GỬI REQUEST AJAX ---
+    function sendBulkRequest(action, actionName) {
+        const isGlobalMode = sessionStorage.getItem('adminCustomerSelectAllMode') === 'true';
+        let count = 0;
+
+        const params = new URLSearchParams();
+        params.append('action', action);
+
+        if (isGlobalMode) {
+            count = TOTAL_CUSTOMERS;
+            params.append('selectAll', 'true');
+            params.append('search', '${paramSearch}');
+            params.append('status', '${paramStatus}');
+            params.append('spending', '${paramSpending}');
+            params.append('orders', '${paramOrders}');
+        } else {
+            const selectedIds = getSelectedCustomers();
+            if (selectedIds.length === 0) return;
+            count = selectedIds.length;
+            params.append('selectAll', 'false');
+            params.append('ids', selectedIds.join(','));
+        }
+
+        if (confirm(`Bạn có chắc muốn ${actionName} ${count} khách hàng?`)) {
+            fetch('customers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`Đã ${actionName} thành công!`);
+                        // Sau khi thành công thì nên hủy chế độ chọn tất cả
+                        sessionStorage.removeItem('adminCustomerSelectAllMode');
+                        location.reload();
+                    } else {
+                        alert('Có lỗi xảy ra: ' + (data.message || 'Lỗi không xác định'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Lỗi kết nối đến máy chủ.');
+                });
+        }
+    }
+
+    function bulkActivate() {
+        sendBulkRequest('activate', 'kích hoạt');
+    }
+
+    function bulkDeactivate() {
+        sendBulkRequest('deactivate', 'vô hiệu hóa');
+    }
+
+    function bulkDelete() {
+        if (confirm("LƯU Ý: Khách hàng sẽ được chuyển sang trạng thái 'Vô hiệu hóa' (Xóa mềm).")) {
+            sendBulkRequest('deactivate', 'vô hiệu hóa');
+        }
     }
 </script>
 </body>
