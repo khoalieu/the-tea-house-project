@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%-- Bổ sung thư viện fmt để định dạng tiền tệ --%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <div class="top-bar">
     <div class="container">
@@ -94,37 +96,79 @@
                     </button>
                     <input type="text" name="search" placeholder="Bạn muốn tìm gì...">
                 </form>
-
                 <div class="cart-container">
+                    <%-- 1. Phần hiển thị Text và Icon (Trigger để hover) --%>
                     <span class="cart-text">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <span>
-                            <a href="${pageContext.request.contextPath}/gio-hang.jsp">
-                                Giỏ Hàng (${sessionScope.cart != null ? sessionScope.cart.totalItems : 0})
-                            </a>
-                        </span>
-                    </span>
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span>
+            <a href="${pageContext.request.contextPath}/gio-hang" style="color: inherit; text-decoration: none;">
+                Giỏ Hàng (${sessionScope.cart != null ? sessionScope.cart.totalQuantity : 0})
+            </a>
+        </span>
+    </span>
 
+                    <%-- 2. Phần Dropdown xổ xuống --%>
                     <div class="cart-dropdown">
                         <div class="cart-dropdown-header">
                             <h3>Giỏ hàng của bạn</h3>
                         </div>
-                        <div class="cart-items">
-                            <c:if test="${sessionScope.cart == null || sessionScope.cart.totalItems == 0}">
+
+                        <div class="cart-items" style="max-height: 300px; overflow-y: auto;">
+                            <%-- Kiểm tra giỏ hàng trống --%>
+                            <c:if test="${sessionScope.cart == null || sessionScope.cart.items.size() == 0}">
                                 <p style="padding: 20px; text-align: center; color: #666;">
                                     Giỏ hàng đang trống
                                 </p>
                             </c:if>
+
+                            <%-- Duyệt danh sách sản phẩm --%>
+                            <c:forEach var="item" items="${sessionScope.cart.items}">
+                                <div class="cart-item">
+                                    <img src="${item.product.imageUrl}" alt="${item.product.name}"
+                                         onerror="this.src='${pageContext.request.contextPath}/assets/images/no-image.png'">
+
+                                    <div class="cart-item-info">
+                                        <h4>
+                                            <a href="chi-tiet-san-pham?id=${item.product.id}" style="color: inherit; text-decoration: none;">
+                                                    ${item.product.name}
+                                            </a>
+                                        </h4>
+                                        <p class="cart-item-quantity">
+                                                ${item.quantity} ×
+                                            <span class="cart-item-price">
+                                <c:choose>
+                                    <c:when test="${item.product.salePrice > 0}">
+                                        <fmt:formatNumber value="${item.product.salePrice}" type="currency"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <fmt:formatNumber value="${item.product.price}" type="currency"/>
+                                    </c:otherwise>
+                                </c:choose>
+                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </c:forEach>
                         </div>
+
                         <div class="cart-dropdown-footer">
+                            <%-- Hiển thị Tổng tiền --%>
+                            <c:if test="${sessionScope.cart != null && sessionScope.cart.items.size() > 0}">
+                                <div class="cart-total">
+                                    <span>Tổng tiền:</span>
+                                    <span class="total-price">
+                        <fmt:formatNumber value="${sessionScope.cart.totalMoney}" type="currency"/>
+                    </span>
+                                </div>
+                            </c:if>
+
                             <div class="cart-actions">
-                                <a href="${pageContext.request.contextPath}/gio-hang.jsp" class="btn-view-cart">XEM GIỎ HÀNG</a>
-                                <a href="${pageContext.request.contextPath}/thanh-toan.jsp" class="btn-checkout">THANH TOÁN</a>
+                                <a href="${pageContext.request.contextPath}/gio-hang" class="btn-view-cart">XEM GIỎ HÀNG</a>
+                                <a href="${pageContext.request.contextPath}/thanh-toan" class="btn-checkout">THANH TOÁN</a>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="user-account">
                     <span class="user-icons">
                         <i class="fa-solid fa-user"></i>
@@ -132,7 +176,6 @@
 
                     <div class="user-dropdown">
                         <c:choose>
-                            <%-- Đã đăng nhập --%>
                             <c:when test="${not empty sessionScope.user}">
                                 <div style="padding: 10px; border-bottom: 1px solid #eee;">
                                     Xin chào, <strong>${sessionScope.user.lastName} ${sessionScope.user.firstName}</strong>
@@ -141,8 +184,6 @@
                                 <a href="${pageContext.request.contextPath}/don-hang-nguoi-dung.jsp">Đơn mua</a>
                                 <a href="${pageContext.request.contextPath}/logout" style="color: red;">Đăng xuất</a>
                             </c:when>
-
-                            <%-- Chưa đăng nhập --%>
                             <c:otherwise>
                                 <a href="${pageContext.request.contextPath}/login.jsp">Đăng nhập</a>
                                 <a href="${pageContext.request.contextPath}/signup.jsp">Đăng ký</a>
@@ -155,4 +196,3 @@
         </div>
     </div>
 </header>
-

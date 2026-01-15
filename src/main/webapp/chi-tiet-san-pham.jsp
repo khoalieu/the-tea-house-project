@@ -39,9 +39,9 @@
 
             <div class="product-info">
                 <c:if test="${product.salePrice > 0 && product.salePrice < product.price}">
-                    <span class="sale-tag">
-                        -<fmt:formatNumber value="${(product.price - product.salePrice) / product.price * 100}" maxFractionDigits="0"/>%
-                    </span>
+        <span class="sale-tag">
+            -<fmt:formatNumber value="${(product.price - product.salePrice) / product.price * 100}" maxFractionDigits="0"/>%
+        </span>
                 </c:if>
 
                 <h1>${product.name}</h1>
@@ -61,15 +61,24 @@
 
                 <p class="short-description">${product.shortDescription}</p>
 
-                <div class="quantity-selector">
-                    <label for="quantity">Số lượng:</label>
-                    <input type="number" id="quantity" value="1" min="1" max="${product.stockQuantity}">
-                    <span style="font-size: 0.8rem; color: #888; margin-left: 10px;">(Còn ${product.stockQuantity} sản phẩm)</span>
-                </div>
+                <form action="gio-hang" method="post" style="margin: 0; padding: 0;">
+                    <input type="hidden" name="action" value="add">
 
-                <a href="add-to-cart?id=${product.id}&qty=1" class="cta-button add-to-cart-btn" onclick="addToCartJS(event)">
-                    <i class="fa-solid fa-cart-plus"></i> Thêm vào giỏ hàng
-                </a>
+                    <input type="hidden" name="productId" value="${product.id}">
+
+                    <div class="quantity-selector">
+                        <label for="quantity">Số lượng:</label>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="${product.stockQuantity}">
+
+                        <span style="font-size: 0.8rem; color: #888; margin-left: 10px;">
+                (Còn ${product.stockQuantity} sản phẩm)
+            </span>
+                    </div>
+
+                    <button type="submit" class="cta-button add-to-cart-btn">
+                        <i class="fa-solid fa-cart-plus"></i> Thêm vào giỏ hàng
+                    </button>
+                </form>
             </div>
         </section>
 
