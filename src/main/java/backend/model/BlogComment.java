@@ -10,7 +10,7 @@ public class BlogComment {
     private Integer userId;
     private String commentText;
     private LocalDateTime createdAt;
-
+    private String postTitle;
     public BlogComment() {}
 
     public BlogComment(Integer id, Integer postId, Integer userId, String commentText, LocalDateTime createdAt) {
@@ -39,4 +39,6 @@ public class BlogComment {
     public Date getCreatedAtDate() {
         return createdAt == null ? null : Timestamp.valueOf(createdAt);
     }
+    public String getPostTitle() { return postTitle; }
+    public void setPostTitle(String postTitle) { this.postTitle = postTitle; }
 }

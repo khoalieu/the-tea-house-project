@@ -82,5 +82,37 @@ public class BlogCommentDAO {
         }
         return false;
     }
+    public List<BlogComment> getByUserId(int userId) {
+        List<BlogComment> list = new ArrayList<>();
+        String sql = "SELECT c.*, p.title AS post_title " +
+                "FROM blog_comments c " +
+                "JOIN blog_posts p ON c.post_id = p.id " +
+                "WHERE c.user_id = ? ORDER BY c.created_at DESC";
 
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    BlogComment c = new BlogComment();
+                    c.setId(rs.getInt("id"));
+                    c.setPostId(rs.getInt("post_id"));
+                    c.setUserId(rs.getInt("user_id"));
+                    c.setCommentText(rs.getString("comment_text"));
+
+                    Timestamp ts = rs.getTimestamp("created_at");
+                    if (ts != null) c.setCreatedAt(ts.toLocalDateTime());
+
+                    c.setPostTitle(rs.getString("post_title"));
+
+                    list.add(c);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }
+
