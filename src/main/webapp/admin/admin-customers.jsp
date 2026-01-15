@@ -242,7 +242,7 @@
                                 </td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="customer-detail?id=${c.id}" class="btn-action" title="Xem chi tiết" style="display:inline-flex; align-items:center; justify-content:center; text-decoration:none; color:inherit;">
+                                        <a href="${pageContext.request.contextPath}/admin/customer/detail?id=${c.id}" class="btn-action" title="Xem chi tiết" style="display:inline-flex; align-items:center; justify-content:center; text-decoration:none; color:inherit;">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <button class="btn-action" title="Chỉnh sửa">
