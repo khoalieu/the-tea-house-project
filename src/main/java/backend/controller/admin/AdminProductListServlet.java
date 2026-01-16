@@ -1,5 +1,6 @@
 package backend.controller.admin;
-
+import backend.dao.PromotionDAO;
+import backend.model.Promotion;
 import backend.dao.CategoryDAO;
 import backend.dao.ProductDAO;
 import backend.model.Category;
@@ -19,11 +20,13 @@ public class AdminProductListServlet extends HttpServlet {
 
     private ProductDAO productDAO;
     private CategoryDAO categoryDAO;
+    private PromotionDAO promotionDAO;
 
     @Override
     public void init() {
         productDAO = new ProductDAO();
         categoryDAO = new CategoryDAO();
+        promotionDAO = new PromotionDAO();
     }
 
     @Override
@@ -33,10 +36,14 @@ public class AdminProductListServlet extends HttpServlet {
         String sort = request.getParameter("sort");
         String pageStr = request.getParameter("page");
         String keyword = request.getParameter("keyword");
+        String status = request.getParameter("status");
 
         Integer categoryId = null;
         if (categoryIdStr != null && !categoryIdStr.isEmpty()) {
-            try { categoryId = Integer.parseInt(categoryIdStr); } catch (Exception e) {}
+            try {
+                categoryId = Integer.parseInt(categoryIdStr);
+            } catch (Exception e) {
+            }
         }
 
         Double maxPrice = null;
@@ -48,25 +55,33 @@ public class AdminProductListServlet extends HttpServlet {
 
         int page = 1;
         if (pageStr != null && !pageStr.isEmpty()) {
-            try { page = Integer.parseInt(pageStr); } catch (Exception e) {}
+            try {
+                page = Integer.parseInt(pageStr);
+            } catch (Exception e) {
+            }
         }
 
         int pageSize = 10;
 
-        List<Product> productList = productDAO.getProducts(categoryId, null, sort, maxPrice, page, pageSize);
+        List<Product> productList = productDAO.getProducts(categoryId, null, sort, maxPrice, page, pageSize, status);
 
         int totalProducts = 0;
         try {
-            totalProducts = productDAO.countProducts(categoryId, null, maxPrice);
+            totalProducts = productDAO.countProducts(categoryId, null, maxPrice, status);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
 
         List<Category> categoryList = categoryDAO.getAllCategories();
 
+        List<Promotion> activePromos = promotionDAO.getActivePromotions();
+
         request.setAttribute("productList", productList);
         request.setAttribute("categoryList", categoryList);
+        request.setAttribute("activePromos", activePromos);
+
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("totalProducts", totalProducts);
@@ -75,6 +90,7 @@ public class AdminProductListServlet extends HttpServlet {
         request.setAttribute("currentMaxPrice", maxPriceStr);
         request.setAttribute("currentSort", sort);
         request.setAttribute("currentKeyword", keyword);
+        request.setAttribute("currentStatus", status);
 
         request.getRequestDispatcher("/admin/admin-products.jsp").forward(request, response);
     }

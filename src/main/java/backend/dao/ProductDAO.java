@@ -13,57 +13,69 @@ public class ProductDAO {
 
     }
 
-    public List<Product> getProducts(Integer categoryId, Integer promotionId, String sort, Double maxPrice, int index, int size) {
+    public List<Product> getProducts(Integer categoryId, Integer promotionId, String sort, Double maxPrice, int index, int size, String status) {
         List<Product> list = new ArrayList<>();
 
-        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE status = 'active' ");
+        StringBuilder sql = new StringBuilder("SELECT p.* FROM products p ");
+
+        if (promotionId != null) {
+            sql.append(" JOIN promotion_items pi ON p.id = pi.product_id ");
+        }
+
+        sql.append(" WHERE 1=1 ");
+
         if (categoryId != null) {
-            sql.append(" AND category_id = ? ");
+            sql.append(" AND p.category_id = ? ");
         }
+
         if (maxPrice != null) {
-            sql.append(" AND (CASE WHEN sale_price > 0 THEN sale_price ELSE price END) <= ? ");
+            sql.append(" AND (CASE WHEN p.sale_price > 0 THEN p.sale_price ELSE p.price END) <= ? ");
         }
-        if (promotionId != null) sql.append(" AND pi.promotion_id = ? ");
+
+        if (promotionId != null) {
+            sql.append(" AND pi.promotion_id = ? ");
+        }
+
+        if (status != null && !status.isEmpty()) {
+            if ("active".equals(status)) sql.append(" AND p.status = 'active' ");
+            else if ("inactive".equals(status)) sql.append(" AND p.status = 'inactive' ");
+            else if ("out-of-stock".equals(status)) sql.append(" AND p.stock_quantity = 0 ");
+        }
 
         if (sort != null) {
             switch (sort) {
-                case "price-asc":
-                    sql.append(" ORDER BY price ASC ");
-                    break;
-                case "price-desc":
-                    sql.append(" ORDER BY price DESC ");
-                    break;
-                case "name-asc":
-                    sql.append(" ORDER BY name ASC ");
-                    break;
-                case "newest":
-                    sql.append(" ORDER BY created_at DESC ");
-                    break;
-                default:
-                    sql.append(" ORDER BY created_at DESC ");
+                case "price-asc": sql.append(" ORDER BY p.price ASC "); break;
+                case "price-desc": sql.append(" ORDER BY p.price DESC "); break;
+                case "name-asc": sql.append(" ORDER BY p.name ASC "); break;
+                case "newest": sql.append(" ORDER BY p.created_at DESC "); break;
+                default: sql.append(" ORDER BY p.created_at DESC ");
             }
         } else {
-            sql.append(" ORDER BY created_at DESC ");
+            sql.append(" ORDER BY p.created_at DESC ");
         }
 
         sql.append(" LIMIT ? OFFSET ?");
-
 
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
             int paramIndex = 1;
+
             if (categoryId != null) {
                 ps.setInt(paramIndex++, categoryId);
             }
-            if (maxPrice != null) ps.setDouble(paramIndex++, maxPrice);
+            if (maxPrice != null) {
+                ps.setDouble(paramIndex++, maxPrice);
+            }
+            if (promotionId != null) {
+                ps.setInt(paramIndex++, promotionId);
+            }
 
             int offset = (index - 1) * size;
             ps.setInt(paramIndex++, size);
             ps.setInt(paramIndex++, offset);
 
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
                 Product p = new Product();
                 p.setId(rs.getInt("id"));
@@ -78,6 +90,7 @@ public class ProductDAO {
                 p.setCategoryId(rs.getInt("category_id"));
                 p.setImageUrl(rs.getString("image_url"));
                 p.setBestseller(rs.getBoolean("is_bestseller"));
+
                 String statusStr = rs.getString("status");
                 if (statusStr != null) {
                     try {
@@ -89,33 +102,58 @@ public class ProductDAO {
 
                 p.setIngredients(rs.getString("ingredients"));
                 p.setUsageInstructions(rs.getString("usage_instructions"));
-
                 if (rs.getTimestamp("created_at") != null) {
                     p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
                 }
                 list.add(p);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
     }
 
-    public int countProducts(Integer categoryId, Integer promotionId, Double maxPrice) throws SQLException {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM products WHERE status = 'active' ");
+    public int countProducts(Integer categoryId, Integer promotionId, Double maxPrice, String status) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM products p ");
+
+        if (promotionId != null) {
+            sql.append(" JOIN promotion_items pi ON p.id = pi.product_id ");
+        }
+
+        sql.append(" WHERE 1=1 ");
+
         if (categoryId != null) {
-            sql.append(" AND category_id = ? ");
+            sql.append(" AND p.category_id = ? ");
         }
+
         if (maxPrice != null) {
-            sql.append(" AND (CASE WHEN sale_price > 0 THEN sale_price ELSE price END) <= ? ");
+            sql.append(" AND (CASE WHEN p.sale_price > 0 THEN p.sale_price ELSE p.price END) <= ? ");
         }
-        if (promotionId != null) sql.append(" AND pi.promotion_id = ? ");
+
+        if (promotionId != null) {
+            sql.append(" AND pi.promotion_id = ? ");
+        }
+
+        if (status != null && !status.isEmpty()) {
+            if ("active".equals(status)) sql.append(" AND p.status = 'active' ");
+            else if ("inactive".equals(status)) sql.append(" AND p.status = 'inactive' ");
+            else if ("out-of-stock".equals(status)) sql.append(" AND p.stock_quantity = 0 ");
+        }
+
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
             int paramIndex = 1;
-            if (categoryId != null) ps.setInt(paramIndex++, categoryId);
-            if (maxPrice != null) ps.setDouble(paramIndex++, maxPrice);
+
+            if (categoryId != null) {
+                ps.setInt(paramIndex++, categoryId);
+            }
+            if (maxPrice != null) {
+                ps.setDouble(paramIndex++, maxPrice);
+            }
+            if (promotionId != null) {
+                ps.setInt(paramIndex++, promotionId);
+            }
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getInt(1);
@@ -222,7 +260,7 @@ public class ProductDAO {
             int rows = ps.executeUpdate();
             if (rows > 0) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if (rs.next()) return rs.getInt(1); // Trả về ID mới
+                    if (rs.next()) return rs.getInt(1);
                 }
             }
         } catch (SQLException e) {
@@ -238,7 +276,7 @@ public class ProductDAO {
             ps.setInt(1, productId);
             ps.setString(2, imageUrl);
             ps.setString(3, altText);
-            ps.setInt(4, sortOrder);    // Lưu thứ tự sắp xếp
+            ps.setInt(4, sortOrder);
 
             ps.executeUpdate();
         } catch (SQLException e) {

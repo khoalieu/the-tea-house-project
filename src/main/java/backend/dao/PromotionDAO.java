@@ -101,4 +101,25 @@ public class PromotionDAO {
         }
         return "Chương Trình Khuyến Mãi";
     }
+    public void addProductsToPromotion(int promoId, String[] productIds) {
+        String sql = "INSERT INTO promotion_items (promotion_id, product_id) VALUES (?, ?)";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            for (String idStr : productIds) {
+                try {
+                    int pid = Integer.parseInt(idStr);
+                    ps.setInt(1, promoId);
+                    ps.setInt(2, pid);
+                    ps.addBatch();
+                } catch (NumberFormatException e) {}
+            }
+
+            ps.executeBatch();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

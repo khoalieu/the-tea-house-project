@@ -134,6 +134,16 @@
                     </div>
 
                     <div class="filter-group">
+                        <label for="status-filter">Trạng thái</label>
+                        <select name="status" id="status-filter" class="form-select" onchange="this.form.submit()">
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="active" ${currentStatus == 'active' ? 'selected' : ''}>Đang bán</option>
+                            <option value="inactive" ${currentStatus == 'inactive' ? 'selected' : ''}>Ngừng bán</option>
+                            <option value="out-of-stock" ${currentStatus == 'out-of-stock' ? 'selected' : ''}>Hết hàng</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
                         <label for="price-filter">Khoảng giá</label>
                         <select name="maxPrice" id="price-filter" class="form-select" onchange="this.form.submit()">
                             <option value="">Tất cả giá</option>
@@ -156,7 +166,37 @@
                     <input type="hidden" name="keyword" value="${currentKeyword}">
                 </div>
             </form>
+            <input type="hidden" name="keyword" value="${currentKeyword}">
+        </div>
+        </form>
 
+        <div class="bulk-actions-bar" id="bulkActionsBar">
+            <input type="checkbox" class="product-checkbox" id="selectAllProducts">
+            <span class="bulk-actions-info">
+        <strong id="selectedCount">0</strong> sản phẩm được chọn
+    </span>
+            <div class="bulk-actions-buttons">
+                <button class="btn-bulk btn-bulk-quick-discount" onclick="openQuickDiscountModal()">
+                    <i class="fas fa-percentage"></i> Giảm giá nhanh
+                </button>
+                <button class="btn-bulk btn-bulk-promo" onclick="openPromoModal()">
+                    <i class="fas fa-tags"></i> Thêm vào KM
+                </button>
+                <button class="btn-bulk btn-bulk-activate" onclick="bulkActivate()">
+                    <i class="fas fa-check-circle"></i> Kích hoạt
+                </button>
+                <button class="btn-bulk btn-bulk-deactivate" onclick="bulkDeactivate()">
+                    <i class="fas fa-ban"></i> Ngừng bán
+                </button>
+                <button class="btn-bulk btn-bulk-delete" onclick="bulkDelete()">
+                    <i class="fas fa-trash"></i> Xóa
+                </button>
+                <button class="btn-bulk btn-bulk-cancel" onclick="cancelSelection()">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+            </div>
+        </div>
+        <div class="products-container">
             <div class="products-container">
                 <div class="table-header">
                     <div class="products-count">Tổng cộng: <strong>${totalProducts} sản phẩm</strong></div>
@@ -264,6 +304,7 @@
         </div>
     </main>
 </div>
+
 <div id="promoModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -276,9 +317,10 @@
                 <label for="promoSelect">Chọn chương trình áp dụng:</label>
                 <select id="promoSelect" class="form-select full-width">
                     <option value="">-- Chọn chương trình --</option>
-                    <option value="1">🔥 Mừng lễ 8/3 (Giảm 20%)</option>
-                    <option value="2">📦 Xả kho cuối tháng (Giảm 50%)</option>
-                    <option value="3">☀️ Chào hè 2025 (Mua 1 tặng 1)</option>
+
+                    <c:forEach var="promo" items="${activePromos}">
+                        <option value="${promo.id}">🔥 ${promo.name}</option>
+                    </c:forEach>
                 </select>
             </div>
         </div>
@@ -440,9 +482,9 @@
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const selected = [];
         
-        rowCheckboxes.forEach((checkbox, index) => {
+        rowCheckboxes.forEach((checkbox) => {
             if (checkbox.checked) {
-                selected.push(index);
+                selected.push(checkbox.value);
             }
         });
         return selected;
@@ -593,6 +635,47 @@ window.onclick = function(event) {
                 })
                 .catch(error => console.error('Error:', error));
         }
+    }
+    function submitAddToPromo() {
+        const promotionId = document.getElementById('promoSelect').value;
+        const selectedProductIds = getSelectedProducts(); // Mảng ID [1, 5, 8...]
+
+        if (!promotionId) {
+            alert("Vui lòng chọn một chương trình khuyến mãi!");
+            return;
+        }
+
+        if (selectedProductIds.length === 0) {
+            alert("Vui lòng chọn sản phẩm!");
+            return;
+        }
+
+        // Gửi AJAX về Servlet AdminAddPromoServlet
+        const params = new URLSearchParams();
+        params.append('promoId', promotionId);
+        params.append('productIds', selectedProductIds.join(',')); // Biến mảng thành chuỗi "1,5,8"
+
+        fetch('${pageContext.request.contextPath}/admin/promotion/add-products', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("✅ Đã thêm sản phẩm vào chương trình thành công!");
+                    closePromoModal();
+                    cancelSelection(); // Bỏ chọn checkbox
+                    location.reload(); // Tải lại trang để cập nhật nếu cần
+                } else {
+                    alert("❌ Có lỗi xảy ra. Vui lòng thử lại.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Lỗi kết nối server.");
+            });
     }
 </script>
 </body>
