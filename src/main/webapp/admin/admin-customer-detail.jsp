@@ -70,17 +70,16 @@
                     </div>
                 </div>
                 <div class="customer-actions-top">
-                    <a href="${pageContext.request.contextPath}/admin/customers.jsp" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i>
-                        Quay lại
+                    <a href="${pageContext.request.contextPath}/admin/customers" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Quay lại
                     </a>
-                    <button class="btn btn-success" onclick="editCustomer(${customer.id})">
-                        <i class="fas fa-edit"></i>
-                        Chỉnh sửa
-                    </button>
+
+                    <a href="${pageContext.request.contextPath}/admin/customer/edit?id=${customer.id}" class="btn btn-success">
+                        <i class="fas fa-edit"></i> Chỉnh sửa
+                    </a>
+
                     <button class="btn btn-danger" onclick="deleteCustomer(${customer.id})">
-                        <i class="fas fa-trash"></i>
-                        Xóa
+                        <i class="fas fa-trash"></i> Xóa
                     </button>
                 </div>
             </div>
