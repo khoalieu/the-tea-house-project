@@ -582,7 +582,24 @@ public class UserDAO {
         }
         return list;
     }
+    public boolean updateUserByAdmin(User u) {
+        String sql = "UPDATE users SET first_name=?, last_name=?, phone=?, role=?, is_active=? WHERE id=?";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
+            ps.setString(1, u.getFirstName());
+            ps.setString(2, u.getLastName());
+            ps.setString(3, u.getPhone());
+            ps.setString(4, u.getRole().name());
+            ps.setBoolean(5, u.getIsActive());
+            ps.setInt(6, u.getId());
+
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 
 }
