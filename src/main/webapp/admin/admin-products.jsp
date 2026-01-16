@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -35,7 +37,7 @@
                 </li>
 
                 <li class="nav-item active">
-                    <a href="admin-products.jsp">
+                    <a href="${pageContext.request.contextPath}/admin/products">
                         <i class="fas fa-box"></i>
                         <span>Tất cả Sản phẩm</span>
                     </a>
@@ -107,7 +109,6 @@
         
         <!-- Content -->
         <div class="admin-content">
-            <!-- Page Header -->
             <div class="page-header">
                 <div class="page-title">
                     <h2>Danh sách sản phẩm</h2>
@@ -119,364 +120,144 @@
                     </a>
                 </div>
             </div>
-            
-            <!-- Filters -->
-            <div class="filters-section">
+
+            <form action="products" method="get" class="filters-section">
                 <div class="filters-grid">
                     <div class="filter-group">
                         <label for="category-filter">Danh mục</label>
-                        <select id="category-filter" class="form-select">
+                        <select name="categoryId" id="category-filter" class="form-select" onchange="this.form.submit()">
                             <option value="">Tất cả danh mục</option>
-                            <option value="tra-sua-nguyen-lieu">Trà sữa nguyên liệu</option>
-                            <option value="tra-thao-moc">Trà thảo mộc</option>
-                            <option value="bot-pha-che">Bột pha chế</option>
-                            <option value="phu-kien">Phụ kiện</option>
+                            <c:forEach var="cat" items="${categoryList}">
+                                <option value="${cat.id}" ${currentCategoryId == cat.id ? 'selected' : ''}>${cat.name}</option>
+                            </c:forEach>
                         </select>
                     </div>
-                    
-                    <div class="filter-group">
-                        <label for="status-filter">Trạng thái</label>
-                        <select id="status-filter" class="form-select">
-                            <option value="">Tất cả trạng thái</option>
-                            <option value="active">Đang bán</option>
-                            <option value="inactive">Ngừng bán</option>
-                            <option value="out-of-stock">Hết hàng</option>
-                        </select>
-                    </div>
-                    
+
                     <div class="filter-group">
                         <label for="price-filter">Khoảng giá</label>
-                        <select id="price-filter" class="form-select">
+                        <select name="maxPrice" id="price-filter" class="form-select" onchange="this.form.submit()">
                             <option value="">Tất cả giá</option>
-                            <option value="0-50000">Dưới 50.000₫</option>
-                            <option value="50000-100000">50.000₫ - 100.000₫</option>
-                            <option value="100000-200000">100.000₫ - 200.000₫</option>
-                            <option value="200000+">Trên 200.000₫</option>
+                            <option value="50000" ${currentMaxPrice == '50000' ? 'selected' : ''}>Dưới 50.000₫</option>
+                            <option value="100000" ${currentMaxPrice == '100000' ? 'selected' : ''}>Dưới 100.000₫</option>
+                            <option value="200000" ${currentMaxPrice == '200000' ? 'selected' : ''}>Dưới 200.000₫</option>
                         </select>
                     </div>
-                    
+
                     <div class="filter-group">
                         <label for="sort-filter">Sắp xếp</label>
-                        <select id="sort-filter" class="form-select">
-                            <option value="newest">Mới nhất</option>
-                            <option value="oldest">Cũ nhất</option>
-                            <option value="name-asc">Tên A-Z</option>
-                            <option value="name-desc">Tên Z-A</option>
-                            <option value="price-asc">Giá thấp đến cao</option>
-                            <option value="price-desc">Giá cao đến thấp</option>
+                        <select name="sort" id="sort-filter" class="form-select" onchange="this.form.submit()">
+                            <option value="newest" ${currentSort == 'newest' ? 'selected' : ''}>Mới nhất</option>
+                            <option value="price-asc" ${currentSort == 'price-asc' ? 'selected' : ''}>Giá thấp đến cao</option>
+                            <option value="price-desc" ${currentSort == 'price-desc' ? 'selected' : ''}>Giá cao đến thấp</option>
+                            <option value="name-asc" ${currentSort == 'name-asc' ? 'selected' : ''}>Tên A-Z</option>
                         </select>
                     </div>
+
+                    <input type="hidden" name="keyword" value="${currentKeyword}">
                 </div>
-            </div>
-            
-            <!-- Bulk Actions Bar -->
-            <div class="bulk-actions-bar" id="bulkActionsBar">
-                <input type="checkbox" class="product-checkbox" id="selectAllProducts">
-                <span class="bulk-actions-info">
-                    <strong id="selectedCount">0</strong> sản phẩm được chọn
-                </span>
-                <div class="bulk-actions-buttons">
-                    <button class="btn-bulk btn-bulk-quick-discount" onclick="openQuickDiscountModal()">
-                        <i class="fas fa-percentage"></i>
-                        Giảm giá nhanh
-                    </button>
-                    <button class="btn-bulk btn-bulk-promo" onclick="openPromoModal()">
-                        <i class="fas fa-tags"></i>
-                        Thêm vào KM
-                    </button>
-                    <button class="btn-bulk btn-bulk-activate" onclick="bulkActivate()">
-                        <i class="fas fa-check-circle"></i>
-                        Kích hoạt
-                    </button>
-                    <button class="btn-bulk btn-bulk-deactivate" onclick="bulkDeactivate()">
-                        <i class="fas fa-ban"></i>
-                        Ngừng bán
-                    </button>
-                    <button class="btn-bulk btn-bulk-delete" onclick="bulkDelete()">
-                        <i class="fas fa-trash"></i>
-                        Xóa
-                    </button>
-                    <button class="btn-bulk btn-bulk-cancel" onclick="cancelSelection()">
-                        <i class="fas fa-times"></i>
-                        Hủy
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Products Container -->
+            </form>
+
             <div class="products-container">
                 <div class="table-header">
-                    <div class="products-count">Tổng cộng: <strong>24 sản phẩm</strong></div>
+                    <div class="products-count">Tổng cộng: <strong>${totalProducts} sản phẩm</strong></div>
                 </div>
-                
-                <!-- Products Table -->
+
                 <div class="table-responsive">
                     <table class="orders-table">
                         <thead>
-                            <tr>
-                                <th style="width: 50px;">
-                                    <input type="checkbox" class="product-checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)">
-                                </th>
-                                <th style="width: 80px;">Hình ảnh</th>
-                                <th>Tên sản phẩm</th>
-                                <th style="width: 120px;">SKU</th>
-                                <th style="width: 150px;">Danh mục</th>
-                                <th style="width: 120px;">Giá bán</th>
-                                <th style="width: 100px;">Tồn kho</th>
-                                <th style="width: 120px;">Trạng thái</th>
-                                <th style="width: 150px; text-align: center;">Hành động</th>
-                            </tr>
+                        <tr>
+                            <th style="width: 50px;">
+                                <input type="checkbox" class="product-checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)">
+                            </th>
+                            <th style="width: 80px;">Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th style="width: 120px;">SKU</th>
+                            <th style="width: 150px;">Danh mục</th> <th style="width: 120px;">Giá bán</th>
+                            <th style="width: 100px;">Tồn kho</th>
+                            <th style="width: 120px;">Trạng thái</th>
+                            <th style="width: 150px; text-align: center;">Hành động</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <!-- Product 1 -->
+                        <c:forEach var="p" items="${productList}">
                             <tr>
                                 <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
+                                    <input type="checkbox" class="product-checkbox row-checkbox" value="${p.id}" onchange="updateBulkActions()">
                                 </td>
                                 <td>
-                                    <img src="../assets/images/san-pham-tra-bac-ha.jpg" alt="Trà Bạc Hà Premium" class="product-image-thumb">
+                                    <img src="${pageContext.request.contextPath}/${p.imageUrl}" alt="${p.name}" class="product-image-thumb">
                                 </td>
                                 <td>
-                                    <div class="product-name-cell">Trà Bạc Hà Premium</div>
-                                    <div class="product-description-cell">Trà thảo mộc cao cấp</div>
+                                    <div class="product-name-cell">${p.name}</div>
+                                    <div class="product-description-cell" style="font-size: 0.8rem; color: #666;">
+                                            ${p.shortDescription}
+                                    </div>
                                 </td>
-                                <td>TBH001</td>
-                                <td>Trà thảo mộc</td>
+                                <td>${p.sku}</td>
                                 <td>
-                                    <div class="product-price-main">85,000₫</div>
-                                    <div class="product-price-original">95,000₫</div>
+                                    <c:forEach var="c" items="${categoryList}">
+                                        <c:if test="${c.id == p.categoryId}">${c.name}</c:if>
+                                    </c:forEach>
                                 </td>
                                 <td>
-                                    <span class="product-stock-high">156</span>
+                                    <div class="product-price-main">
+                                        <fmt:formatNumber value="${p.salePrice > 0 ? p.salePrice : p.price}" pattern="#,###"/>₫
+                                    </div>
+                                    <c:if test="${p.salePrice > 0 && p.salePrice < p.price}">
+                                        <div class="product-price-original">
+                                            <fmt:formatNumber value="${p.price}" pattern="#,###"/>₫
+                                        </div>
+                                    </c:if>
                                 </td>
                                 <td>
-                                    <span class="status-badge status-confirmed">Đang bán</span>
+                                <span class="${p.stockQuantity > 10 ? 'product-stock-high' : 'product-stock-low'}">
+                                        ${p.stockQuantity}
+                                </span>
+                                </td>
+                                <td>
+                                <span class="status-badge ${p.status == 'ACTIVE' ? 'status-confirmed' : 'status-cancelled'}">
+                                        ${p.status == 'ACTIVE' ? 'Đang bán' : 'Ngừng bán'}
+                                </span>
                                 </td>
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
+                                        <a href="${pageContext.request.contextPath}/chi-tiet-san-pham?id=${p.id}" target="_blank" class="btn-action" title="Xem chi tiết">
                                             <i class="fas fa-eye"></i>
-                                        </button>
-                                        <a href="admin-product-edit.jsp" class="btn-action" title="Chỉnh sửa">
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/admin/product/edit?id=${p.id}" class="btn-action" title="Chỉnh sửa">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <button class="btn-action danger" title="Xóa">
+                                        <button class="btn-action danger" title="Xóa" onclick="deleteProduct(${p.id})">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
                                 </td>
                             </tr>
-                            
-                            <!-- Product 2 -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <img src="../assets/images/san-pham-tra-gung-mat-ong.jpg" alt="Trà Gừng Mật Ong" class="product-image-thumb">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Trà Gừng Mật Ong</div>
-                                    <div class="product-description-cell">Trà thảo mộc ấm bụng</div>
-                                </td>
-                                <td>TGMO002</td>
-                                <td>Trà thảo mộc</td>
-                                <td>
-                                    <div class="product-price-main">75,000₫</div>
-                                </td>
-                                <td>
-                                    <span class="product-stock-high">89</span>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-confirmed">Đang bán</span>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Product 3 -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <img src="../assets/images/san-pham-bot-milk-foam.jpg" alt="Bột Milk Foam Trứng Muối" class="product-image-thumb">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Bột Milk Foam Trứng Muối</div>
-                                    <div class="product-description-cell">Bột pha chế cao cấp</div>
-                                </td>
-                                <td>BMFTM003</td>
-                                <td>Bột pha chế</td>
-                                <td>
-                                    <div class="product-price-main">120,000₫</div>
-                                </td>
-                                <td>
-                                    <span class="product-stock-low">5</span>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-confirmed">Đang bán</span>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Product 4 -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <img src="../assets/images/san-pham-tra-atiso.jpg" alt="Trà Atiso Đà Lạt" class="product-image-thumb">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Trà Atiso Đà Lạt</div>
-                                    <div class="product-description-cell">Trà thảo mộc giải nhiệt</div>
-                                </td>
-                                <td>TADL004</td>
-                                <td>Trà thảo mộc</td>
-                                <td>
-                                    <div class="product-price-main">65,000₫</div>
-                                    <div class="product-price-original">70,000₫</div>
-                                </td>
-                                <td>
-                                    <span class="product-stock-low">0</span>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-cancelled">Hết hàng</span>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Product 5 -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <img src="../assets/images/san-pham-tran-chau-den.jpg" alt="Trân Châu Đen Taiwan" class="product-image-thumb">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Trân Châu Đen Taiwan</div>
-                                    <div class="product-description-cell">Nguyên liệu pha chế</div>
-                                </td>
-                                <td>TCDT005</td>
-                                <td>Trà sữa nguyên liệu</td>
-                                <td>
-                                    <div class="product-price-main">45,000₫</div>
-                                </td>
-                                <td>
-                                    <span class="product-stock-high">234</span>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-confirmed">Đang bán</span>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Product 6 -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <img src="../assets/images/san-pham-bot-sua-beo.jpg" alt="Bột Sữa Béo Premium" class="product-image-thumb">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Bột Sữa Béo Premium</div>
-                                    <div class="product-description-cell">Bột pha chế cao cấp</div>
-                                </td>
-                                <td>BSB006</td>
-                                <td>Bột pha chế</td>
-                                <td>
-                                    <div class="product-price-main">95,000₫</div>
-                                </td>
-                                <td>
-                                    <span class="product-stock-high">67</span>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-confirmed">Đang bán</span>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
                 </div>
-                
-                <!-- Pagination -->
+
                 <div class="pagination-container">
                     <div class="pagination-info">
-                        Hiển thị <strong>1-6</strong> trong tổng số <strong>24</strong> sản phẩm
+                        Trang <strong>${currentPage}</strong> / <strong>${totalPages}</strong>
                     </div>
                     <div class="pagination">
-                        <a href="#" class="page-btn disabled">
-                            <i class="fas fa-chevron-left"></i>
-                        </a>
-                        <a href="#" class="page-btn active">1</a>
-                        <a href="#" class="page-btn">2</a>
-                        <a href="#" class="page-btn">3</a>
-                        <a href="#" class="page-btn">4</a>
-                        <a href="#" class="page-btn">
-                            <i class="fas fa-chevron-right"></i>
-                        </a>
+                        <c:if test="${currentPage > 1}">
+                            <a href="products?page=${currentPage - 1}&categoryId=${currentCategoryId}&sort=${currentSort}" class="page-btn">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </c:if>
+
+                        <c:forEach begin="1" end="${totalPages}" var="i">
+                            <a href="products?page=${i}&categoryId=${currentCategoryId}&sort=${currentSort}" class="page-btn ${currentPage == i ? 'active' : ''}">${i}</a>
+                        </c:forEach>
+
+                        <c:if test="${currentPage < totalPages}">
+                            <a href="products?page=${currentPage + 1}&categoryId=${currentCategoryId}&sort=${currentSort}" class="page-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </c:if>
                     </div>
                 </div>
             </div>
@@ -791,13 +572,28 @@ function submitQuickDiscount() {
     cancelSelection(); // Hàm này hủy các checkbox (đã có ở code cũ)
 }
 
-// Đóng modal khi click ra ngoài vùng trắng
 window.onclick = function(event) {
     const modal = document.getElementById('quickDiscountModal');
     if (event.target == modal) {
         closeQuickDiscountModal();
     }
 }
+    function deleteProduct(productId) {
+        if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này? Hành động này không thể hoàn tác!")) {
+            fetch('${pageContext.request.contextPath}/admin/product/delete?id=' + productId, {
+                method: 'POST'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Đã xóa sản phẩm thành công!");
+                        location.reload();
+                    } else {
+                        alert("Xóa thất bại. Vui lòng thử lại.");
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    }
 </script>
 </body>
 </html>
