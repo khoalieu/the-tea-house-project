@@ -1,6 +1,7 @@
 package backend.controller;
 
 import backend.dao.ProductDAO;
+import backend.dao.PromotionDAO;
 import backend.model.Product;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class ProductServlet extends HttpServlet {
         String pageParam = request.getParameter("page");
         String priceParam = request.getParameter("price");
         Integer categoryId = null;
+        String promoParam = request.getParameter("promotionId");
         if(categoryParam != null && !categoryParam.isEmpty()) {
             try {
                 categoryId = Integer.parseInt(categoryParam);
@@ -47,19 +49,29 @@ public class ProductServlet extends HttpServlet {
                 maxPrice = null;
             }
         }
+
+        Integer promotionId = null;
+        if (promoParam != null) {
+            try { promotionId = Integer.parseInt(promoParam); } catch (Exception e) {}
+        }
         int pageSize = 12;
         List<Product> products = null;
-        products = productDAO.getProducts(categoryId, sortParam, maxPrice, page, pageSize);
+        products = productDAO.getProducts(categoryId,promotionId, sortParam, maxPrice, page, pageSize);
         int totalProducts = 0;
         try {
-            totalProducts = productDAO.countProducts(categoryId, maxPrice);
+            totalProducts = productDAO.countProducts(categoryId, promotionId,maxPrice);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
         String categoryName = "Tất Cả Sản Phẩm";
+        if (promotionId != null) {
+            PromotionDAO promoDAO = new PromotionDAO();
+            categoryName = promoDAO.getPromotionName(promotionId);
+        }
         if (categoryId != null) {
-            if (categoryId == 1) {
+
+             if (categoryId == 1) {
                 categoryName = "Trà Thảo Mộc";
             } else if (categoryId == 2) {
                 categoryName = "Nguyên Liệu Trà Sữa";
@@ -72,6 +84,7 @@ public class ProductServlet extends HttpServlet {
         request.setAttribute("currentCategory", categoryId);
         request.setAttribute("currentSort", sortParam);
         request.setAttribute("currentPrice", maxPrice);
+        request.setAttribute("currentPromotion", promotionId);
         request.getRequestDispatcher("/san-pham.jsp").forward(request, response);
     }
 }
