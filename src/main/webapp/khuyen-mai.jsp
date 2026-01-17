@@ -18,8 +18,31 @@
 </head>
 <body>
 <jsp:include page="common/header.jsp"></jsp:include>
+
 <main class="main-content">
 
+    <section class="slider-container">
+        <button class="slider-btn slider-prev"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="slider-btn slider-next"><i class="fa-solid fa-chevron-right"></i></button>
+
+        <c:forEach var="promo" items="${activePromotions}" varStatus="status">
+            <div class="slide ${status.first ? 'active' : ''}"
+                 style="background-image: url('${pageContext.request.contextPath}/${promo.imageUrl}');">
+
+                <div class="promo-hero__overlay">
+                    <h1>${promo.name}</h1>
+                    <p>${promo.description}</p>
+                    <a href="san-pham?promotionId=${promo.id}" class="btn-hero">Xem Ngay</a>
+                </div>
+            </div>
+        </c:forEach>
+
+        <div class="slider-dots">
+            <c:forEach items="${activePromotions}" varStatus="status">
+                <div class="dot ${status.first ? 'active' : ''}"></div>
+            </c:forEach>
+        </div>
+    </section>
     <c:forEach var="entry" items="${promoMap}">
         <c:set var="promo" value="${entry.key}" />
         <c:set var="productList" value="${entry.value}" />
@@ -74,9 +97,10 @@
 <button id="backToTop" class="back-to-top" title="Lên đầu trang">
     <i class="fa-solid fa-chevron-up"></i>
 </button>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        console.log("Slider Script đang chạy..."); // Mở F12 xem có dòng này không
+        console.log("Slider Script đang chạy...");
 
         const slides = document.querySelectorAll('.slide');
         const dots = document.querySelectorAll('.dot');
@@ -87,13 +111,11 @@
         const totalSlides = slides.length;
         let slideInterval;
 
-        // Nếu không tìm thấy slide nào thì dừng ngay để tránh lỗi
         if (slides.length === 0) {
             console.error("Không tìm thấy class .slide nào!");
             return;
         }
 
-        // Hàm Reset active
         function clearActive() {
             slides.forEach(slide => {
                 slide.classList.remove('active');
@@ -103,44 +125,28 @@
             });
         }
 
-        // Hàm chuyển slide
         function showSlide(index) {
             console.log("Chuyển sang slide: " + index);
 
-            // Xử lý vòng lặp index
             if (index >= totalSlides) currentSlide = 0;
             else if (index < 0) currentSlide = totalSlides - 1;
             else currentSlide = index;
 
             clearActive();
 
-            // Thêm class active cho slide hiện tại
             slides[currentSlide].classList.add('active');
 
-            // Thêm active cho dot tương ứng (nếu có dot)
             if(dots.length > 0 && dots[currentSlide]) {
                 dots[currentSlide].classList.add('active');
             }
         }
 
-        function nextSlide() {
-            showSlide(currentSlide + 1);
-        }
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function prevSlide() { showSlide(currentSlide - 1); }
 
-        function prevSlide() {
-            showSlide(currentSlide - 1);
-        }
+        function startAutoSlide() { slideInterval = setInterval(nextSlide, 4000); }
+        function stopAutoSlide() { clearInterval(slideInterval); }
 
-        // Tự động chạy (Auto play)
-        function startAutoSlide() {
-            slideInterval = setInterval(nextSlide, 4000); // 4 giây chuyển 1 lần
-        }
-
-        function stopAutoSlide() {
-            clearInterval(slideInterval);
-        }
-
-        // Gán sự kiện click nút Next/Prev
         if(nextBtn) {
             nextBtn.addEventListener('click', () => {
                 nextSlide();
@@ -157,7 +163,6 @@
             });
         }
 
-        // Gán sự kiện click Dot
         dots.forEach((dot, index) => {
             dot.addEventListener('click', () => {
                 showSlide(index);
@@ -166,7 +171,6 @@
             });
         });
 
-        // Bắt đầu chạy
         startAutoSlide();
     });
 </script>
