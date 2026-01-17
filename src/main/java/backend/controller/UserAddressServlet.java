@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "UserAddressServlet", value = "/user-address")
+@WebServlet(name = "UserAddressServlet", value = "/dia-chi-nguoi-dung")
 public class UserAddressServlet extends HttpServlet {
 
     @Override
@@ -81,6 +81,6 @@ public class UserAddressServlet extends HttpServlet {
             dao.setDefaultAddress(id, user.getId());
         }
 
-        response.sendRedirect("user-address");
+        response.sendRedirect("dia-chi-nguoi-dung");
     }
 }

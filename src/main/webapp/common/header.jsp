@@ -180,13 +180,13 @@
                                 <div style="padding: 10px; border-bottom: 1px solid #eee;">
                                     Xin chào, <strong>${sessionScope.user.lastName} ${sessionScope.user.firstName}</strong>
                                 </div>
-                                <a href="${pageContext.request.contextPath}/thong-tin-tai-khoan-nguoi-dung.jsp">Tài khoản của tôi</a>
-                                <a href="${pageContext.request.contextPath}/don-hang-nguoi-dung.jsp">Đơn mua</a>
+                                <a href="${pageContext.request.contextPath}/tai-khoan-cua-toi">Tài khoản của tôi</a>
+                                <a href="${pageContext.request.contextPath}/don-hang">Đơn mua</a>
                                 <a href="${pageContext.request.contextPath}/logout" style="color: red;">Đăng xuất</a>
                             </c:when>
                             <c:otherwise>
-                                <a href="${pageContext.request.contextPath}/login.jsp">Đăng nhập</a>
-                                <a href="${pageContext.request.contextPath}/signup.jsp">Đăng ký</a>
+                                <a href="${pageContext.request.contextPath}/login">Đăng nhập</a>
+                                <a href="${pageContext.request.contextPath}/signup">Đăng ký</a>
                             </c:otherwise>
                         </c:choose>
                     </div>

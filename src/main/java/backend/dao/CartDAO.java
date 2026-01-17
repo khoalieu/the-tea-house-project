@@ -96,4 +96,17 @@ public class CartDAO {
             e.printStackTrace();
         }
     }
+
+    public void clearCart(int userId) {
+        String sql = "DELETE FROM cart WHERE user_id = ?";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

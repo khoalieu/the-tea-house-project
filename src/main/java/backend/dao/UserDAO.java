@@ -3,6 +3,7 @@ package backend.dao;
 import backend.db.DBConnect;
 import backend.model.CustomerDTO;
 import backend.model.User;
+import backend.model.UserAddress;
 import backend.model.enums.UserGender;
 import backend.model.enums.UserRole;
 import org.mindrot.jbcrypt.BCrypt; // Import thư viện BCrypt
@@ -582,6 +583,28 @@ public class UserDAO {
         }
         return list;
     }
+    public int addAddressAndGetId(UserAddress addr) {
+        String sql = "INSERT INTO user_addresses (user_id, full_name, phone_number, label, province, ward, street_address, is_default) VALUES (?,?,?,?,?,?,?,?)";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, addr.getUserId());
+            ps.setString(2, addr.getFullName());
+            ps.setString(3, addr.getPhoneNumber());
+            ps.setString(4, addr.getLabel());
+            ps.setString(5, addr.getProvince());
+            ps.setString(6, addr.getWard());
+            ps.setString(7, addr.getStreetAddress());
+            ps.setBoolean(8, addr.getIsDefault());
+
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) return rs.getInt(1); // Trả về ID mới tạo
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return -1;
+    }
     public boolean updateUserByAdmin(User u) {
         String sql = "UPDATE users SET first_name=?, last_name=?, phone=?, role=?, is_active=? WHERE id=?";
         try (Connection conn = DBConnect.getConnection();
@@ -600,6 +623,7 @@ public class UserDAO {
         }
         return false;
     }
+
 
 
 }

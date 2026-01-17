@@ -346,7 +346,6 @@ public class ProductDAO {
             ps.setInt(1, quantityPurchased);
             ps.setInt(2, productId);
             ps.executeUpdate();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
