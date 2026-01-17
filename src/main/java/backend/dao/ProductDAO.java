@@ -4,10 +4,7 @@ import backend.db.DBConnect;
 import backend.model.Product;
 import backend.model.enums.ProductStatus;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -193,6 +190,45 @@ public class ProductDAO {
             e.printStackTrace();
         }
         return list;
+    }
+    public boolean insertProduct(Product p) {
+        String sql = "INSERT INTO products (name, slug, description, short_description, price, sale_price, " +
+                "sku, stock_quantity, category_id, image_url, is_bestseller, status, " +
+                "ingredients, usage_instructions, created_at) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, p.getName());
+            ps.setString(2, p.getSlug());
+            ps.setString(3, p.getDescription());
+            ps.setString(4, p.getShortDescription());
+            ps.setDouble(5, p.getPrice());
+            ps.setDouble(6, p.getSalePrice());
+            ps.setString(7, p.getSku());
+            ps.setInt(8, p.getStockQuantity());
+
+            if (p.getCategoryId() != null) {
+                ps.setInt(9, p.getCategoryId());
+            } else {
+                ps.setNull(9, java.sql.Types.INTEGER);
+            }
+
+            ps.setString(10, p.getImageUrl());
+            ps.setBoolean(11, p.isBestseller());
+            ps.setString(12, p.getStatus() != null ? p.getStatus().name().toLowerCase() : "active");
+            ps.setString(13, p.getIngredients());
+            ps.setString(14, p.getUsageInstructions());
+            ps.setTimestamp(15, Timestamp.valueOf(p.getCreatedAt()));
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
 

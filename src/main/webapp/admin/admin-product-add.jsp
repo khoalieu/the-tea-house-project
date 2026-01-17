@@ -100,8 +100,13 @@
             </header>
             
             <!-- Content -->
+            <c:if test="${not empty error}">
+                <div style="color: red; background-color: #fce4e4; padding: 10px; margin-bottom: 15px; border: 1px solid #fcc2c3; border-radius: 4px;">
+                    <i class="fas fa-exclamation-triangle"></i> ${error}
+                </div>
+            </c:if>
             <div class="admin-content">
-                <form class="form-container" action="#" method="POST" enctype="multipart/form-data">
+                <form class="form-container" action="${pageContext.request.contextPath}/admin/product/add" method="POST" enctype="multipart/form-data">
                     <div class="form-header">
                         <h2>Thêm sản phẩm mới</h2>
                         <p>Điền thông tin chi tiết để thêm sản phẩm vào hệ thống</p>
