@@ -560,8 +560,6 @@ function submitAddToPromo() {
         return;
     }
 
-    // --- GỬI AJAX VỀ SERVER (JSP/Servlet) ---
-    // Ví dụ code gửi dữ liệu đi:
     console.log("Đang thêm sản phẩm:", selectedProductIds, "vào KM ID:", promotionId);
     
     /* fetch('add-products-to-promotion', {
@@ -571,7 +569,7 @@ function submitAddToPromo() {
     }).then(...) 
     */
 
-    // Giả lập thành công cho giao diện Demo
+
     alert(`Đã thêm thành công ${selectedProductIds.length} sản phẩm vào chương trình!`);
     
     // Đóng modal và hủy chọn
@@ -712,14 +710,11 @@ function submitQuickDiscount() {
 
         const selectedIds = getSelectedProducts();
 
-        // Chúng ta có thể tái sử dụng Servlet AddPromo nhưng truyền promoId = 0 hoặc -1 để xử lý xóa
-        // Hoặc tạo endpoint riêng. Ở đây mình gọi endpoint add-products nhưng thêm param action=remove cho gọn
 
         const params = new URLSearchParams();
         params.append('action', 'remove'); // Flag báo hiệu xóa
         params.append('productIds', selectedIds.join(','));
 
-        // Lưu ý: Cần update Servlet AdminAddPromoServlet để xử lý param 'action' này
         fetch('${pageContext.request.contextPath}/admin/promotion/add-products', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},

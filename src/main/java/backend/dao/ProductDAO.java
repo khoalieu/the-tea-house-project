@@ -284,5 +284,41 @@ public class ProductDAO {
             e.printStackTrace();
         }
     }
+    public boolean updateProduct(Product p) {
+        String sql = "UPDATE products SET name=?, slug=?, description=?, short_description=?, price=?, sale_price=?, " +
+                "sku=?, stock_quantity=?, category_id=?, is_bestseller=?, status=?, ingredients=?, usage_instructions=?, " +
+                "image_url=? WHERE id=?";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, p.getName());
+            ps.setString(2, p.getSlug());
+            ps.setString(3, p.getDescription());
+            ps.setString(4, p.getShortDescription());
+            ps.setDouble(5, p.getPrice());
+            ps.setDouble(6, p.getSalePrice());
+            ps.setString(7, p.getSku());
+            ps.setInt(8, p.getStockQuantity());
+
+            if (p.getCategoryId() != null) ps.setInt(9, p.getCategoryId());
+            else ps.setNull(9, java.sql.Types.INTEGER);
+
+            ps.setBoolean(10, p.isBestseller());
+            ps.setString(11, p.getStatus() != null ? p.getStatus().name().toLowerCase() : "active");
+            ps.setString(12, p.getIngredients());
+            ps.setString(13, p.getUsageInstructions());
+
+
+            ps.setString(14, p.getImageUrl());
+
+            ps.setInt(15, p.getId());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
 
