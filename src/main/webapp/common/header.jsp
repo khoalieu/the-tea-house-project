@@ -185,8 +185,8 @@
                                 <a href="${pageContext.request.contextPath}/logout" style="color: red;">Đăng xuất</a>
                             </c:when>
                             <c:otherwise>
-                                <a href="${pageContext.request.contextPath}/login.jsp">Đăng nhập</a>
-                                <a href="${pageContext.request.contextPath}/signup.jsp">Đăng ký</a>
+                                <a href="${pageContext.request.contextPath}/login">Đăng nhập</a>
+                                <a href="${pageContext.request.contextPath}/register">Đăng ký</a>
                             </c:otherwise>
                         </c:choose>
                     </div>
