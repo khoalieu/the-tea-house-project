@@ -16,8 +16,19 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 // Mapping URL mới
-@WebServlet(name = "UpdateProfileInfoServlet", value = "/update-profile-info")
+@WebServlet(name = "UpdateProfileInfoServlet", value = "/tai-khoan-cua-toi")
 public class UpdateProfileInfoServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 1. Check login
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+        request.getRequestDispatcher("thong-tin-tai-khoan-nguoi-dung.jsp").forward(request, response);
+    }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 1. Cấu hình UTF-8 để nhận tiếng Việt
@@ -70,6 +81,6 @@ public class UpdateProfileInfoServlet extends HttpServlet {
             session.setAttribute("msgType", "danger");
         }
 
-        response.sendRedirect("thong-tin-tai-khoan-nguoi-dung.jsp");
+        response.sendRedirect("tai-khoan-cua-toi");
     }
 }

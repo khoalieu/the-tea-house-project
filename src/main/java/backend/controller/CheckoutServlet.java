@@ -2,6 +2,7 @@ package backend.controller;
 
 import backend.dao.CartDAO;
 import backend.dao.OrderDAO;
+import backend.dao.ProductDAO;
 import backend.dao.UserAddressDAO;
 import backend.model.Cart;
 import backend.model.CartItem;
@@ -123,8 +124,11 @@ public class CheckoutServlet extends HttpServlet {
             // Convert Collection<CartItem> sang List<CartItem>
             List<CartItem> cartItems = new ArrayList<>(cart.getItems());
             orderDAO.addOrderItems(orderId, cartItems);
-
-            // 6.2 Xóa giỏ hàng trong Session và Database (nếu có lưu)
+            ProductDAO productDAO = new ProductDAO();
+            for (CartItem item : cartItems) {
+                // Lấy ID sản phẩm và số lượng khách mua để trừ kho
+                productDAO.decreaseStock(item.getProduct().getId(), item.getQuantity());
+            }
             session.removeAttribute("cart");
             CartDAO cartDAO = new CartDAO();
             cartDAO.clearCart(user.getId());

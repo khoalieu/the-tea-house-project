@@ -245,5 +245,18 @@ public class ProductDAO {
             e.printStackTrace();
         }
     }
+    public void decreaseStock(int productId, int quantityPurchased) {
+        String sql = "UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ?";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, quantityPurchased);
+            ps.setInt(2, productId);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

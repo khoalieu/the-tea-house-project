@@ -3,7 +3,10 @@ package backend.model;
 import backend.model.enums.OrderStatus;
 import backend.model.enums.PaymentStatus;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Order {
     private int id;
@@ -17,8 +20,8 @@ public class Order {
     private String paymentMethod;
     private PaymentStatus paymentStatus; // enum('pending','paid')
     private String notes;
-    private LocalDateTime createdAt;
-
+    private Timestamp createdAt;
+    private List<OrderItem> items = new ArrayList<>();
     public Order() {}
 
     public int getId() { return id; }
@@ -51,6 +54,12 @@ public class Order {
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public Timestamp getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+    public List<OrderItem> getItems() {
+        return items;
+    }
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
+    }
 }

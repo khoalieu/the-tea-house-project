@@ -9,6 +9,7 @@
     <title>Saved Addresses - Mộc Trà</title>
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
 
     <style>
         .btn-link-style {
@@ -64,7 +65,7 @@
                                         <p><strong>${addr.fullName}</strong> · ${addr.phoneNumber}</p>
                                     </div>
 
-                                    <form action="user-address" method="post" class="address-default-toggle">
+                                    <form action="dia-chi-nguoi-dung" method="post" class="address-default-toggle">
                                         <input type="hidden" name="action" value="set_default">
                                         <input type="hidden" name="defaultAddressId" value="${addr.id}">
 
@@ -81,7 +82,7 @@
                                 <p>${addr.streetAddress}, ${addr.ward}, ${addr.province}</p>
 
                                 <div class="address-actions">
-                                    <form action="user-address" method="post" style="display:inline;">
+                                    <form action="dia-chi-nguoi-dung" method="post" style="display:inline;">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="id" value="${addr.id}">
 
@@ -110,7 +111,7 @@
             <section class="saved-address-right">
                 <h3 class="section-subtitle">Thêm địa chỉ mới</h3>
 
-                <form class="profile-form address-form" action="user-address" method="post">
+                <form class="profile-form address-form" action="dia-chi-nguoi-dung" method="post">
                     <input type="hidden" name="action" value="add">
 
                     <div class="form-row">
