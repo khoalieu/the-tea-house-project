@@ -10,13 +10,20 @@ import java.util.List;
 
 public class ProductDAO {
     public ProductDAO() {
-
     }
 
+    // --- PHẦN 1: HÀM CŨ CỦA ĐỒNG ĐỘI (Giữ nguyên để tương thích trang chủ) ---
+    // (Lưu ý: Hàm này chỉ lấy sản phẩm ACTIVE mặc định)
+    public List<Product> getProducts(Integer categoryId, Integer promotionId, String sort, Double maxPrice, int index, int size) {
+        // Gọi sang hàm đầy đủ của bạn với status = "active" để tái sử dụng logic Subquery (tránh lặp sản phẩm)
+        return getProducts(categoryId, promotionId, sort, maxPrice, index, size, "active");
+    }
 
+    // --- PHẦN 2: HÀM MỚI CỦA BẠN (Đầy đủ chức năng cho Admin & Client) ---
     public List<Product> getProducts(Integer categoryId, Integer promotionId, String sort, Double maxPrice, int index, int size, String status) {
         List<Product> list = new ArrayList<>();
 
+        // Sử dụng Subquery để lấy promotion_id -> Tránh lỗi lặp dòng khi JOIN
         StringBuilder sql = new StringBuilder(
                 "SELECT p.*, " +
                         "(SELECT promotion_id FROM promotion_items pi WHERE pi.product_id = p.id LIMIT 1) AS current_promo_id " +
@@ -33,16 +40,19 @@ public class ProductDAO {
             sql.append(" AND (CASE WHEN p.sale_price > 0 THEN p.sale_price ELSE p.price END) <= ? ");
         }
 
+        // Lọc theo Promotion ID (Dùng Subquery trong WHERE)
         if (promotionId != null) {
             sql.append(" AND p.id IN (SELECT product_id FROM promotion_items WHERE promotion_id = ?) ");
         }
 
+        // Lọc theo Status (Nâng cao)
         if (status != null && !status.isEmpty()) {
             if ("active".equals(status)) sql.append(" AND p.status = 'active' ");
             else if ("inactive".equals(status)) sql.append(" AND p.status = 'inactive' ");
             else if ("out-of-stock".equals(status)) sql.append(" AND p.stock_quantity = 0 ");
         }
 
+        // Sắp xếp
         if (sort != null) {
             switch (sort) {
                 case "price-asc": sql.append(" ORDER BY p.price ASC "); break;
@@ -104,9 +114,17 @@ public class ProductDAO {
         return list;
     }
 
+    // Hàm đếm của đồng đội (Overload) -> Gọi sang hàm đầy đủ của bạn
+    public int countProducts(Integer categoryId, Integer promotionId, Double maxPrice) throws SQLException {
+        return countProducts(categoryId, promotionId, maxPrice, "active");
+    }
+
+    // Hàm đếm đầy đủ (Của bạn)
     public int countProducts(Integer categoryId, Integer promotionId, Double maxPrice, String status) {
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM products p ");
 
+        // Dùng JOIN nếu cần lọc theo promotion (cách cũ) hoặc Subquery đều được
+        // Ở đây dùng JOIN như code của bạn để đếm chính xác
         if (promotionId != null) {
             sql.append(" JOIN promotion_items pi ON p.id = pi.product_id ");
         }
@@ -136,15 +154,9 @@ public class ProductDAO {
 
             int paramIndex = 1;
 
-            if (categoryId != null) {
-                ps.setInt(paramIndex++, categoryId);
-            }
-            if (maxPrice != null) {
-                ps.setDouble(paramIndex++, maxPrice);
-            }
-            if (promotionId != null) {
-                ps.setInt(paramIndex++, promotionId);
-            }
+            if (categoryId != null) ps.setInt(paramIndex++, categoryId);
+            if (maxPrice != null) ps.setDouble(paramIndex++, maxPrice);
+            if (promotionId != null) ps.setInt(paramIndex++, promotionId);
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getInt(1);
@@ -154,6 +166,8 @@ public class ProductDAO {
         }
         return 0;
     }
+
+    // --- CÁC HÀM CRUD & HELPER ---
 
     public Product getProductById(int id) {
         String sql = "SELECT * FROM products WHERE id = ?";
@@ -197,6 +211,7 @@ public class ProductDAO {
         }
         return null;
     }
+
     public List<Product> getRelatedProducts(int categoryId, int currentProductId) {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM products WHERE category_id = ? AND id != ? AND status = 'active' ORDER BY RAND() LIMIT 4";
@@ -220,6 +235,7 @@ public class ProductDAO {
         }
         return list;
     }
+
     public int insertProduct(Product p) {
         String sql = "INSERT INTO products (name, slug, description, short_description, price, sale_price, " +
                 "sku, stock_quantity, category_id, image_url, is_bestseller, status, " +
@@ -259,6 +275,7 @@ public class ProductDAO {
         }
         return -1;
     }
+
     public void insertProductImage(int productId, String imageUrl, String altText, int sortOrder) {
         String sql = "INSERT INTO product_images (product_id, image_url, alt_text, sort_order) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnect.getConnection();
@@ -274,6 +291,7 @@ public class ProductDAO {
             e.printStackTrace();
         }
     }
+
     public void softDeleteProduct(int id) {
         String sql = "UPDATE products SET status = 'inactive' WHERE id = ?";
         try (Connection conn = DBConnect.getConnection();
@@ -284,6 +302,7 @@ public class ProductDAO {
             e.printStackTrace();
         }
     }
+
     public boolean updateProduct(Product p) {
         String sql = "UPDATE products SET name=?, slug=?, description=?, short_description=?, price=?, sale_price=?, " +
                 "sku=?, stock_quantity=?, category_id=?, is_bestseller=?, status=?, ingredients=?, usage_instructions=?, " +
@@ -308,10 +327,7 @@ public class ProductDAO {
             ps.setString(11, p.getStatus() != null ? p.getStatus().name().toLowerCase() : "active");
             ps.setString(12, p.getIngredients());
             ps.setString(13, p.getUsageInstructions());
-
-
             ps.setString(14, p.getImageUrl());
-
             ps.setInt(15, p.getId());
 
             return ps.executeUpdate() > 0;
@@ -320,5 +336,19 @@ public class ProductDAO {
         }
         return false;
     }
-}
 
+
+    public void decreaseStock(int productId, int quantityPurchased) {
+        String sql = "UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ?";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, quantityPurchased);
+            ps.setInt(2, productId);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
