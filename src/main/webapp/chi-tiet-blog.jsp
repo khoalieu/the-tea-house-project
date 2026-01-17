@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -10,7 +11,7 @@
         <title>${not empty post.metaTitle ? post.metaTitle : post.title}</title>
     </title>
     <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 <jsp:include page="common/header.jsp"></jsp:include>
@@ -18,7 +19,7 @@
     <div class="container">
 
         <div class="blog-detail-layout">
-        <%-- search + bar = rêcnt--%>
+            <%-- search + bar = rêcnt--%>
             <jsp:include page="common/blog-sidebar.jsp"></jsp:include>
 
             <article class="blog-post-content">
@@ -27,7 +28,7 @@
 
                 <div class="post-meta">
                     <span>Tác giả: <b>Admin</b></span>
-                    <span>Ngày đăng: <b>${postDate}</b></span>
+                    <span>Ngày đăng: <b><fmt:formatDate value="${post.createdAtDate}" pattern="dd/MM/yyyy"/></b></span>
                     <span>
                         Danh mục:
                         <b>
@@ -87,7 +88,9 @@
                                     <div class="comment-author">
                                             ${not empty u && (not empty u.firstName || not empty u.lastName)? u.firstName.concat(' ').concat(u.lastName) : 'User '.concat(cm.userId)}
                                     </div>
-                                    <div class="comment-meta">${commentDateMap[cm.id]}</div>
+                                    <div class="comment-meta">
+                                        <fmt:formatDate value="${cm.createdAtDate}" pattern="dd/MM/yyyy 'lúc' HH:mm"/>
+                                    </div>
                                     <p class="comment-body"><c:out value="${cm.commentText}"/></p>
                                 </div>
 
@@ -99,7 +102,7 @@
 
             </article>
 
- </div> </div> </main>
+        </div> </div> </main>
 <jsp:include page="common/footer.jsp"></jsp:include>
 <button id="backToTop" class="back-to-top" title="Lên đầu trang">
     <i class="fa-solid fa-chevron-up"></i>

@@ -1,4 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -16,74 +20,10 @@
 <body>
 <div class="admin-container">
     <!-- Sidebar -->
-    <aside class="admin-sidebar">
-        <div class="sidebar-header">
-            <div class="admin-logo">
-                <img src="../assets/images/logoweb.png" alt="Mộc Trà">
-                <h2>Mộc Trà Admin</h2>
-            </div>
-        </div>
+    <jsp:include page="/common/admin-sidebar.jsp">
+        <jsp:param name="activePage" value="blog" />
+    </jsp:include>
 
-        <nav class="admin-nav">
-            <ul>
-                <li class="nav-item">
-                    <a href="admin-dashboard.jsp">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-products.jsp">
-                        <i class="fas fa-box"></i>
-                        <span>Tất cả Sản phẩm</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-banners.jsp">
-                        <i class="fas fa-images"></i>
-                        <span>Quản lý Banner</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-categories.jsp">
-                        <i class="fas fa-sitemap"></i>
-                        <span>Danh mục Sản phẩm</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-orders.jsp">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Đơn hàng</span>
-                        <span class="badge">23</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-customers.jsp">
-                        <i class="fas fa-users"></i>
-                        <span>Khách hàng</span>
-                    </a>
-                </li>
-
-                <li class="nav-item active">
-                    <a href="admin-blog.html">
-                        <i class="fas fa-newspaper"></i>
-                        <span>Tất cả Bài viết</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-blog-categories.jsp">
-                        <i class="fas fa-folder"></i>
-                        <span>Danh mục Blog</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-        
     <!-- Main Content -->
     <main class="admin-main">
         <!-- Header -->
@@ -91,20 +31,23 @@
             <div class="header-left">
                 <h1>Quản lý Blog</h1>
             </div>
-            
+
             <div class="header-right">
                 <div class="header-search">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Tìm kiếm bài viết...">
+                    <input id="adminBlogSearch" type="text" name="q" form="blogFilterForm"
+                           value="${fn:escapeXml(currentQ)}"
+                           placeholder="Tìm kiếm bài viết..."
+                           autocomplete="off">
                 </div>
-                
-                <a href="../index.jsp" class="view-site-btn" target="_blank">
+
+                <a href="${pageContext.request.contextPath}/index.jsp" class="view-site-btn" target="_blank">
                     <i class="fas fa-external-link-alt"></i>
                     <span>Xem trang web</span>
                 </a>
             </div>
         </header>
-        
+
         <!-- Content -->
         <div class="admin-content">
             <!-- Page Header -->
@@ -114,61 +57,64 @@
                     <p>Quản lý tất cả bài viết blog và nội dung website</p>
                 </div>
                 <div class="page-actions">
-                    <a href="admin-blog-add.jsp" class="btn btn-primary">
+                    <a href="${pageContext.request.contextPath}/admin/blog/add" class="btn btn-primary">
                         <i class="fas fa-plus"></i>
                         Thêm bài viết mới
                     </a>
                 </div>
             </div>
-            
+
             <!-- Filters -->
             <div class="filters-section">
-                <div class="filters-grid">
-                    <div class="filter-group">
-                        <label for="category-filter">Danh mục</label>
-                        <select id="category-filter" class="form-select">
-                            <option value="">Tất cả danh mục</option>
-                            <option value="1">Kiến thức trà</option>
-                            <option value="2">Cách pha chế</option>
-                            <option value="3">Sức khỏe</option>
-                            <option value="4">Tin tức</option>
-                        </select>
+                <form id="blogFilterForm" method="get" action="${pageContext.request.contextPath}/admin/blog" class="filter-form">
+                    <div class="filters-grid">
+                        <div class="filter-group">
+                            <label>Danh mục</label>
+                            <select id="category-filter" class="form-select" name="category" onchange="this.form.submit()">
+                                <option value="">Tất cả danh mục</option>
+                                <c:forEach var="cat" items="${allCategories}">
+                                    <option value="${cat.id}" ${currentCategory == cat.id ? 'selected' : ''}>${cat.name}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="status-filter">Trạng thái</label>
+                            <select id="status-filter" class="form-select" name="status" onchange="this.form.submit()">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="published" ${currentStatus == 'published' ? 'selected' : ''}>Đã xuất bản</option>
+                                <option value="draft" ${currentStatus == 'draft' ? 'selected' : ''}>Bản nháp</option>
+                                <option value="archived" ${currentStatus == 'archived' ? 'selected' : ''}>Đã lưu trữ</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="author-filter">Tác giả</label>
+                            <select id="author-filter" class="form-select" name="author" onchange="this.form.submit()">
+                                <option value="">Tất cả tác giả</option>
+                                <c:forEach var="author" items="${allAuthors}">
+                                    <option value="${author.id}" ${currentAuthor == author.id ? 'selected' : ''}>
+                                            ${author.displayName}
+                                    </option>
+                                </c:forEach>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="sort-filter">Sắp xếp</label>
+                            <select id="sort-filter" class="form-select" name="sort" onchange="this.form.submit()">
+                                <option value="date_desc" ${currentSort == 'date_desc' || empty currentSort ? 'selected' : ''}>Mới nhất</option>
+                                <option value="date_asc" ${currentSort == 'date_asc' ? 'selected' : ''}>Cũ nhất</option>
+                                <option value="title_asc" ${currentSort == 'title_asc' ? 'selected' : ''}>Tên A-Z</option>
+                                <option value="title_desc" ${currentSort == 'title_desc' ? 'selected' : ''}>Tên Z-A</option>
+                                <option value="views_desc" ${currentSort == 'views_desc' ? 'selected' : ''}>Xem nhiều nhất</option>
+                                <option value="views_asc" ${currentSort == 'views_asc' ? 'selected' : ''}>Xem ít nhất</option>
+                            </select>
+                        </div>
                     </div>
-                    
-                    <div class="filter-group">
-                        <label for="status-filter">Trạng thái</label>
-                        <select id="status-filter" class="form-select">
-                            <option value="">Tất cả trạng thái</option>
-                            <option value="published">Đã xuất bản</option>
-                            <option value="draft">Bản nháp</option>
-                            <option value="archived">Đã lưu trữ</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label for="author-filter">Tác giả</label>
-                        <select id="author-filter" class="form-select">
-                            <option value="">Tất cả tác giả</option>
-                            <option value="1">Admin</option>
-                            <option value="2">Editor 1</option>
-                            <option value="3">Editor 2</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label for="sort-filter">Sắp xếp</label>
-                        <select id="sort-filter" class="form-select">
-                            <option value="newest">Mới nhất</option>
-                            <option value="oldest">Cũ nhất</option>
-                            <option value="title-asc">Tiêu đề A-Z</option>
-                            <option value="title-desc">Tiêu đề Z-A</option>
-                            <option value="views-desc">Lượt xem cao nhất</option>
-                            <option value="views-asc">Lượt xem thấp nhất</option>
-                        </select>
-                    </div>
-                </div>
+                </form>
             </div>
-            
+
             <!-- Bulk Actions Bar -->
             <div class="bulk-actions-bar" id="bulkActionsBar">
                 <input type="checkbox" class="product-checkbox" id="selectAllPosts">
@@ -194,204 +140,137 @@
                     </button>
                 </div>
             </div>
-            
+
             <!-- Blog Posts Container -->
             <div class="products-container">
                 <div class="table-header">
-                    <div class="products-count">Tổng cộng: <strong>35 bài viết</strong></div>
+                    <div class="products-count">Tổng số bài viết : <strong>${totalPosts}</strong></div>
                 </div>
-                
+
                 <!-- Blog Posts Table -->
                 <div class="table-responsive">
                     <table class="orders-table">
                         <thead>
-                            <tr>
-                                <th style="width: 50px;">
-                                    <input type="checkbox" class="product-checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)">
-                                </th>
-                                <th style="width: 80px;">Hình ảnh</th>
-                                <th>Tiêu đề</th>
-                                <th style="width: 130px;">Danh mục</th>
-                                <th style="width: 150px;">Tác giả</th>
-                                <th style="width: 120px;">Trạng thái</th>
-                                <th style="width: 100px;">Lượt xem</th>
-                                <th style="width: 120px;">Ngày tạo</th>
-                                <th style="width: 130px; text-align: center;">Thao tác</th>
-                            </tr>
+                        <tr>
+                            <th style="width: 50px;">
+                                <input type="checkbox" class="product-checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)">
+                            </th>
+                            <th style="width: 80px;">Hình ảnh</th>
+                            <th>Tiêu đề</th>
+                            <th style="width: 130px;">Danh mục</th>
+                            <th style="width: 150px;">Tác giả</th>
+                            <th style="width: 120px;">Trạng thái</th>
+                            <th style="width: 100px;">Lượt xem</th>
+                            <th style="width: 120px;">Ngày tạo</th>
+                            <th style="width: 130px; text-align: center;">Thao tác</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <!-- Post 1 -->
+                        <c:if test="${empty posts}">
                             <tr>
+                                <td colspan="9" style="text-align: center;">Chưa có bài viết nào</td>
+                            </tr>
+                        </c:if>
+                        <c:forEach var="post" items="${posts}">
+                            <tr>
+                                <td><input type="checkbox" class="product-checkbox row-checkbox" value="${post.id}" onchange="updateBulkActions()"></td>
+
+                                <td><img src="${pageContext.request.contextPath}/${post.featuredImage}" alt="Blog image" class="product-image-thumb"></td>
+
                                 <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <img src="../assets/images/loi-ich-tra-hoa-cuc.jpg" alt="Blog image" class="product-image-thumb">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Lợi ích tuyệt vời của trà hoa cúc đối với sức khỏe</div>
-                                    <div class="product-description-cell">Trà hoa cúc không chỉ có hương vị thơm ngon mà còn mang lại nhiều lợi ích cho sức khỏe...</div>
-                                </td>
-                                <td>
-                                    <span class="category-badge health">Sức khỏe</span>
-                                </td>
-                                <td>
-                                    <div class="author-info">
-                                        <strong>Admin</strong>
-                                        <small>admin@moctra.com</small>
+                                    <div class="product-name-cell">${post.title}</div>
+                                    <div class="product-description-cell">
+                                            ${empty post.excerpt ? '' : post.excerpt}
                                     </div>
                                 </td>
+
                                 <td>
-                                    <span class="status-badge published">Đã xuất bản</span>
+                                    <span class="category-badge health">${empty post.categoryId ? 'Chưa phân loại' : categoryMap[post.categoryId]}</span>
+                                </td>
+                                <td>
+                                    <div class="author-name">
+                                            ${empty post.author ? '---' : post.author.displayName}
+                                    </div>
+                                    <small class="author-email">
+                                            ${empty post.author ? '' : post.author.email}
+                                    </small>
+                                </td>
+
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${post.status.name() == 'PUBLISHED'}">
+                                            <span class="status-badge published">ĐÃ XUẤT BẢN</span>
+                                        </c:when>
+                                        <c:when test="${post.status.name() == 'DRAFT'}">
+                                            <span class="status-badge status-pending">BẢN NHÁP</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="status-badge status-cancelled">LƯU TRỮ</span>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </td>
                                 <td>
                                     <div class="views-count">
                                         <i class="fas fa-eye"></i>
-                                        <span>1,245</span>
+                                        <span><fmt:formatNumber value="${post.viewsCount}" pattern="#,###"/></span>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="date-info">
-                                        <strong>15/11/2025</strong>
-                                        <small>09:30</small>
-                                    </div>
+                                    <div><fmt:formatDate value="${post.createdAtDate}" pattern="dd/MM/yyyy"/></div>
+                                    <small><fmt:formatDate value="${post.createdAtDate}" pattern="HH:mm"/></small>
                                 </td>
+
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
+                                        <a class="btn-action" title="Xem chi tiết (Admin)"
+                                           href="${pageContext.request.contextPath}/admin/blog/detail?id=${post.id}"
+                                           target="_blank">
                                             <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
+                                        </a>
+                                        <a class="btn-action" title="Chỉnh sửa"
+                                           href="${pageContext.request.contextPath}/admin/blog/edit?id=${post.id}">
                                             <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
+                                        </a>
+                                        <button class="btn-action danger" title="Xóa"
+                                                onclick="deleteSinglePost(${post.id})">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
                                 </td>
                             </tr>
-                            
-                            <!-- Post 2 -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <img src="../assets/images/san-pham-tra-gung-mat-ong.jpg" alt="Blog image" class="product-image-thumb">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Cách pha trà gừng mật ong chuẩn vị thơm ngon</div>
-                                    <div class="product-description-cell">Hướng dẫn chi tiết cách pha trà gừng mật ong với tỷ lệ hoàn hảo...</div>
-                                </td>
-                                <td>
-                                    <span class="category-badge recipe">Cách pha chế</span>
-                                </td>
-                                <td>
-                                    <div class="author-info">
-                                        <strong>Editor 1</strong>
-                                        <small>editor1@moctra.com</small>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status-badge draft">Bản nháp</span>
-                                </td>
-                                <td>
-                                    <div class="views-count">
-                                        <i class="fas fa-eye"></i>
-                                        <span>0</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="date-info">
-                                        <strong>14/11/2025</strong>
-                                        <small>14:15</small>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Post 3 -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" onchange="updateBulkActions()">
-                                </td>
-                                <td>
-                                    <img src="../assets/images/san-pham-tra-atiso.jpg" alt="Blog image" class="product-image-thumb">
-                                </td>
-                                <td>
-                                    <div class="product-name-cell">Trà atiso - Thần dược cho gan và hệ tiêu hóa</div>
-                                    <div class="product-description-cell">Khám phá những công dụng tuyệt vời của trà atiso đối với sức khỏe...</div>
-                                </td>
-                                <td>
-                                    <span class="category-badge knowledge">Kiến thức trà</span>
-                                </td>
-                                <td>
-                                    <div class="author-info">
-                                        <strong>Editor 2</strong>
-                                        <small>editor2@moctra.com</small>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status-badge published">Đã xuất bản</span>
-                                </td>
-                                <td>
-                                    <div class="views-count">
-                                        <i class="fas fa-eye"></i>
-                                        <span>856</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="date-info">
-                                        <strong>13/11/2025</strong>
-                                        <small>16:42</small>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn-action" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn-action danger" title="Xóa">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
                 </div>
-                
+
                 <!-- Pagination -->
                 <div class="pagination-container">
                     <div class="pagination-info">
-                        Hiển thị <strong>1-3</strong> trong tổng số <strong>35</strong> bài viết
+                        Hiển thị <strong>${fromItem}-${toItem}</strong> trong tổng số <strong>${totalPosts}</strong> bài viết
                     </div>
                     <div class="pagination">
-                        <a href="#" class="page-btn disabled">
-                            <i class="fas fa-chevron-left"></i>
-                        </a>
-                        <a href="#" class="page-btn active">1</a>
-                        <a href="#" class="page-btn">2</a>
-                        <a href="#" class="page-btn">3</a>
-                        <a href="#" class="page-btn">4</a>
-                        <a href="#" class="page-btn">
-                            <i class="fas fa-chevron-right"></i>
-                        </a>
+                        <c:forEach begin="1" end="${totalPages}" var="i">
+                            <c:url var="pageUrl" value="/admin/blog">
+                                <c:param name="page" value="${i}" />
+                                <c:if test="${not empty currentQ}">
+                                    <c:param name="q" value="${currentQ}" />
+                                </c:if>
+                                <c:if test="${not empty currentCategory}">
+                                    <c:param name="category" value="${currentCategory}" />
+                                </c:if>
+                                <c:if test="${not empty currentStatus}">
+                                    <c:param name="status" value="${currentStatus}" />
+                                </c:if>
+                                <c:if test="${not empty currentAuthor}">
+                                    <c:param name="author" value="${currentAuthor}" />
+                                </c:if>
+                                <c:if test="${not empty currentSort}">
+                                    <c:param name="sort" value="${currentSort}" />
+                                </c:if>
+                            </c:url>
+
+                            <a href="${pageUrl}" class="page-link ${currentPage == i ? 'active' : ''}">${i}</a>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
@@ -400,41 +279,36 @@
 </div>
 
 <script>
-    // Toggle select all checkboxes
     function toggleSelectAll(checkbox) {
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const bulkActionsCheckbox = document.getElementById('selectAllPosts');
-        
+
         rowCheckboxes.forEach(cb => {
             cb.checked = checkbox.checked;
         });
-        
+
         bulkActionsCheckbox.checked = checkbox.checked;
         updateBulkActions();
     }
-    
-    // Update bulk actions bar
+
     function updateBulkActions() {
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const selectAllCheckbox = document.getElementById('selectAllCheckbox');
         const bulkActionsCheckbox = document.getElementById('selectAllPosts');
         const bulkActionsBar = document.getElementById('bulkActionsBar');
         const selectedCount = document.getElementById('selectedCount');
-        
+
         const checkedCount = Array.from(rowCheckboxes).filter(cb => cb.checked).length;
         const totalCount = rowCheckboxes.length;
-        
-        // Update count
+
         selectedCount.textContent = checkedCount;
-        
-        // Show/hide bulk actions bar
+
         if (checkedCount > 0) {
             bulkActionsBar.classList.add('active');
         } else {
             bulkActionsBar.classList.remove('active');
         }
-        
-        // Update select all checkbox state
+
         if (checkedCount === totalCount) {
             selectAllCheckbox.checked = true;
             bulkActionsCheckbox.checked = true;
@@ -449,78 +323,147 @@
             selectAllCheckbox.indeterminate = false;
         }
     }
-    
-    // Sync bulk actions bar checkbox with table header checkbox
+
     document.getElementById('selectAllPosts').addEventListener('change', function() {
         const selectAllCheckbox = document.getElementById('selectAllCheckbox');
         selectAllCheckbox.checked = this.checked;
         toggleSelectAll(this);
     });
-    
-    // Bulk actions functions
+
     function bulkPublish() {
         const selectedPosts = getSelectedPosts();
         if (selectedPosts.length === 0) return;
-        
-        if (confirm(`Bạn có chắc muốn xuất bản ${selectedPosts.length} bài viết đã chọn?`)) {
-            console.log('Publishing posts:', selectedPosts);
-            // Add your publish logic here
-            alert(`Đã xuất bản ${selectedPosts.length} bài viết!`);
-            cancelSelection();
+
+        if (confirm(`Bạn có chắc muốn xuất bản \${selectedPosts.length} bài viết đã chọn?`)) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '${pageContext.request.contextPath}/admin/blog/change-status';
+
+            selectedPosts.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids';
+                input.value = id;
+                form.appendChild(input);
+            });
+
+            const statusInput = document.createElement('input');
+            statusInput.type = 'hidden';
+            statusInput.name = 'status';
+            statusInput.value = 'published';
+            form.appendChild(statusInput);
+
+            document.body.appendChild(form);
+            form.submit();
         }
     }
-    
+
     function bulkArchive() {
         const selectedPosts = getSelectedPosts();
         if (selectedPosts.length === 0) return;
-        
-        if (confirm(`Bạn có chắc muốn lưu trữ ${selectedPosts.length} bài viết đã chọn?`)) {
-            console.log('Archiving posts:', selectedPosts);
-            // Add your archive logic here
-            alert(`Đã lưu trữ ${selectedPosts.length} bài viết!`);
-            cancelSelection();
+
+        if (confirm(`Bạn có chắc muốn lưu trữ \${selectedPosts.length} bài viết đã chọn?`)) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '${pageContext.request.contextPath}/admin/blog/change-status';
+
+            selectedPosts.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids';
+                input.value = id;
+                form.appendChild(input);
+            });
+
+            const statusInput = document.createElement('input');
+            statusInput.type = 'hidden';
+            statusInput.name = 'status';
+            statusInput.value = 'archived';
+            form.appendChild(statusInput);
+
+            document.body.appendChild(form);
+            form.submit();
         }
     }
-    
+
+    function deleteSinglePost(postId) {
+        if (!confirm('Bạn có chắc muốn xóa bài viết này?')) return;
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '${pageContext.request.contextPath}/admin/blog/delete';
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'ids';
+        input.value = postId;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
     function bulkDelete() {
         const selectedPosts = getSelectedPosts();
         if (selectedPosts.length === 0) return;
-        
-        if (confirm(`CẢNH BÁO: Bạn có chắc muốn xóa ${selectedPosts.length} bài viết đã chọn? Hành động này không thể hoàn tác!`)) {
-            console.log('Deleting posts:', selectedPosts);
-            // Add your deletion logic here
-            alert(`Đã xóa ${selectedPosts.length} bài viết!`);
-            cancelSelection();
+
+        if (!confirm(`CẢNH BÁO: Bạn có chắc muốn xóa \${selectedPosts.length} bài viết đã chọn?`)) {
+            return;
         }
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '${pageContext.request.contextPath}/admin/blog/delete';
+
+        selectedPosts.forEach(id => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'ids';
+            input.value = id;
+            form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
     }
-    
+
     function cancelSelection() {
         const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const selectAllCheckbox = document.getElementById('selectAllCheckbox');
         const bulkActionsCheckbox = document.getElementById('selectAllPosts');
-        
+
         rowCheckboxes.forEach(cb => {
             cb.checked = false;
         });
-        
+
         selectAllCheckbox.checked = false;
         bulkActionsCheckbox.checked = false;
         selectAllCheckbox.indeterminate = false;
         updateBulkActions();
     }
-    
+
     function getSelectedPosts() {
-        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-        const selected = [];
-        
-        rowCheckboxes.forEach((checkbox, index) => {
-            if (checkbox.checked) {
-                selected.push(index);
-            }
-        });
-        
-        return selected;
+        return Array.from(document.querySelectorAll('.row-checkbox:checked'))
+            .map(cb => parseInt(cb.value, 10))
+            .filter(id => !isNaN(id));
     }
+
+    (function () {
+        const input = document.getElementById('adminBlogSearch');
+        const form  = document.getElementById('blogFilterForm');
+        if (!input || !form) return;
+
+        let t;
+
+        input.addEventListener('input', function () {
+            clearTimeout(t);
+
+            const v = input.value;
+            if (/\s$/.test(v)) return;
+
+            t = setTimeout(() => form.submit(), 900);
+        });
+    })();
 </script>
 </body>
 </html>

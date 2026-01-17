@@ -57,4 +57,30 @@ public class BlogCommentDAO {
     
         return c;
     }
+    public BlogComment getById(int id) {
+        String sql = "SELECT * FROM blog_comments WHERE id = ? LIMIT 1";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return map(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean deleteById(int id) {
+        String sql = "DELETE FROM blog_comments WHERE id = ? LIMIT 1";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

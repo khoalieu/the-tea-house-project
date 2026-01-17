@@ -78,4 +78,13 @@ public class User {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    // hiển thị tên đầy đủ or username nếu kh có tên
+    public String getDisplayName() {
+        String fn = (firstName == null) ? "" : firstName.trim();
+        String ln = (lastName == null) ? "" : lastName.trim();
+        String name = (fn + " " + ln).trim();
+        return name.isEmpty() ? username : name;
+    }
+
 }

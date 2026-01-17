@@ -6,24 +6,16 @@ import backend.dao.BlogPostDAO;
 import backend.model.BlogCategory;
 import backend.model.BlogComment;
 import backend.model.BlogPost;
-
 import backend.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-
 import backend.dao.UserDAO;
-
-
 @WebServlet("/chi-tiet-blog")
-public class BlogDetailServlet extends HttpServlet {
-
-    private static final DateTimeFormatter DF_DATE = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter DF_COMMENT = DateTimeFormatter.ofPattern("dd/MM/yyyy 'lúc' HH:mm");
+public class
+BlogDetailServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -78,37 +70,19 @@ public class BlogDetailServlet extends HttpServlet {
 
         // recent posts
         List<BlogPost> recentPosts = postDAO.getRecentPublishedPosts(3);
-        Map<Integer, String> recent = new HashMap<>();
-        for (BlogPost p : recentPosts) {
-            if (p.getCreatedAt() != null) recent.put(p.getId(), p.getCreatedAt().format(DF_DATE));
-        }
-
         // comments
         List<BlogComment> comments = commentDAO.getByPostId(post.getId());
-        Map<Integer, String> commentDateMap = new HashMap<>();
-        for (BlogComment c : comments) {
-            if (c.getCreatedAt() != null) {
-                commentDateMap.put(c.getId(), c.getCreatedAt().format(DF_COMMENT));
-            }
-        }
         request.setAttribute("commentUserMap", new UserDAO().getUserMapByPostId(post.getId()));
 
-
-        String postDate = (post.getCreatedAt() == null) ? "" : post.getCreatedAt().format(DF_DATE);
-
         request.setAttribute("post", post);
-        request.setAttribute("postDate", postDate);
         request.setAttribute("postCategory", postCategory);
 
         request.setAttribute("categories", categories);
         request.setAttribute("categoryCountMap", categoryCountMap);
 
         request.setAttribute("recentPosts", recentPosts);
-        request.setAttribute("recent", recent);
-
         request.setAttribute("comments", comments);
         request.setAttribute("commentsCount", comments.size());
-        request.setAttribute("commentDateMap", commentDateMap);
 
         request.getRequestDispatcher("/chi-tiet-blog.jsp").forward(request, response);
     }
@@ -179,3 +153,4 @@ public class BlogDetailServlet extends HttpServlet {
     }
 
 }
+

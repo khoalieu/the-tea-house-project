@@ -1,6 +1,8 @@
 package backend.model;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class BlogComment {
     private Integer id;
@@ -33,4 +35,8 @@ public class BlogComment {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public Date getCreatedAtDate() {
+        return createdAt == null ? null : Timestamp.valueOf(createdAt);
+    }
 }
