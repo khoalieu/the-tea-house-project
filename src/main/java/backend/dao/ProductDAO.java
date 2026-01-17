@@ -16,7 +16,7 @@ public class ProductDAO {
 
     }
 
-    public List<Product> getProducts(Integer categoryId, String sort,Double maxPrice, int index, int size) {
+    public List<Product> getProducts(Integer categoryId, Integer promotionId, String sort,Double maxPrice, int index, int size) {
         List<Product> list = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE status = 'active' ");
@@ -26,6 +26,7 @@ public class ProductDAO {
         if (maxPrice != null) {
             sql.append(" AND (CASE WHEN sale_price > 0 THEN sale_price ELSE price END) <= ? ");
         }
+        if (promotionId != null) sql.append(" AND pi.promotion_id = ? ");
         // Logic sắp xếp
         if (sort != null) {
             switch (sort) {
@@ -95,7 +96,7 @@ public class ProductDAO {
         return list;
     }
 
-    public int countProducts(Integer categoryId, Double maxPrice) throws SQLException {
+    public int countProducts(Integer categoryId,Integer promotionId ,Double maxPrice) throws SQLException {
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM products WHERE status = 'active' ");
         if(categoryId != null){
             sql.append(" AND category_id = ? ");
@@ -103,6 +104,7 @@ public class ProductDAO {
         if (maxPrice != null) {
             sql.append(" AND (CASE WHEN sale_price > 0 THEN sale_price ELSE price END) <= ? ");
         }
+        if (promotionId != null) sql.append(" AND pi.promotion_id = ? ");
         try(Connection conn = DBConnect.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
             int paramIndex = 1;

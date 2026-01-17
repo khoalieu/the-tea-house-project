@@ -41,18 +41,19 @@ public class PromotionDAO {
         return list;
     }
 
-    public List<Product> getProductsByPromotionId(int promoId) {
+    public List<Product> getProductsByPromotionId(int promoId, int limit) {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT p.*, pr.discount_type, pr.discount_value " +
                 "FROM products p " +
                 "JOIN promotion_items pi ON p.id = pi.product_id " +
                 "JOIN promotions pr ON pi.promotion_id = pr.id " +
-                "WHERE pr.id = ? AND p.status = 'active'";
+                "WHERE pr.id = ? AND p.status = 'active'"+"LIMIT ?";
 
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, promoId);
+            ps.setInt(2, limit);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -83,5 +84,21 @@ public class PromotionDAO {
             e.printStackTrace();
         }
         return list;
+    }
+    public String getPromotionName(int promoId) {
+        String sql = "SELECT name FROM promotions WHERE id = ?";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, promoId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("name");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Chương Trình Khuyến Mãi";
     }
 }

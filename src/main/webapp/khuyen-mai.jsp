@@ -58,11 +58,7 @@
                             <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
                         </div>
                     </div>
-                    <div class="campaign-header__right">
-                        <a href="san-pham?promotionId=${promo.id}" class="btn-view-all">
-                            Xem tất cả <i class="fa-solid fa-arrow-right"></i>
-                        </a>
-                    </div>
+
                 </div>
 
                 <div class="product-grid">
@@ -87,6 +83,12 @@
                             <a href="chi-tiet-san-pham.jsp?id=${p.id}" class="cta-button">Xem Chi Tiết</a>
                         </div>
                     </c:forEach>
+                </div>
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="san-pham?promotionId=${promo.id}" class="btn-hero"
+                       style="background: #fff; color: #333; border: 1px solid #333; padding: 10px 40px;">
+                        Xem thêm sản phẩm <strong>${promo.name}</strong> <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </section>

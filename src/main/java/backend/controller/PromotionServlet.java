@@ -25,7 +25,7 @@ public class PromotionServlet extends HttpServlet {
         Map<Promotion, List<Product>> promoMap = new LinkedHashMap<>();
 
         for (Promotion promo : activePromotions) {
-            List<Product> products = dao.getProductsByPromotionId(promo.getId());
+            List<Product> products = dao.getProductsByPromotionId(promo.getId(),8);
 
             if (!products.isEmpty()) {
                 promoMap.put(promo, products);
