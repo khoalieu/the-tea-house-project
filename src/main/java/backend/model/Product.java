@@ -21,7 +21,7 @@ public class Product {
     private String ingredients;
     private String usageInstructions;
     private LocalDateTime createdAt;
-
+    private int currentPromotionId;
     public Product() {}
 
     public int getId() { return id; }
@@ -71,4 +71,6 @@ public class Product {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public int getCurrentPromotionId() { return currentPromotionId; }
+    public void setCurrentPromotionId(int currentPromotionId) { this.currentPromotionId = currentPromotionId; }
 }

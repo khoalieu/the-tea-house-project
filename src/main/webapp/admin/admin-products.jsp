@@ -182,6 +182,9 @@
                 <button class="btn-bulk btn-bulk-promo" onclick="openPromoModal()">
                     <i class="fas fa-tags"></i> Thêm vào KM
                 </button>
+                <button class="btn-bulk btn-bulk-cancel" onclick="bulkRemovePromo()">
+                    <i class="fas fa-eraser"></i> Gỡ khỏi KM
+                </button>
                 <button class="btn-bulk btn-bulk-activate" onclick="bulkActivate()">
                     <i class="fas fa-check-circle"></i> Kích hoạt
                 </button>
@@ -197,7 +200,7 @@
             </div>
         </div>
         <div class="products-container">
-            <div class="products-container">
+
                 <div class="table-header">
                     <div class="products-count">Tổng cộng: <strong>${totalProducts} sản phẩm</strong></div>
                 </div>
@@ -222,7 +225,10 @@
                         <c:forEach var="p" items="${productList}">
                             <tr>
                                 <td>
-                                    <input type="checkbox" class="product-checkbox row-checkbox" value="${p.id}" onchange="updateBulkActions()">
+                                    <input type="checkbox" class="product-checkbox row-checkbox"
+                                           value="${p.id}"
+                                           data-promo-id="${p.currentPromotionId}"
+                                           onchange="updateBulkActions()">
                                 </td>
                                 <td>
                                     <img src="${pageContext.request.contextPath}/${p.imageUrl}" alt="${p.name}" class="product-image-thumb">
@@ -301,7 +307,6 @@
                     </div>
                 </div>
             </div>
-        </div>
     </main>
 </div>
 
@@ -317,14 +322,22 @@
                 <label for="promoSelect">Chọn chương trình áp dụng:</label>
                 <select id="promoSelect" class="form-select full-width">
                     <option value="">-- Chọn chương trình --</option>
-
                     <c:forEach var="promo" items="${activePromos}">
                         <option value="${promo.id}">🔥 ${promo.name}</option>
                     </c:forEach>
                 </select>
+
+                <p id="promoWarning" style="color: red; display: none; margin-top: 10px; font-size: 0.9em;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Sản phẩm này đang thuộc chương trình khác. Chọn chương trình mới sẽ ghi đè.
+                </p>
             </div>
         </div>
         <div class="modal-footer">
+            <button id="btnRemovePromo" class="btn btn-danger" style="display: none; margin-right: auto;" onclick="submitRemovePromo()">
+                <i class="fas fa-trash-alt"></i> Gỡ khỏi KM
+            </button>
+
             <button class="btn btn-secondary" onclick="closePromoModal()">Hủy</button>
             <button class="btn btn-primary" onclick="submitAddToPromo()">Lưu thay đổi</button>
         </div>
@@ -492,21 +505,43 @@
     // --- LOGIC MODAL KHUYẾN MÃI ---
 
 // 1. Mở Modal
-function openPromoModal() {
-    const selectedIds = getSelectedProducts();
-    
-    // Kiểm tra xem đã chọn sản phẩm chưa
-    if (selectedIds.length === 0) {
-        alert("Vui lòng chọn ít nhất 1 sản phẩm!");
-        return;
-    }
+    function openPromoModal() {
+        const checkboxes = document.querySelectorAll('.row-checkbox:checked');
+        if (checkboxes.length === 0) { alert("Chưa chọn sản phẩm!"); return; }
 
-    // Cập nhật số lượng vào text trong Modal
-    document.getElementById('promoSelectedCount').textContent = selectedIds.length;
-    
-    // Hiển thị Modal
-    document.getElementById('promoModal').classList.add('active');
-}
+        document.getElementById('promoSelectedCount').textContent = checkboxes.length;
+
+        // Logic Auto-Select:
+        // Nếu chỉ chọn 1 sản phẩm và nó đang có KM -> Tự chọn dropdown và hiện nút Xóa
+        const btnRemove = document.getElementById('btnRemovePromo');
+        const warning = document.getElementById('promoWarning');
+        const select = document.getElementById('promoSelect');
+
+        // Reset trạng thái
+        btnRemove.style.display = 'none';
+        warning.style.display = 'none';
+        select.value = "";
+
+        if (checkboxes.length === 1) {
+            const currentPromoId = checkboxes[0].getAttribute('data-promo-id');
+            if (currentPromoId && currentPromoId != "0") {
+                select.value = currentPromoId; // Tự động chọn đúng chương trình
+                btnRemove.style.display = 'inline-block'; // Hiện nút Gỡ
+                warning.style.display = 'block';
+                warning.textContent = "Sản phẩm này đang thuộc chương trình khuyến mãi được chọn.";
+            }
+        } else {
+            // Nếu chọn nhiều sản phẩm, kiểm tra xem có cái nào dính KM không
+            let conflict = false;
+            checkboxes.forEach(cb => { if(cb.getAttribute('data-promo-id') != "0") conflict = true; });
+            if(conflict) {
+                warning.style.display = 'block';
+                warning.textContent = "⚠️ Một số sản phẩm trong danh sách đã có KM. Thao tác này sẽ ghi đè.";
+            }
+        }
+
+        document.getElementById('promoModal').classList.add('active');
+    }
 
 // 2. Đóng Modal
 function closePromoModal() {
@@ -552,24 +587,26 @@ window.onclick = function(event) {
     }
 }
 
-// --- LOGIC MODAL GIẢM GIÁ NHANH ---
 
-// 1. Mở Modal Giảm Giá Nhanh
-function openQuickDiscountModal() {
-    const selectedIds = getSelectedProducts();
-    
-    // Kiểm tra xem đã chọn sản phẩm chưa
-    if (selectedIds.length === 0) {
-        alert("Vui lòng chọn ít nhất 1 sản phẩm!");
-        return;
+    function openQuickDiscountModal() {
+        const checkboxes = document.querySelectorAll('.row-checkbox:checked');
+        if (checkboxes.length === 0) { alert("Chưa chọn sản phẩm!"); return; }
+
+        let hasConflict = false;
+        checkboxes.forEach(cb => {
+            if (cb.getAttribute('data-promo-id') != "0") {
+                hasConflict = true;
+            }
+        });
+
+        if (hasConflict) {
+            alert("⚠️ CẢNH BÁO: Một số sản phẩm bạn chọn ĐANG THUỘC CHƯƠNG TRÌNH KHUYẾN MÃI.\n\nVui lòng gỡ sản phẩm khỏi chương trình KM trước khi áp dụng Giảm giá nhanh.");
+            return;
+        }
+
+        document.getElementById('discountSelectedCount').textContent = checkboxes.length;
+        document.getElementById('quickDiscountModal').classList.add('active');
     }
-
-    // Cập nhật số lượng vào text trong Modal
-    document.getElementById('discountSelectedCount').textContent = selectedIds.length;
-    
-    // Hiển thị Modal
-    document.getElementById('quickDiscountModal').classList.add('active');
-}
 
 // 2. Đóng Modal Giảm Giá Nhanh
 function closeQuickDiscountModal() {
@@ -581,11 +618,11 @@ function closeQuickDiscountModal() {
 
 // 3. Xử lý nút Áp dụng (Submit Giảm Giá Nhanh)
 function submitQuickDiscount() {
+    const selectedIds = getSelectedProducts();
     const discountType = document.querySelector('input[name="discountType"]:checked').value;
     const discountValue = document.getElementById('discountValue').value;
-    const selectedProductIds = getSelectedProducts(); // Hàm này lấy từ code cũ
 
-    if (selectedProductIds.length === 0) {
+    if (selectedIds.length === 0) {
         alert("Vui lòng chọn ít nhất 1 sản phẩm!");
         return;
     }
@@ -595,30 +632,23 @@ function submitQuickDiscount() {
         return;
     }
 
-    // --- GỬI AJAX VỀ SERVER (JSP/Servlet) ---
-    // Ví dụ code gửi dữ liệu đi:
-    console.log("Đang áp dụng giảm giá:", selectedProductIds, "Giảm giá:", discountValue, "%");
-    
-    /* fetch('apply-quick-discount', {
+    const params = new URLSearchParams();
+    params.append('type', discountType);
+    params.append('value', discountValue);
+    params.append('productIds', selectedIds.join(','));
+
+    fetch('${pageContext.request.contextPath}/admin/product/quick-discount', {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: `productIds=${selectedProductIds.join(',')}&discountType=${discountType}&discountValue=${discountValue}`
-    }).then(...) 
-    */
-
-    // Giả lập thành công cho giao diện Demo
-    alert(`Đã áp dụng giảm giá thành công cho ${selectedProductIds.length} sản phẩm!`);
-    
-    // Đóng modal và hủy chọn
-    closeQuickDiscountModal();
-    cancelSelection(); // Hàm này hủy các checkbox (đã có ở code cũ)
-}
-
-window.onclick = function(event) {
-    const modal = document.getElementById('quickDiscountModal');
-    if (event.target == modal) {
-        closeQuickDiscountModal();
-    }
+        body: params
+    }).then(res => {
+        if(res.ok) {
+            alert("Đã cập nhật giá!");
+            location.reload();
+        } else {
+            alert("Lỗi cập nhật.");
+        }
+    });
 }
     function deleteProduct(productId) {
         if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này? Hành động này không thể hoàn tác!")) {
@@ -676,6 +706,53 @@ window.onclick = function(event) {
                 console.error('Error:', error);
                 alert("Lỗi kết nối server.");
             });
+    }
+    function submitRemovePromo() {
+        if(!confirm("Bạn chắc chắn muốn đưa sản phẩm này về giá gốc?")) return;
+
+        const selectedIds = getSelectedProducts();
+
+        // Chúng ta có thể tái sử dụng Servlet AddPromo nhưng truyền promoId = 0 hoặc -1 để xử lý xóa
+        // Hoặc tạo endpoint riêng. Ở đây mình gọi endpoint add-products nhưng thêm param action=remove cho gọn
+
+        const params = new URLSearchParams();
+        params.append('action', 'remove'); // Flag báo hiệu xóa
+        params.append('productIds', selectedIds.join(','));
+
+        // Lưu ý: Cần update Servlet AdminAddPromoServlet để xử lý param 'action' này
+        fetch('${pageContext.request.contextPath}/admin/promotion/add-products', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: params
+        }).then(res => {
+            if(res.ok) { alert("Đã gỡ sản phẩm khỏi chương trình!"); location.reload(); }
+            else alert("Lỗi khi gỡ.");
+        });
+    }
+    function bulkRemovePromo() {
+        const selectedIds = getSelectedProducts();
+        if (selectedIds.length === 0) return;
+
+        if (!confirm(`Bạn có chắc muốn gỡ ${selectedIds.length} sản phẩm này khỏi tất cả chương trình khuyến mãi? Giá sẽ về mức gốc.`)) {
+            return;
+        }
+
+        const params = new URLSearchParams();
+        params.append('action', 'remove');
+        params.append('productIds', selectedIds.join(','));
+
+        fetch('${pageContext.request.contextPath}/admin/promotion/add-products', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: params
+        }).then(res => {
+            if (res.ok) {
+                alert("✅ Đã gỡ sản phẩm khỏi chương trình khuyến mãi!");
+                location.reload();
+            } else {
+                alert("❌ Lỗi khi xử lý.");
+            }
+        });
     }
 </script>
 </body>

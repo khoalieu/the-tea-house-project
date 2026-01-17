@@ -9,6 +9,7 @@ import backend.model.enums.ProductStatus;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,11 +44,11 @@ public class PromotionDAO {
 
     public List<Product> getProductsByPromotionId(int promoId, int limit) {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT p.*, pr.discount_type, pr.discount_value " +
-                "FROM products p " +
+
+        String sql = "SELECT p.* FROM products p " +
                 "JOIN promotion_items pi ON p.id = pi.product_id " +
-                "JOIN promotions pr ON pi.promotion_id = pr.id " +
-                "WHERE pr.id = ? AND p.status = 'active'"+"LIMIT ?";
+                "WHERE pi.promotion_id = ? AND p.status = 'active' " +
+                "LIMIT ?";
 
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -60,24 +61,11 @@ public class PromotionDAO {
                 Product p = new Product();
                 p.setId(rs.getInt("id"));
                 p.setName(rs.getString("name"));
-                p.setPrice(rs.getDouble("price")); // Giá gốc
+                p.setSlug(rs.getString("slug"));
+                p.setPrice(rs.getDouble("price"));
+                p.setSalePrice(rs.getDouble("sale_price"));
                 p.setImageUrl(rs.getString("image_url"));
-
-                String type = rs.getString("discount_type");
-                double value = rs.getDouble("discount_value");
-                double originalPrice = rs.getDouble("price");
-                double salePrice = originalPrice;
-
-                if ("PERCENT".equals(type)) {
-                    salePrice = originalPrice * (1 - value / 100.0);
-                } else if ("FIXED_AMOUNT".equals(type)) {
-                    salePrice = originalPrice - value;
-                }
-
-                if (salePrice < 0) salePrice = 0;
-
-                p.setSalePrice(salePrice);
-
+                p.setShortDescription(rs.getString("short_description"));
                 list.add(p);
             }
         } catch (Exception e) {
@@ -85,6 +73,7 @@ public class PromotionDAO {
         }
         return list;
     }
+
     public String getPromotionName(int promoId) {
         String sql = "SELECT name FROM promotions WHERE id = ?";
         try (Connection conn = DBConnect.getConnection();
@@ -101,25 +90,134 @@ public class PromotionDAO {
         }
         return "Chương Trình Khuyến Mãi";
     }
-    public void addProductsToPromotion(int promoId, String[] productIds) {
-        String sql = "INSERT INTO promotion_items (promotion_id, product_id) VALUES (?, ?)";
 
-        try (Connection conn = DBConnect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+    public void addProductsToPromotion(int promoId, String[] productIds) {
+        Connection conn = null;
+        PreparedStatement psGetPromo = null;
+        PreparedStatement psInsert = null;
+        PreparedStatement psUpdatePrice = null;
+        PreparedStatement psCleanOld = null;
+
+        try {
+            conn = DBConnect.getConnection();
+            conn.setAutoCommit(false);
+
+            String sqlGetPromo = "SELECT discount_type, discount_value FROM promotions WHERE id = ?";
+            psGetPromo = conn.prepareStatement(sqlGetPromo);
+            psGetPromo.setInt(1, promoId);
+            ResultSet rs = psGetPromo.executeQuery();
+
+            String type = "";
+            double value = 0;
+
+            if (rs.next()) {
+                type = rs.getString("discount_type");
+                value = rs.getDouble("discount_value");
+            } else {
+                throw new Exception("Không tìm thấy chương trình khuyến mãi ID: " + promoId);
+            }
+
+            String sqlClean = "DELETE FROM promotion_items WHERE product_id = ?";
+            psCleanOld = conn.prepareStatement(sqlClean);
+
+            String sqlInsert = "INSERT INTO promotion_items (promotion_id, product_id) VALUES (?, ?)";
+            psInsert = conn.prepareStatement(sqlInsert);
+
+            String sqlUpdatePrice = "";
+            if ("PERCENT".equals(type)) {
+                sqlUpdatePrice = "UPDATE products SET sale_price = price * (100 - ?) / 100 WHERE id = ?";
+            } else {
+                sqlUpdatePrice = "UPDATE products SET sale_price = GREATEST(0, price - ?) WHERE id = ?";
+            }
+            psUpdatePrice = conn.prepareStatement(sqlUpdatePrice);
 
             for (String idStr : productIds) {
                 try {
                     int pid = Integer.parseInt(idStr);
-                    ps.setInt(1, promoId);
-                    ps.setInt(2, pid);
-                    ps.addBatch();
-                } catch (NumberFormatException e) {}
+
+                    psCleanOld.setInt(1, pid);
+                    psCleanOld.executeUpdate();
+
+                    psInsert.setInt(1, promoId);
+                    psInsert.setInt(2, pid);
+                    psInsert.executeUpdate();
+
+                    psUpdatePrice.setDouble(1, value);
+                    psUpdatePrice.setInt(2, pid);
+                    psUpdatePrice.executeUpdate();
+
+                } catch (NumberFormatException e) {
+                    System.err.println("Lỗi ID sản phẩm: " + idStr);
+                }
             }
 
-            ps.executeBatch();
+            conn.commit();
+            System.out.println("✅ Đã thêm vào KM và cập nhật giá (Loại: " + type + ")");
 
         } catch (Exception e) {
             e.printStackTrace();
+            try { if (conn != null) conn.rollback(); } catch (SQLException ex) {}
+        } finally {
+
+            try { if (psCleanOld != null) psCleanOld.close(); } catch (Exception e) {}
+            try { if (psGetPromo != null) psGetPromo.close(); } catch (Exception e) {}
+            try { if (psInsert != null) psInsert.close(); } catch (Exception e) {}
+            try { if (psUpdatePrice != null) psUpdatePrice.close(); } catch (Exception e) {}
+            try { if (conn != null) conn.close(); } catch (Exception e) {}
+        }
+    }
+
+    public void removeProductsFromPromotion(String[] productIds) {
+        Connection conn = null;
+        PreparedStatement psDelete = null;
+        PreparedStatement psResetPrice = null;
+
+        try {
+            conn = DBConnect.getConnection();
+            conn.setAutoCommit(false);
+
+            String sqlDelete = "DELETE FROM promotion_items WHERE product_id = ?";
+            psDelete = conn.prepareStatement(sqlDelete);
+
+            String sqlResetPrice = "UPDATE products SET sale_price = 0 WHERE id = ?";
+            psResetPrice = conn.prepareStatement(sqlResetPrice);
+
+            for (String idStr : productIds) {
+                try {
+                    int pid = Integer.parseInt(idStr);
+
+                    psDelete.setInt(1, pid);
+                    psDelete.executeUpdate();
+
+                    psResetPrice.setInt(1, pid);
+                    psResetPrice.executeUpdate();
+
+                } catch (NumberFormatException e) {
+                }
+            }
+
+            conn.commit();
+            System.out.println("✅ Đã gỡ sản phẩm khỏi KM và reset giá!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                if (conn != null) conn.rollback();
+            } catch (SQLException ex) {
+            }
+        } finally {
+            try {
+                if (psDelete != null) psDelete.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (psResetPrice != null) psResetPrice.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+            }
         }
     }
 }

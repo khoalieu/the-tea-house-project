@@ -17,18 +17,29 @@ public class AdminAddPromoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String promoIdStr = request.getParameter("promoId");
-        String productIdsStr = request.getParameter("productIds"); // Chuỗi dạng "1,5,10"
+        String action = request.getParameter("action");
+        String productIdsStr = request.getParameter("productIds");
+
+        PromotionDAO dao = new PromotionDAO();
+
+        if ("remove".equals(action) && productIdsStr != null) {
+            try {
+                String[] ids = productIdsStr.split(",");
+                dao.removeProductsFromPromotion(ids);
+                response.setStatus(HttpServletResponse.SC_OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+            return;
+        }
 
         if (promoIdStr != null && productIdsStr != null) {
             try {
                 int promoId = Integer.parseInt(promoIdStr);
                 String[] ids = productIdsStr.split(",");
-
-                PromotionDAO dao = new PromotionDAO();
-                // Gọi hàm insert hàng loạt (Chúng ta viết hàm này ở bước tiếp theo)
                 dao.addProductsToPromotion(promoId, ids);
-
-                response.setStatus(HttpServletResponse.SC_OK); // Báo thành công 200 OK
+                response.setStatus(HttpServletResponse.SC_OK);
             } catch (Exception e) {
                 e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

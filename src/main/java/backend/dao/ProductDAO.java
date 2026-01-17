@@ -13,14 +13,15 @@ public class ProductDAO {
 
     }
 
+
     public List<Product> getProducts(Integer categoryId, Integer promotionId, String sort, Double maxPrice, int index, int size, String status) {
         List<Product> list = new ArrayList<>();
 
-        StringBuilder sql = new StringBuilder("SELECT p.* FROM products p ");
-
-        if (promotionId != null) {
-            sql.append(" JOIN promotion_items pi ON p.id = pi.product_id ");
-        }
+        StringBuilder sql = new StringBuilder(
+                "SELECT p.*, " +
+                        "(SELECT promotion_id FROM promotion_items pi WHERE pi.product_id = p.id LIMIT 1) AS current_promo_id " +
+                        "FROM products p "
+        );
 
         sql.append(" WHERE 1=1 ");
 
@@ -33,7 +34,7 @@ public class ProductDAO {
         }
 
         if (promotionId != null) {
-            sql.append(" AND pi.promotion_id = ? ");
+            sql.append(" AND p.id IN (SELECT product_id FROM promotion_items WHERE promotion_id = ?) ");
         }
 
         if (status != null && !status.isEmpty()) {
@@ -61,15 +62,9 @@ public class ProductDAO {
 
             int paramIndex = 1;
 
-            if (categoryId != null) {
-                ps.setInt(paramIndex++, categoryId);
-            }
-            if (maxPrice != null) {
-                ps.setDouble(paramIndex++, maxPrice);
-            }
-            if (promotionId != null) {
-                ps.setInt(paramIndex++, promotionId);
-            }
+            if (categoryId != null) ps.setInt(paramIndex++, categoryId);
+            if (maxPrice != null) ps.setDouble(paramIndex++, maxPrice);
+            if (promotionId != null) ps.setInt(paramIndex++, promotionId);
 
             int offset = (index - 1) * size;
             ps.setInt(paramIndex++, size);
@@ -91,6 +86,8 @@ public class ProductDAO {
                 p.setImageUrl(rs.getString("image_url"));
                 p.setBestseller(rs.getBoolean("is_bestseller"));
 
+                p.setCurrentPromotionId(rs.getInt("current_promo_id"));
+
                 String statusStr = rs.getString("status");
                 if (statusStr != null) {
                     try {
@@ -98,12 +95,6 @@ public class ProductDAO {
                     } catch (IllegalArgumentException e) {
                         p.setStatus(ProductStatus.ACTIVE);
                     }
-                }
-
-                p.setIngredients(rs.getString("ingredients"));
-                p.setUsageInstructions(rs.getString("usage_instructions"));
-                if (rs.getTimestamp("created_at") != null) {
-                    p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
                 }
                 list.add(p);
             }
@@ -280,6 +271,16 @@ public class ProductDAO {
 
             ps.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void softDeleteProduct(int id) {
+        String sql = "UPDATE products SET status = 'inactive' WHERE id = ?";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
