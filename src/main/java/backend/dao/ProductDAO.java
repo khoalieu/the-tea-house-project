@@ -125,6 +125,7 @@ public class ProductDAO {
         }
         return 0;
     }
+    public int insertProduct(Product p) {
 
     public Product getProductById(int id) {
         String sql = "SELECT * FROM products WHERE id = ?";
@@ -198,7 +199,7 @@ public class ProductDAO {
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, p.getName());
             ps.setString(2, p.getSlug());
@@ -209,11 +210,8 @@ public class ProductDAO {
             ps.setString(7, p.getSku());
             ps.setInt(8, p.getStockQuantity());
 
-            if (p.getCategoryId() != null) {
-                ps.setInt(9, p.getCategoryId());
-            } else {
-                ps.setNull(9, java.sql.Types.INTEGER);
-            }
+            if (p.getCategoryId() != null) ps.setInt(9, p.getCategoryId());
+            else ps.setNull(9, java.sql.Types.INTEGER);
 
             ps.setString(10, p.getImageUrl());
             ps.setBoolean(11, p.isBestseller());
@@ -223,11 +221,29 @@ public class ProductDAO {
             ps.setTimestamp(15, Timestamp.valueOf(p.getCreatedAt()));
 
             int rows = ps.executeUpdate();
-            return rows > 0;
-
+            if (rows > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) return rs.getInt(1); // Trả về ID mới
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+        }
+        return -1;
+    }
+    public void insertProductImage(int productId, String imageUrl, String altText, int sortOrder) {
+        String sql = "INSERT INTO product_images (product_id, image_url, alt_text, sort_order) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, productId);
+            ps.setString(2, imageUrl);
+            ps.setString(3, altText);
+            ps.setInt(4, sortOrder);    // Lưu thứ tự sắp xếp
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

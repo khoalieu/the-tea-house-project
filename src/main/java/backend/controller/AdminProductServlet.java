@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @WebServlet(name = "AdminProductServlet", urlPatterns = {"/admin/product/add"})
 @MultipartConfig(
@@ -42,12 +43,12 @@ public class AdminProductServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         try {
+            // LẤY DỮ LIỆU CƠ BẢN
             String name = request.getParameter("name");
             String slug = request.getParameter("slug");
             if (slug == null || slug.trim().isEmpty()) {
                 slug = name.toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
             }
-
             String shortDesc = request.getParameter("short_description");
             String description = request.getParameter("description");
             String ingredients = request.getParameter("ingredients");
@@ -66,24 +67,21 @@ public class AdminProductServlet extends HttpServlet {
             String statusStr = request.getParameter("status");
             boolean isBestseller = "1".equals(request.getParameter("is_bestseller"));
 
-            //xu ly upload anh
-            Part filePart = request.getPart("image_url");
-            String imageUrl = "";
+            // XỬ LÝ ẢNH CHÍNH
+            Part mainImagePart = request.getPart("image_url");
+            String mainImageUrl = "";
+            String uploadPath = getServletContext().getRealPath("/assets/images/products");
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) uploadDir.mkdirs();
 
-            if (filePart != null && filePart.getSize() > 0) {
-                String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-
-                // Lưu ảnh vào thư mục assets/images/products của project
-                String uploadDir = getServletContext().getRealPath("/assets/images/products");
-                File uploadDirFile = new File(uploadDir);
-                if (!uploadDirFile.exists()) uploadDirFile.mkdirs();
-
-                String filePath = uploadDir + File.separator + fileName;
-                filePart.write(filePath);
-
-                imageUrl = "assets/images/products/" + fileName;
+            if (mainImagePart != null && mainImagePart.getSize() > 0) {
+                String fileName = Paths.get(mainImagePart.getSubmittedFileName()).getFileName().toString();
+                String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
+                mainImagePart.write(uploadPath + File.separator + uniqueFileName);
+                mainImageUrl = "assets/images/products/" + uniqueFileName;
             }
 
+            // TẠO PRODUCT VÀ LƯU VÀO DB
             Product product = new Product();
             product.setName(name);
             product.setSlug(slug);
@@ -98,12 +96,36 @@ public class AdminProductServlet extends HttpServlet {
             product.setBestseller(isBestseller);
             product.setIngredients(ingredients);
             product.setUsageInstructions(usage);
-            product.setImageUrl(imageUrl);
+            product.setImageUrl(mainImageUrl);
             product.setCreatedAt(LocalDateTime.now());
-            boolean success = productDAO.insertProduct(product);
 
-            if (success) {
-                response.sendRedirect(request.getContextPath() + "/admin/admin-products.jsp?msg=success");
+            // Lưu và lấy ID sản phẩm mới
+            int newProductId = productDAO.insertProduct(product);
+
+            if (newProductId > 0) {
+                // XỬ LÝ ẢNH PHỤ
+                Collection<Part> parts = request.getParts();
+                int sortOrder = 1;
+
+                for (Part part : parts) {
+                    if ("gallery[]".equals(part.getName()) && part.getSize() > 0) {
+                        String fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+                        if (fileName != null && !fileName.isEmpty()) {
+                            // Upload file
+                            String uniqueGalleryName = System.currentTimeMillis() + "_g_" + fileName;
+                            part.write(uploadPath + File.separator + uniqueGalleryName);
+
+                            String galleryUrl = "assets/images/products/" + uniqueGalleryName;
+                            String altText = name + " - " + sortOrder;
+                            productDAO.insertProductImage(newProductId, galleryUrl, altText, sortOrder);
+
+                            sortOrder++;
+                        }
+                    }
+                }
+
+                // Thành công
+                response.sendRedirect(request.getContextPath() + "/admin/product/add?msg=success");
             } else {
                 request.setAttribute("error", "Thêm sản phẩm thất bại.");
                 request.getRequestDispatcher("/admin/admin-product-add.jsp").forward(request, response);
@@ -111,7 +133,7 @@ public class AdminProductServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "Lỗi: " + e.getMessage());
+            request.setAttribute("error", "Lỗi hệ thống: " + e.getMessage());
             request.getRequestDispatcher("/admin/admin-product-add.jsp").forward(request, response);
         }
     }

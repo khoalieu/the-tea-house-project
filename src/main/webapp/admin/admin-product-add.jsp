@@ -1,302 +1,187 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý sản phẩm - Mộc Trà Admin</title>
-    <link rel="stylesheet" href="../assets/css/base.css">
-    <link rel="stylesheet" href="../assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/admin.css">
-    <link rel="stylesheet" href="assets/css/admin-add-product.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <title>Thêm sản phẩm - Mộc Trà Admin</title>
+
+    <base href="${pageContext.request.contextPath}/">
+
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="admin/assets/css/admin.css">
+    <link rel="stylesheet" href="admin/assets/css/admin-add-product.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css">
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+
+    <style>
+        .filepond--root { font-family: 'Roboto', sans-serif; }
+        .filepond--panel-root { background-color: #f7f9fc; border: 1px dashed #ccc; }
+        .dropify-wrapper { border-radius: 8px; border: 2px dashed #e5e5e5; }
+    </style>
 </head>
 <body>
 <div class="admin-container">
-    <!-- Sidebar -->
     <aside class="admin-sidebar">
         <div class="sidebar-header">
             <div class="admin-logo">
-                <img src="../assets/images/logoweb.png" alt="Mộc Trà">
+                <img src="assets/images/logoweb.png" alt="Mộc Trà">
                 <h2>Mộc Trà Admin</h2>
             </div>
         </div>
-
         <nav class="admin-nav">
             <ul>
-                <li class="nav-item">
-                    <a href="admin-dashboard.jsp">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-
-                <li class="nav-item active">
-                    <a href="admin-products.jsp">
-                        <i class="fas fa-box"></i>
-                        <span>Tất cả Sản phẩm</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-categories.jsp">
-                        <i class="fas fa-sitemap"></i>
-                        <span>Danh mục Sản phẩm</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-orders.jsp">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Đơn hàng</span>
-                        <span class="badge">23</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-customers.jsp">
-                        <i class="fas fa-users"></i>
-                        <span>Khách hàng</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-blog.jsp">
-                        <i class="fas fa-newspaper"></i>
-                        <span>Tất cả Bài viết</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-blog-categories.jsp">
-                        <i class="fas fa-folder"></i>
-                        <span>Danh mục Blog</span>
-                    </a>
-                </li>
+                <li class="nav-item"><a href="admin/admin-dashboard.jsp"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                <li class="nav-item active"><a href="admin/admin-products.jsp"><i class="fas fa-box"></i><span>Sản phẩm</span></a></li>
             </ul>
         </nav>
     </aside>
-        
-        <!-- Main Content -->
-        <main class="admin-main">
-            <!-- Header -->
-            <header class="admin-header">
-                <div class="header-left">
-                    <h1>Thêm sản phẩm mới</h1>
-                </div>
-                
-                <div class="header-right">
-                    <a href="admin-products.jsp" class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i>
-                        <span>Quay lại danh sách</span>
-                    </a>
-                    
-                    <a href="../index.jsp" class="view-site-btn" target="_blank">
-                        <i class="fas fa-external-link-alt"></i>
-                        <span>Xem trang web</span>
-                    </a>
-                </div>
-            </header>
-            
-            <!-- Content -->
+
+    <main class="admin-main">
+        <header class="admin-header">
+            <div class="header-left"><h1>Thêm sản phẩm mới</h1></div>
+            <div class="header-right">
+                <a href="admin/admin-products.jsp" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Quay lại</a>
+            </div>
+        </header>
+
+        <div class="admin-content">
             <c:if test="${not empty error}">
-                <div style="color: red; background-color: #fce4e4; padding: 10px; margin-bottom: 15px; border: 1px solid #fcc2c3; border-radius: 4px;">
+                <div style="color: #721c24; background-color: #f8d7da; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
                     <i class="fas fa-exclamation-triangle"></i> ${error}
                 </div>
             </c:if>
-            <div class="admin-content">
-                <form class="form-container" action="${pageContext.request.contextPath}/admin/product/add" method="POST" enctype="multipart/form-data">
-                    <div class="form-header">
-                        <h2>Thêm sản phẩm mới</h2>
-                        <p>Điền thông tin chi tiết để thêm sản phẩm vào hệ thống</p>
-                    </div>
-                    
-                    <div class="form-content">
-                        <div class="form-grid">
-                            <!-- Left Column -->
-                            <div class="form-left">
-                                <!-- Thông tin cơ bản -->
-                                <div class="form-section">
-                                    <h3>
-                                        <i class="fas fa-info-circle"></i>
-                                        Thông tin cơ bản
-                                    </h3>
-                                    
-                                    <div class="form-group">
-                                        <label for="product_name">Tên sản phẩm <span class="required">*</span></label>
-                                        <input type="text" id="product_name" name="name" class="form-control" required>
-                                        <div class="help-text">Tên sản phẩm sẽ hiển thị trên website</div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="product_slug">Slug (URL thân thiện)</label>
-                                        <input type="text" id="product_slug" name="slug" class="form-control">
-                                        <div class="help-text">Để trống sẽ tự động tạo từ tên sản phẩm</div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="short_description">Mô tả ngắn</label>
-                                        <textarea id="short_description" name="short_description" class="form-control textarea" rows="4"></textarea>
-                                        <div class="help-text">Mô tả ngắn gọn về sản phẩm (hiển thị trong danh sách)</div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="description">Mô tả chi tiết</label>
-                                        <textarea id="description" name="description" class="form-control textarea large" rows="8"></textarea>
-                                        <div class="help-text">Mô tả chi tiết về sản phẩm, công dụng, cách sử dụng</div>
-                                    </div>
+            <c:if test="${param.msg eq 'success'}">
+                <div style="color: #155724; background-color: #d4edda; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+                    <i class="fas fa-check-circle"></i> Thêm sản phẩm thành công!
+                </div>
+            </c:if>
+
+            <form class="form-container" action="admin/product/add" method="POST" enctype="multipart/form-data">
+                <div class="form-content">
+                    <div class="form-grid">
+                        <div class="form-left">
+                            <div class="form-section">
+                                <h3><i class="fas fa-info-circle"></i> Thông tin cơ bản</h3>
+
+                                <div class="form-group">
+                                    <label>Tên sản phẩm <span class="required">*</span></label>
+                                    <input type="text" name="name" class="form-control" required placeholder="Nhập tên sản phẩm...">
                                 </div>
-                                
-                                <!-- Thông tin bổ sung -->
-                                <div class="form-section">
-                                    <h3>
-                                        <i class="fas fa-leaf"></i>
-                                        Thông tin bổ sung
-                                    </h3>
-                                    
-                                    <div class="form-group">
-                                        <label for="ingredients">Thành phần nguyên liệu</label>
-                                        <textarea id="ingredients" name="ingredients" class="form-control textarea" rows="4"></textarea>
-                                        <div class="help-text">Liệt kê các thành phần chính trong sản phẩm</div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="usage_instructions">Hướng dẫn sử dụng</label>
-                                        <textarea id="usage_instructions" name="usage_instructions" class="form-control textarea" rows="4"></textarea>
-                                        <div class="help-text">Hướng dẫn cách pha chế và sử dụng sản phẩm</div>
-                                    </div>
+
+                                <div class="form-group">
+                                    <label>Slug (URL)</label>
+                                    <input type="text" name="slug" class="form-control" placeholder="Để trống tự động tạo">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Mô tả ngắn</label>
+                                    <textarea name="short_description" class="form-control textarea" rows="3"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Mô tả chi tiết</label>
+                                    <textarea name="description" class="form-control textarea large" rows="6"></textarea>
                                 </div>
                             </div>
-                            
-                            <!-- Right Column -->
-                            <div class="form-right">
-                                <!-- Trạng thái và phân loại -->
-                                <div class="form-section">
-                                    <h3>
-                                        <i class="fas fa-cog"></i>
-                                        Trạng thái & Phân loại
-                                    </h3>
-                                    
-                                    <div class="form-group">
-                                        <label for="status">Trạng thái <span class="required">*</span></label>
-                                        <select id="status" name="status" class="form-control" required>
-                                            <option value="">-- Chọn trạng thái --</option>
-                                            <option value="active">Hoạt động</option>
-                                            <option value="inactive">Không hoạt động</option>
-                                            <option value="out_of_stock">Hết hàng</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="category_id">Danh mục <span class="required">*</span></label>
-                                        <select id="category_id" name="category_id" class="form-control" required>
-                                            <option value="">-- Chọn danh mục --</option>
-                                            <option value="1">Trà sữa nguyên liệu</option>
-                                            <option value="2">Trà thảo mộc</option>
-                                            <option value="3">Nguyên liệu pha chế</option>
-                                            <option value="4">Phụ kiện pha trà</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="checkbox-group">
-                                        <input type="checkbox" id="is_bestseller" name="is_bestseller" value="1">
-                                        <label for="is_bestseller">Sản phẩm bán chạy</label>
-                                    </div>
-                                </div>
-                                
-                                <!-- Giá và kho -->
-                                <div class="form-section">
-                                    <h3>
-                                        <i class="fas fa-dollar-sign"></i>
-                                        Giá & Kho hàng
-                                    </h3>
-                                    
-                                    <div class="form-group">
-                                        <label for="price">Giá bán (VNĐ) <span class="required">*</span></label>
-                                        <input type="number" id="price" name="price" class="form-control" min="0" step="1000" required>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="sale_price">Giá khuyến mãi (VNĐ)</label>
-                                        <input type="number" id="sale_price" name="sale_price" class="form-control" min="0" step="1000">
-                                        <div class="help-text">Nhập giá này để chạy "Deal Hot" hoặc xả kho (Sẽ được ưu tiên hiển thị)</div>
-                                    </div>
-                                    
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label for="sku">Mã SKU</label>
-                                            <input type="text" id="sku" name="sku" class="form-control">
-                                            <div class="help-text">Mã sản phẩm duy nhất</div>
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label for="stock_quantity">Số lượng tồn kho</label>
-                                            <input type="number" id="stock_quantity" name="stock_quantity" class="form-control" min="0">
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Hình ảnh -->
-                                <div class="form-section">
-                                    <h3>
-                                        <i class="fas fa-image"></i>
-                                        Hình ảnh sản phẩm
-                                    </h3>
-                                    
-                                    <div class="form-group">
-                                        <label for="image_url">Hình ảnh chính <span class="required">*</span></label>
-                                        <div class="image-upload" onclick="document.getElementById('image_url').click()">
-                                            <i class="fas fa-cloud-upload-alt"></i>
-                                            <p>Nhấp để tải lên hình ảnh chính</p>
-                                            <small>JPG, PNG, GIF tối đa 2MB</small>
-                                        </div>
-                                        <input type="file" id="image_url" name="image_url" accept="image/*" style="display: none;" required>
-                                    </div>
 
-                                    <div class="form-group">
-                                        <label for="gallery">Bộ sưu tập hình ảnh</label>
-                                        <div class="gallery-upload" onclick="document.getElementById('gallery').click()">
-                                            <i class="fas fa-images"></i>
-                                            <p>Tải lên nhiều hình ảnh</p>
-                                            <small>Có thể chọn nhiều file (Giữ Ctrl để chọn)</small>
-                                        </div>
-                                        <input type="file" id="gallery" name="gallery[]" accept="image/*" multiple style="display: none;">
+                            <div class="form-section">
+                                <h3><i class="fas fa-leaf"></i> Thành phần & HDSD</h3>
+                                <div class="form-group"><label>Thành phần</label><textarea name="ingredients" class="form-control textarea" rows="3"></textarea></div>
+                                <div class="form-group"><label>Hướng dẫn sử dụng</label><textarea name="usage_instructions" class="form-control textarea" rows="3"></textarea></div>
+                            </div>
+                        </div>
 
-                                        <div class="help-text">Ảnh sẽ được lưu vào thư viện (Bảng PRODUCT_IMAGES)</div>
-                                    </div>
+                        <div class="form-right">
+                            <div class="form-section">
+                                <h3><i class="fas fa-cog"></i> Phân loại</h3>
+                                <div class="form-group">
+                                    <label>Trạng thái</label>
+                                    <select name="status" class="form-control">
+                                        <option value="active">Hoạt động</option>
+                                        <option value="inactive">Ẩn</option>
+                                        <option value="out_of_stock">Hết hàng</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Danh mục</label>
+                                    <select name="category_id" class="form-control">
+                                        <option value="1">Trà sữa nguyên liệu</option>
+                                        <option value="2">Trà thảo mộc</option>
+                                        <option value="3">Nguyên liệu pha chế</option>
+                                        <option value="4">Phụ kiện</option>
+                                    </select>
+                                </div>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="best" name="is_bestseller" value="1">
+                                    <label for="best">Sản phẩm bán chạy</label>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h3><i class="fas fa-dollar-sign"></i> Giá & Kho</h3>
+                                <div class="form-group"><label>Giá bán</label><input type="number" name="price" class="form-control" required></div>
+                                <div class="form-group"><label>Giá khuyến mãi</label><input type="number" name="sale_price" class="form-control"></div>
+                                <div class="form-row">
+                                    <div class="form-group"><label>SKU</label><input type="text" name="sku" class="form-control"></div>
+                                    <div class="form-group"><label>Tồn kho</label><input type="number" name="stock_quantity" class="form-control" value="0"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h3><i class="fas fa-image"></i> Hình ảnh</h3>
+
+                                <div class="form-group">
+                                    <label>Ảnh đại diện <span class="required">*</span></label>
+                                    <input type="file" name="image_url" class="dropify" data-height="200" accept="image/*" required />
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Album ảnh phụ</label>
+                                    <input type="file" id="gallery" name="gallery[]" multiple data-max-file-size="3MB" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="form-actions">
-                        <div class="help-text">
-                            <i class="fas fa-info-circle"></i>
-                            Các trường có dấu <span class="required">*</span> là bắt buộc
-                        </div>
-                        
-                        <div class="btn-group">
-                            <a href="admin-products.jsp" class="btn btn-outline">
-                                <i class="fas fa-times"></i>
-                                Hủy bỏ
-                            </a>
-                            
-                            <button type="button" class="btn btn-secondary">
-                                <i class="fas fa-save"></i>
-                                Lưu nháp
-                            </button>
-                            
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-plus"></i>
-                                Thêm sản phẩm
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </main>
-    </div>
+                </div>
 
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="history.back()">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+<script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Dropify
+        $('.dropify').dropify({
+            messages: { 'default': 'Kéo thả hoặc click', 'replace': 'Thay thế', 'remove': 'Xóa', 'error': 'Lỗi' }
+        });
+
+        // FilePond
+        FilePond.registerPlugin(FilePondPluginImagePreview);
+        const pond = FilePond.create(document.querySelector('#gallery'), {
+            storeAsFile: true, // QUAN TRỌNG
+            allowMultiple: true,
+            maxFiles: 10,
+            labelIdle: 'Kéo thả ảnh phụ hoặc <span class="filepond--label-action">Chọn file</span>',
+            credits: false
+        });
+    });
+</script>
 </body>
 </html>
