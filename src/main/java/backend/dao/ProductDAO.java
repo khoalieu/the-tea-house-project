@@ -4,10 +4,7 @@ import backend.db.DBConnect;
 import backend.model.Product;
 import backend.model.enums.ProductStatus;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -193,6 +190,60 @@ public class ProductDAO {
             e.printStackTrace();
         }
         return list;
+    }
+    public int insertProduct(Product p) {
+        String sql = "INSERT INTO products (name, slug, description, short_description, price, sale_price, " +
+                "sku, stock_quantity, category_id, image_url, is_bestseller, status, " +
+                "ingredients, usage_instructions, created_at) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, p.getName());
+            ps.setString(2, p.getSlug());
+            ps.setString(3, p.getDescription());
+            ps.setString(4, p.getShortDescription());
+            ps.setDouble(5, p.getPrice());
+            ps.setDouble(6, p.getSalePrice());
+            ps.setString(7, p.getSku());
+            ps.setInt(8, p.getStockQuantity());
+
+            if (p.getCategoryId() != null) ps.setInt(9, p.getCategoryId());
+            else ps.setNull(9, java.sql.Types.INTEGER);
+
+            ps.setString(10, p.getImageUrl());
+            ps.setBoolean(11, p.isBestseller());
+            ps.setString(12, p.getStatus() != null ? p.getStatus().name().toLowerCase() : "active");
+            ps.setString(13, p.getIngredients());
+            ps.setString(14, p.getUsageInstructions());
+            ps.setTimestamp(15, Timestamp.valueOf(p.getCreatedAt()));
+
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) return rs.getInt(1); // Trả về ID mới
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    public void insertProductImage(int productId, String imageUrl, String altText, int sortOrder) {
+        String sql = "INSERT INTO product_images (product_id, image_url, alt_text, sort_order) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, productId);
+            ps.setString(2, imageUrl);
+            ps.setString(3, altText);
+            ps.setInt(4, sortOrder);    // Lưu thứ tự sắp xếp
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
 

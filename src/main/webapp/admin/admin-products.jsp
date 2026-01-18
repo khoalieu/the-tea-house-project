@@ -114,9 +114,8 @@
                     <p>Quản lý tất cả sản phẩm trà và nguyên liệu pha chế</p>
                 </div>
                 <div class="page-actions">
-                    <a href="admin-product-add.jsp" class="btn btn-primary">
-                        <i class="fas fa-plus"></i>
-                        Thêm sản phẩm mới
+                    <a href="${pageContext.request.contextPath}/admin/product/add" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Thêm sản phẩm
                     </a>
                 </div>
             </div>

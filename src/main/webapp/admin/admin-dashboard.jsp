@@ -18,7 +18,7 @@
 <div class="admin-container">
     <!-- Sidebar -->
     <jsp:include page="/common/admin-sidebar.jsp">
-        <jsp:param name="activePage" value="blog" />
+        <jsp:param name="activePage" value="dashboard" />
     </jsp:include>
 
 
