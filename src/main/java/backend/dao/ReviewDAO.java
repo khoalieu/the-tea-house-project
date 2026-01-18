@@ -1,7 +1,7 @@
 package backend.dao;
 
 import backend.db.DBConnect;
-import backend.dto.ReviewDTO;
+import backend.model.ReviewDTO;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class ReviewDAO {
             while (rs.next()) {
 
                 String avatar = rs.getString("avatar");
-                if (avatar == null || avatar.isEmpty()) avatar = "assets/images/user-default.png";
+                if (avatar == null || avatar.isEmpty()) avatar = "assets/images/useravata.png";
 
                 ReviewDTO review = new ReviewDTO(
                         rs.getString("username"),
@@ -36,5 +36,22 @@ public class ReviewDAO {
             e.printStackTrace();
         }
         return list;
+    }
+    public boolean addReview(int productId, int userId, int rating, String comment) {
+        String sql = "INSERT INTO product_reviews (product_id, user_id, rating, comment_text, created_at) VALUES (?, ?, ?, ?, NOW())";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, productId);
+            ps.setInt(2, userId);
+            ps.setInt(3, rating);
+            ps.setString(4, comment);
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

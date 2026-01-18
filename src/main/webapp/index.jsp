@@ -20,7 +20,7 @@
             <div class="hero-content">
                 <h1>Mừng Quốc Tế Phụ Nữ 8/3</h1>
                 <p>Trao gửi yêu thương - Tặng kèm hộp quà cao cấp cho đơn từ 299k.</p>
-                <a href="khuyen-mai.jsp" class="hero-btn">Săn Deal Ngay</a>
+                <a href="khuyen-mai" class="hero-btn">Săn Deal Ngay</a>
             </div>
         </div>
 
@@ -28,7 +28,7 @@
             <div class="hero-content">
                 <h1>Xả Kho Nguyên Liệu -50%</h1>
                 <p>Cơ hội duy nhất trong năm. Số lượng có hạn!</p>
-                <a href="san-pham.jsp?promotionId=2" class="hero-btn">Mua Ngay</a>
+                <a href="san-pham?promotionId=2" class="hero-btn">Mua Ngay</a>
             </div>
         </div>
 
