@@ -1,4 +1,4 @@
-package backend.controller;
+package backend.controller.admin;
 
 import backend.dao.ProductDAO;
 import backend.model.Product;
