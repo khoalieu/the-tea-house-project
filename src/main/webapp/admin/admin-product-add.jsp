@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="a" uri="jakarta.tags.core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -108,11 +109,6 @@
                                         <option value="inactive">Ẩn</option>
                                         <option value="out_of_stock">Hết hàng</option>
                                     </select>
-                                </div>
-                                <div style="background: yellow; padding: 10px; border: 1px solid red;">
-                                    <p>Debug Categories:</p>
-                                    <p>List có null không? : ${categories == null}</p>
-                                    <p>Số lượng phần tử: ${categories.size()}</p>
                                 </div>
                                 <div class="form-group">
                                     <label>Danh mục <span class="required">*</span></label>
