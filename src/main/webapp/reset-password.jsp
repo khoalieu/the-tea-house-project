@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -31,8 +33,7 @@
             </div>
 
             <div class="login-content">
-                <!-- Sau này action trỏ tới servlet -->
-                <form id="resetForm" action="login.jsp" method="post" autocomplete="off">
+                <form id="resetForm" action="reset-password" method="post" autocomplete="off">
                     <div class="form-row">
                         <input
                                 id="new-password"
@@ -53,8 +54,7 @@
                                 required>
                     </div>
 
-                    <!-- Backend có thể gán message vào đây -->
-                    <p class="reset-message" id="resetMessage">
+                    <p class="reset-message" id="resetMessage" style="color:red; margin:8px 0;">
                         <c:out value="${message}" />
                     </p>
 

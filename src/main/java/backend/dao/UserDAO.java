@@ -98,6 +98,7 @@ public class UserDAO {
             e.printStackTrace();
         }
     }
+
     // 4. Lấy map user theo postId (Dùng trong hiển thị comment)
     public Map<Integer, User> getUserMapByPostId(int postId) {
         Map<Integer, User> map = new HashMap<>();
@@ -129,6 +130,7 @@ public class UserDAO {
 
         return map;
     }
+
     public boolean updateProfile(String firstname, String lastname, String phone, String dob, String gender, int userId) throws SQLException {
         // 1. Sửa câu Query: Xóa dấu phẩy trước WHERE và thêm phone
         String query = "UPDATE users SET first_name = ?, last_name = ?, phone = ?, dateOfBirth = ?, gender = ? WHERE id = ?";
@@ -161,6 +163,7 @@ public class UserDAO {
         }
         return false;
     }
+
     public boolean changePassword(int userId, String newPassword) {
         // Mã hóa mật khẩu mới trước khi lưu
         String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt(12));
@@ -176,6 +179,7 @@ public class UserDAO {
         }
         return false;
     }
+
     public boolean checkPassword(int userId, String oldPassword) {
         String query = "SELECT password_hash FROM users WHERE id = ?";
         try {
@@ -192,6 +196,7 @@ public class UserDAO {
         }
         return false;
     }
+
     public List<User> getAllAdminUsers() {
         List<User> list = new ArrayList<>();
         String sql =
@@ -218,6 +223,7 @@ public class UserDAO {
         }
         return list;
     }
+
     public User getById(int id) {
         String sql = "SELECT id, username, email, first_name, last_name, avatar, role FROM users WHERE id=? LIMIT 1";
         try (Connection conn = DBConnect.getConnection();
@@ -226,7 +232,9 @@ public class UserDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return map(rs);
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -250,7 +258,9 @@ public class UserDAO {
                     map.put(u.getId(), u);
                 }
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return map;
     }
 
@@ -268,4 +278,20 @@ public class UserDAO {
 
         return u;
     }
+
+    // tim user id trong email
+    public Integer findUserIdByEmail(String email) {
+        String sql = "SELECT id FROM users WHERE email = ? LIMIT 1";
+        try (Connection conn = new DBConnect().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt("id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

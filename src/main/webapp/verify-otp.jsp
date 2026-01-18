@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -31,8 +33,9 @@
       </div>
 
       <div class="login-content">
-        <!-- Sau này action trỏ tới servlet; hiện tại để demo sang trang đặt lại mật khẩu -->
-        <form id="otpForm" action="dat-lai-mat-khau.jsp" method="get" autocomplete="off">
+
+        <!-- Verify OTP -->
+        <form id="otpForm" action="verify-otp" method="post" autocomplete="off">
           <div class="otp-input-group">
             <input type="text" maxlength="1" class="otp-input" data-id="1">
             <input type="text" maxlength="1" class="otp-input" data-id="2">
@@ -42,20 +45,29 @@
             <input type="text" maxlength="1" class="otp-input" data-id="6">
           </div>
 
-          <!-- Input ẩn để submit OTP -->
           <input type="hidden" name="otp" id="otpHiddenInput">
+
+          <!-- message lỗi màu đỏ -->
+          <p class="reset-message" style="color:red; margin:8px 0;">
+            <c:out value="${message}" />
+          </p>
 
           <div class="form-row">
             <button type="submit" class="btn">Xác nhận</button>
           </div>
-
-          <div class="auth-extra-links">
-            <button type="button" class="link-button">Gửi lại mã OTP</button>
-            <a href="quen-mat-khau.jsp">Thay đổi email</a>
-          </div>
         </form>
-      </div>
 
+        <div class="auth-extra-links">
+          <!-- Resend OTP -->
+          <form action="forgot-password" method="post" style="display:inline;">
+            <input type="hidden" name="action" value="resend">
+            <button type="submit" class="link-button">Gửi lại mã OTP</button>
+          </form>
+
+          <a href="quen-mat-khau.jsp">Thay đổi email</a>
+        </div>
+
+      </div>
     </div>
   </div>
 </main>
@@ -76,14 +88,11 @@
       inputs.forEach(i => code += (i.value || ''));
       hiddenInput.value = code;
     }
-    // xử lý input verify
+
     inputs.forEach((input, index) => {
-      // Khi nhập
       input.addEventListener('input', (e) => {
-        // Chỉ cho số
         input.value = input.value.replace(/[^0-9]/g, '');
 
-        // Nếu dán nhiều số vào 1 ô -> tự tách ra
         if (e.inputType === 'insertFromPaste' && input.value.length > 1) {
           const chars = input.value.split('');
           input.value = chars[0];
@@ -93,16 +102,13 @@
           }
         }
 
-        // Nếu có ký tự & chưa phải ô cuối -> nhảy qua ô tiếp theo
         if (input.value && index < inputs.length - 1) {
           inputs[index + 1].focus();
           inputs[index + 1].select();
         }
-
         updateHiddenInput();
       });
 
-      // Bắt phím để xử lý Backspace
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Backspace') {
           if (input.value === '' && index > 0) {
@@ -112,14 +118,8 @@
             updateHiddenInput();
           }
         }
-
-        // Di chuyển bằng phím mũi tên trái/phải (optional cho tiện)
-        if (e.key === 'ArrowLeft' && index > 0) {
-          inputs[index - 1].focus();
-        }
-        if (e.key === 'ArrowRight' && index < inputs.length - 1) {
-          inputs[index + 1].focus();
-        }
+        if (e.key === 'ArrowLeft' && index > 0) inputs[index - 1].focus();
+        if (e.key === 'ArrowRight' && index < inputs.length - 1) inputs[index + 1].focus();
       });
     });
   });
@@ -127,7 +127,6 @@
   document.getElementById('otpForm').addEventListener('submit', function (e) {
     const inputs = document.querySelectorAll('.otp-input');
     let code = '';
-
     inputs.forEach(i => code += (i.value || ''));
 
     if (code.length !== 6) {
@@ -135,11 +134,8 @@
       e.preventDefault();
       return;
     }
-
     document.getElementById('otpHiddenInput').value = code;
   });
-
-
 </script>
 </body>
 </html>
