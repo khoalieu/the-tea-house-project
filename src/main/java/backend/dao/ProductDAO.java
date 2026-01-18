@@ -125,7 +125,6 @@ public class ProductDAO {
         }
         return 0;
     }
-    public int insertProduct(Product p) {
 
     public Product getProductById(int id) {
         String sql = "SELECT * FROM products WHERE id = ?";
@@ -192,7 +191,7 @@ public class ProductDAO {
         }
         return list;
     }
-    public boolean insertProduct(Product p) {
+    public int insertProduct(Product p) {
         String sql = "INSERT INTO products (name, slug, description, short_description, price, sale_price, " +
                 "sku, stock_quantity, category_id, image_url, is_bestseller, status, " +
                 "ingredients, usage_instructions, created_at) " +
