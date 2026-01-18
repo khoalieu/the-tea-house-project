@@ -16,7 +16,7 @@ public class ProductDAO {
 
     }
 
-    public List<Product> getProducts(Integer categoryId, Integer promotionId, String sort,Double maxPrice, int index, int size) {
+    public List<Product> getProducts(Integer categoryId, Integer promotionId, String sort, Double maxPrice, int index, int size) {
         List<Product> list = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE status = 'active' ");
@@ -27,14 +27,23 @@ public class ProductDAO {
             sql.append(" AND (CASE WHEN sale_price > 0 THEN sale_price ELSE price END) <= ? ");
         }
         if (promotionId != null) sql.append(" AND pi.promotion_id = ? ");
-        // Logic sắp xếp
+
         if (sort != null) {
             switch (sort) {
-                case "price-asc": sql.append(" ORDER BY price ASC "); break;
-                case "price-desc": sql.append(" ORDER BY price DESC "); break;
-                case "name-asc": sql.append(" ORDER BY name ASC "); break;
-                case "newest": sql.append(" ORDER BY created_at DESC "); break;
-                default: sql.append(" ORDER BY created_at DESC ");
+                case "price-asc":
+                    sql.append(" ORDER BY price ASC ");
+                    break;
+                case "price-desc":
+                    sql.append(" ORDER BY price DESC ");
+                    break;
+                case "name-asc":
+                    sql.append(" ORDER BY name ASC ");
+                    break;
+                case "newest":
+                    sql.append(" ORDER BY created_at DESC ");
+                    break;
+                default:
+                    sql.append(" ORDER BY created_at DESC ");
             }
         } else {
             sql.append(" ORDER BY created_at DESC ");
@@ -60,34 +69,34 @@ public class ProductDAO {
 
             while (rs.next()) {
                 Product p = new Product();
-                    p.setId(rs.getInt("id"));
-                    p.setName(rs.getString("name"));
-                    p.setSlug(rs.getString("slug"));
-                    p.setDescription(rs.getString("description"));
-                    p.setShortDescription(rs.getString("short_description"));
-                    p.setPrice(rs.getDouble("price"));
-                    p.setSalePrice(rs.getDouble("sale_price"));
-                    p.setSku(rs.getString("sku"));
-                    p.setStockQuantity(rs.getInt("stock_quantity"));
-                    p.setCategoryId(rs.getInt("category_id"));
-                    p.setImageUrl(rs.getString("image_url"));
-                    p.setBestseller(rs.getBoolean("is_bestseller"));
-                    String statusStr = rs.getString("status");
-                    if (statusStr != null) {
-                        try {
-                            p.setStatus(ProductStatus.valueOf(statusStr.toUpperCase()));
-                        } catch (IllegalArgumentException e) {
-                            p.setStatus(ProductStatus.ACTIVE);
-                        }
+                p.setId(rs.getInt("id"));
+                p.setName(rs.getString("name"));
+                p.setSlug(rs.getString("slug"));
+                p.setDescription(rs.getString("description"));
+                p.setShortDescription(rs.getString("short_description"));
+                p.setPrice(rs.getDouble("price"));
+                p.setSalePrice(rs.getDouble("sale_price"));
+                p.setSku(rs.getString("sku"));
+                p.setStockQuantity(rs.getInt("stock_quantity"));
+                p.setCategoryId(rs.getInt("category_id"));
+                p.setImageUrl(rs.getString("image_url"));
+                p.setBestseller(rs.getBoolean("is_bestseller"));
+                String statusStr = rs.getString("status");
+                if (statusStr != null) {
+                    try {
+                        p.setStatus(ProductStatus.valueOf(statusStr.toUpperCase()));
+                    } catch (IllegalArgumentException e) {
+                        p.setStatus(ProductStatus.ACTIVE);
                     }
+                }
 
-                    p.setIngredients(rs.getString("ingredients"));
-                    p.setUsageInstructions(rs.getString("usage_instructions"));
+                p.setIngredients(rs.getString("ingredients"));
+                p.setUsageInstructions(rs.getString("usage_instructions"));
 
-                    if (rs.getTimestamp("created_at") != null) {
-                        p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-                    }
-                    list.add(p);
+                if (rs.getTimestamp("created_at") != null) {
+                    p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                }
+                list.add(p);
             }
 
         } catch (Exception e) {
@@ -96,17 +105,17 @@ public class ProductDAO {
         return list;
     }
 
-    public int countProducts(Integer categoryId,Integer promotionId ,Double maxPrice) throws SQLException {
+    public int countProducts(Integer categoryId, Integer promotionId, Double maxPrice) throws SQLException {
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM products WHERE status = 'active' ");
-        if(categoryId != null){
+        if (categoryId != null) {
             sql.append(" AND category_id = ? ");
         }
         if (maxPrice != null) {
             sql.append(" AND (CASE WHEN sale_price > 0 THEN sale_price ELSE price END) <= ? ");
         }
         if (promotionId != null) sql.append(" AND pi.promotion_id = ? ");
-        try(Connection conn = DBConnect.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
             int paramIndex = 1;
             if (categoryId != null) ps.setInt(paramIndex++, categoryId);
             if (maxPrice != null) ps.setDouble(paramIndex++, maxPrice);
@@ -119,4 +128,71 @@ public class ProductDAO {
         }
         return 0;
     }
+
+    public Product getProductById(int id) {
+        String sql = "SELECT * FROM products WHERE id = ?";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("id"));
+                p.setName(rs.getString("name"));
+                p.setSlug(rs.getString("slug"));
+                p.setDescription(rs.getString("description"));
+                p.setShortDescription(rs.getString("short_description"));
+                p.setPrice(rs.getDouble("price"));
+                p.setSalePrice(rs.getDouble("sale_price"));
+                p.setSku(rs.getString("sku"));
+                p.setStockQuantity(rs.getInt("stock_quantity"));
+                p.setCategoryId(rs.getInt("category_id"));
+                p.setImageUrl(rs.getString("image_url"));
+                p.setBestseller(rs.getBoolean("is_bestseller"));
+                String statusStr = rs.getString("status");
+                if (statusStr != null) {
+                    try {
+                        p.setStatus(ProductStatus.valueOf(statusStr.toUpperCase()));
+                    } catch (IllegalArgumentException e) {
+                        p.setStatus(ProductStatus.ACTIVE);
+                    }
+                }
+
+                p.setIngredients(rs.getString("ingredients"));
+                p.setUsageInstructions(rs.getString("usage_instructions"));
+
+                if (rs.getTimestamp("created_at") != null) {
+                    p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                }
+                return p;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public List<Product> getRelatedProducts(int categoryId, int currentProductId) {
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT * FROM products WHERE category_id = ? AND id != ? AND status = 'active' ORDER BY RAND() LIMIT 4";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, categoryId);
+            ps.setInt(2, currentProductId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("id"));
+                p.setName(rs.getString("name"));
+                p.setPrice(rs.getDouble("price"));
+                p.setSalePrice(rs.getDouble("sale_price"));
+                p.setImageUrl(rs.getString("image_url"));
+                p.setSlug(rs.getString("slug"));
+                list.add(p);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }
+
