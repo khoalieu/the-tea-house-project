@@ -109,13 +109,20 @@
                                         <option value="out_of_stock">Hết hàng</option>
                                     </select>
                                 </div>
+                                <div style="background: yellow; padding: 10px; border: 1px solid red;">
+                                    <p>Debug Categories:</p>
+                                    <p>List có null không? : ${categories == null}</p>
+                                    <p>Số lượng phần tử: ${categories.size()}</p>
+                                </div>
                                 <div class="form-group">
-                                    <label>Danh mục</label>
-                                    <select name="category_id" class="form-control">
-                                        <option value="1">Trà sữa nguyên liệu</option>
-                                        <option value="2">Trà thảo mộc</option>
-                                        <option value="3">Nguyên liệu pha chế</option>
-                                        <option value="4">Phụ kiện</option>
+                                    <label>Danh mục <span class="required">*</span></label>
+                                    <select name="category_id" class="form-control" required>
+                                        <option value="">-- Chọn danh mục --</option>
+
+                                        <c:forEach var="cat" items="${categories}">
+                                            <option value="${cat.id}">${cat.name}</option>
+                                        </c:forEach>
+
                                     </select>
                                 </div>
                                 <div class="checkbox-group">
