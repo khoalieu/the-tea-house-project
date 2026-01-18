@@ -132,7 +132,7 @@ public class CheckoutServlet extends HttpServlet {
             session.removeAttribute("cart");
             CartDAO cartDAO = new CartDAO();
             cartDAO.clearCart(user.getId());
-            response.sendRedirect("don-hang-nguoi-dung.jsp");
+            response.sendRedirect("hoa-don?id=" + orderId);
         } else {
             request.setAttribute("errorMessage", "Đặt hàng thất bại. Vui lòng thử lại.");
             doGet(request, response);

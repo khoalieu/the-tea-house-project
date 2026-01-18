@@ -125,7 +125,7 @@
                                     <strong>${o.paymentMethod == 'cod' ? 'Thanh toán khi nhận hàng (COD)' : o.paymentMethod}</strong>
                                 </div>
                                 <div class="order-actions">
-                                    <a href="chi-tiet-don-hang?id=${o.id}" class="btn-action btn-outline">
+                                    <a href="hoa-don?id=${o.id}" class="btn-action btn-outline">
                                         <i class="fa-solid fa-eye"></i> Chi tiết
                                     </a>
 

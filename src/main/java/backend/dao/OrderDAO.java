@@ -199,4 +199,57 @@ public class OrderDAO {
         }
         return items;
     }
+    public Order getOrderById(int orderId) {
+        Order o = null;
+        String sql = "SELECT o.*, a.full_name, a.phone_number, a.street_address, a.ward, a.province " +
+                "FROM orders o " +
+                "LEFT JOIN user_addresses a ON o.shipping_address_id = a.id " +
+                "WHERE o.id = ?";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                o = new Order();
+                o.setId(rs.getInt("id"));
+                o.setUserId(rs.getInt("user_id"));
+                o.setShippingAddressId(rs.getInt("shipping_address_id"));
+                o.setOrderNumber(rs.getString("order_number"));
+                o.setTotalAmount(rs.getDouble("total_amount"));
+                o.setShippingFee(rs.getDouble("shipping_fee"));
+                o.setPaymentMethod(rs.getString("payment_method"));
+                Timestamp ts = rs.getTimestamp("created_at");
+                if (ts != null) {
+                    o.setCreatedAt(Timestamp.valueOf(ts.toLocalDateTime()));
+                }
+                try {
+                    String statusStr = rs.getString("status");
+                    o.setStatus(statusStr != null ? OrderStatus.valueOf(statusStr.toUpperCase()) : OrderStatus.PENDING);
+                } catch (Exception e) { o.setStatus(OrderStatus.PENDING); }
+                try {
+                    String payStatusStr = rs.getString("payment_status");
+                    o.setPaymentStatus(payStatusStr != null ? PaymentStatus.valueOf(payStatusStr.toUpperCase()) : PaymentStatus.PENDING);
+                } catch (Exception e) { o.setPaymentStatus(PaymentStatus.PENDING); }
+                String fullName = rs.getString("full_name");
+                if (fullName != null) {
+                    String phone = rs.getString("phone_number");
+                    String street = rs.getString("street_address");
+                    String ward = rs.getString("ward");
+                    String province = rs.getString("province");
+                    String fullAddr = String.format("%s - %s<br>%s, %s, %s",
+                            fullName, phone, street, ward, province);
+                    o.setNotes(fullAddr);
+                } else {
+                    o.setNotes(rs.getString("notes"));
+                }
+                o.setItems(getOrderItems(o.getId()));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return o;
+    }
 }
