@@ -43,15 +43,16 @@ public class AdminProductServlet extends HttpServlet {
         loadCategoriesToRequest(request);
         request.getRequestDispatcher("/admin/admin-product-add.jsp").forward(request, response);
     }
+
     private void loadCategoriesToRequest(HttpServletRequest request) {
         List<Category> listCategories = categoryDAO.getAllCategories();
         request.setAttribute("categories", listCategories);
     }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         try {
-            // Lưu trực tiếp vào assets/images/
             String relativeDir = "assets" + File.separator + "images";
             String uploadPath = getServletContext().getRealPath("") + File.separator + relativeDir;
 
@@ -62,9 +63,13 @@ public class AdminProductServlet extends HttpServlet {
 
             String name = request.getParameter("name");
             String slug = request.getParameter("slug");
+
             if (slug == null || slug.trim().isEmpty()) {
-                slug = name.toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
+                String rawSlug = name.toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
+                slug = rawSlug + "-" + System.currentTimeMillis();
             }
+            // ----------------------------------------------------------------
+
             String shortDesc = request.getParameter("short_description");
             String description = request.getParameter("description");
             String ingredients = request.getParameter("ingredients");
@@ -83,13 +88,13 @@ public class AdminProductServlet extends HttpServlet {
 
             if (mainImagePart != null && mainImagePart.getSize() > 0) {
                 String fileName = Paths.get(mainImagePart.getSubmittedFileName()).getFileName().toString();
-                // Làm sạch tên file
                 fileName = fileName.replaceAll("\\s+", "_");
                 String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
                 mainImagePart.write(uploadPath + File.separator + uniqueFileName);
                 // Lưu đường dẫn DB: assets/images/ten_file.jpg
                 mainImageUrl = "assets/images/" + uniqueFileName;
             }
+
             Product product = new Product();
             product.setName(name);
             product.setSlug(slug);
@@ -150,8 +155,6 @@ public class AdminProductServlet extends HttpServlet {
             request.getRequestDispatcher("/admin/admin-product-add.jsp").forward(request, response);
         }
     }
-
-    // Tiện ích xử lý số
     private double parseDoubleSafe(String value) {
         if (value == null || value.trim().isEmpty()) return 0.0;
         try { return Double.parseDouble(value); } catch (NumberFormatException e) { return 0.0; }

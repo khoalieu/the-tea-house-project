@@ -73,29 +73,37 @@
 
                                 <div class="form-group">
                                     <label>Tên sản phẩm <span class="required">*</span></label>
-                                    <input type="text" name="name" class="form-control" required placeholder="Nhập tên sản phẩm...">
+                                    <input type="text" name="name" class="form-control" required
+                                           placeholder="Nhập tên sản phẩm..." value="${param.name}">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Slug (URL)</label>
-                                    <input type="text" name="slug" class="form-control" placeholder="Để trống tự động tạo">
+                                    <input type="text" name="slug" class="form-control"
+                                           placeholder="Để trống tự động tạo" value="${param.slug}">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Mô tả ngắn</label>
-                                    <textarea name="short_description" class="form-control textarea" rows="3"></textarea>
+                                    <textarea name="short_description" class="form-control textarea" rows="3">${param.short_description}</textarea>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Mô tả chi tiết</label>
-                                    <textarea name="description" class="form-control textarea large" rows="6"></textarea>
+                                    <textarea name="description" class="form-control textarea large" rows="6">${param.description}</textarea>
                                 </div>
                             </div>
 
                             <div class="form-section">
                                 <h3><i class="fas fa-leaf"></i> Thành phần & HDSD</h3>
-                                <div class="form-group"><label>Thành phần</label><textarea name="ingredients" class="form-control textarea" rows="3"></textarea></div>
-                                <div class="form-group"><label>Hướng dẫn sử dụng</label><textarea name="usage_instructions" class="form-control textarea" rows="3"></textarea></div>
+                                <div class="form-group">
+                                    <label>Thành phần</label>
+                                    <textarea name="ingredients" class="form-control textarea" rows="3">${param.ingredients}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Hướng dẫn sử dụng</label>
+                                    <textarea name="usage_instructions" class="form-control textarea" rows="3">${param.usage_instructions}</textarea>
+                                </div>
                             </div>
                         </div>
 
@@ -105,35 +113,45 @@
                                 <div class="form-group">
                                     <label>Trạng thái</label>
                                     <select name="status" class="form-control">
-                                        <option value="active">Hoạt động</option>
-                                        <option value="inactive">Ẩn</option>
-                                        <option value="out_of_stock">Hết hàng</option>
+                                        <option value="active" ${param.status == 'active' ? 'selected' : ''}>Hoạt động</option>
+                                        <option value="inactive" ${param.status == 'inactive' ? 'selected' : ''}>Ẩn</option>
+                                        <option value="out_of_stock" ${param.status == 'out_of_stock' ? 'selected' : ''}>Hết hàng</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Danh mục <span class="required">*</span></label>
                                     <select name="category_id" class="form-control" required>
                                         <option value="">-- Chọn danh mục --</option>
-
                                         <c:forEach var="cat" items="${categories}">
-                                            <option value="${cat.id}">${cat.name}</option>
+                                            <option value="${cat.id}" ${param.category_id == cat.id ? 'selected' : ''}>${cat.name}</option>
                                         </c:forEach>
-
                                     </select>
                                 </div>
                                 <div class="checkbox-group">
-                                    <input type="checkbox" id="best" name="is_bestseller" value="1">
+                                    <input type="checkbox" id="best" name="is_bestseller" value="1" ${param.is_bestseller == '1' ? 'checked' : ''}>
                                     <label for="best">Sản phẩm bán chạy</label>
                                 </div>
                             </div>
 
                             <div class="form-section">
                                 <h3><i class="fas fa-dollar-sign"></i> Giá & Kho</h3>
-                                <div class="form-group"><label>Giá bán</label><input type="number" name="price" class="form-control" required></div>
-                                <div class="form-group"><label>Giá khuyến mãi</label><input type="number" name="sale_price" class="form-control"></div>
+                                <div class="form-group">
+                                    <label>Giá bán</label>
+                                    <input type="number" name="price" class="form-control" required value="${param.price}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Giá khuyến mãi</label>
+                                    <input type="number" name="sale_price" class="form-control" value="${param.sale_price}">
+                                </div>
                                 <div class="form-row">
-                                    <div class="form-group"><label>SKU</label><input type="text" name="sku" class="form-control"></div>
-                                    <div class="form-group"><label>Tồn kho</label><input type="number" name="stock_quantity" class="form-control" value="0"></div>
+                                    <div class="form-group">
+                                        <label>SKU</label>
+                                        <input type="text" name="sku" class="form-control" value="${param.sku}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tồn kho</label>
+                                        <input type="number" name="stock_quantity" class="form-control" value="${param.stock_quantity != null ? param.stock_quantity : '0'}">
+                                    </div>
                                 </div>
                             </div>
 
@@ -174,11 +192,10 @@
         $('.dropify').dropify({
             messages: { 'default': 'Kéo thả hoặc click', 'replace': 'Thay thế', 'remove': 'Xóa', 'error': 'Lỗi' }
         });
-
         // FilePond
         FilePond.registerPlugin(FilePondPluginImagePreview);
         const pond = FilePond.create(document.querySelector('#gallery'), {
-            storeAsFile: true, // QUAN TRỌNG
+            storeAsFile: true,
             allowMultiple: true,
             maxFiles: 10,
             labelIdle: 'Kéo thả ảnh phụ hoặc <span class="filepond--label-action">Chọn file</span>',
