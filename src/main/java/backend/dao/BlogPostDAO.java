@@ -230,6 +230,31 @@ public class BlogPostDAO {
             e.printStackTrace();
         }
     }
+    // BlogPostDAO.java
+    public List<BlogPost> getTopViewedPublished(int limit) {
+        List<BlogPost> list = new ArrayList<>();
+
+        String sql = "SELECT id, title, slug, excerpt, featured_image, views_count, created_at " +
+                "FROM blog_posts " +
+                "WHERE status = 'published' " +
+                "ORDER BY IFNULL(views_count, 0) DESC, created_at DESC " +
+                "LIMIT ?";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, limit);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapCard(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
 
     private BlogPost mapCard(ResultSet rs) throws Exception {
         BlogPost b = new BlogPost();
