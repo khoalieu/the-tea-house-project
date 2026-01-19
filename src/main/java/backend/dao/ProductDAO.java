@@ -350,4 +350,33 @@ public class ProductDAO {
             e.printStackTrace();
         }
     }
+
+    public List<Product> getTopSellingByParentCategory(int parentId, int limit) {
+        List<Product> list = new ArrayList<>(); String sql = "SELECT p.*, IFNULL(SUM(IF(o.status = 'completed', oi.quantity, 0)), 0) AS sold_qty "
+                + "FROM products p " + "JOIN categories c ON c.id = p.category_id "
+                + "LEFT JOIN order_items oi ON oi.product_id = p.id "
+                + "LEFT JOIN orders o ON o.id = oi.order_id "
+                + "WHERE p.status = 'active' AND c.parent_id = ? "
+                + "GROUP BY p.id "
+                + "ORDER BY sold_qty DESC, p.created_at DESC " + "LIMIT ?";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, parentId); ps.setInt(2, limit);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Product p = new Product();
+                    p.setId(rs.getInt("id"));
+                    p.setName(rs.getString("name"));
+                    p.setSlug(rs.getString("slug"));
+                    p.setPrice(rs.getDouble("price"));
+                    p.setSalePrice(rs.getDouble("sale_price"));
+                    p.setSku(rs.getString("sku"));
+                    p.setStockQuantity(rs.getInt("stock_quantity"));
+                    int catId = rs.getInt("category_id");
+                    p.setCategoryId(rs.wasNull() ? null : catId);
+                    p.setImageUrl(rs.getString("image_url"));
+                    list.add(p); } } } catch (Exception e) { e.printStackTrace();
+        }
+        return list;
+    }
 }
