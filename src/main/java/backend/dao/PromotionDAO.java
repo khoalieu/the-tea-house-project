@@ -6,10 +6,7 @@ import backend.model.Promotion;
 import backend.model.enums.DiscountType;
 import backend.model.enums.ProductStatus;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -219,5 +216,109 @@ public class PromotionDAO {
             } catch (Exception e) {
             }
         }
+    }
+    public List<Promotion> getAllPromotions() {
+        List<Promotion> list = new ArrayList<>();
+        String sql = "SELECT * FROM promotions ORDER BY created_at DESC";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Promotion p = new Promotion();
+                p.setId(rs.getInt("id"));
+                p.setName(rs.getString("name"));
+                p.setDescription(rs.getString("description"));
+                p.setDiscountType(DiscountType.valueOf(rs.getString("discount_type")));
+                p.setDiscountValue(rs.getDouble("discount_value"));
+                p.setStartDate(rs.getTimestamp("start_date").toLocalDateTime());
+                p.setEndDate(rs.getTimestamp("end_date").toLocalDateTime());
+                p.setActive(rs.getBoolean("is_active"));
+                list.add(p);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public boolean insertPromotion(Promotion p) {
+        String sql = "INSERT INTO promotions (name, description, discount_type, discount_value, start_date, end_date, is_active, image_url, created_at) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, p.getName());
+            ps.setString(2, p.getDescription());
+            ps.setString(3, p.getDiscountType().name());
+            ps.setDouble(4, p.getDiscountValue());
+            ps.setTimestamp(5, Timestamp.valueOf(p.getStartDate()));
+            ps.setTimestamp(6, Timestamp.valueOf(p.getEndDate()));
+            ps.setBoolean(7, p.isActive());
+            ps.setString(8, p.getImageUrl());
+
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void togglePromotionStatus(int promoId, boolean newStatus) {
+        Connection conn = null;
+        try {
+            conn = DBConnect.getConnection();
+            conn.setAutoCommit(false);
+
+            String sqlUpdateStatus = "UPDATE promotions SET is_active = ? WHERE id = ?";
+            try (PreparedStatement ps = conn.prepareStatement(sqlUpdateStatus)) {
+                ps.setBoolean(1, newStatus);
+                ps.setInt(2, promoId);
+                ps.executeUpdate();
+            }
+
+            if (!newStatus) {
+                String sqlResetPrice = "UPDATE products p " +
+                        "JOIN promotion_items pi ON p.id = pi.product_id " +
+                        "SET p.sale_price = 0 " +
+                        "WHERE pi.promotion_id = ?";
+                try (PreparedStatement ps = conn.prepareStatement(sqlResetPrice)) {
+                    ps.setInt(1, promoId);
+                    ps.executeUpdate();
+                }
+
+                String sqlDeleteItems = "DELETE FROM promotion_items WHERE promotion_id = ?";
+                try (PreparedStatement ps = conn.prepareStatement(sqlDeleteItems)) {
+                    ps.setInt(1, promoId);
+                    ps.executeUpdate();
+                }
+            }
+
+            conn.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try { if(conn != null) conn.rollback(); } catch (SQLException ex) {}
+        } finally {
+            try { if(conn != null) conn.close(); } catch (SQLException ex) {}
+        }
+    }
+    public boolean updatePromotion(Promotion p) {
+        String sql = "UPDATE promotions SET name=?, description=?, discount_type=?, discount_value=?, " +
+                "start_date=?, end_date=?, image_url=? WHERE id=?";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, p.getName());
+            ps.setString(2, p.getDescription());
+            ps.setString(3, p.getDiscountType().name());
+            ps.setDouble(4, p.getDiscountValue());
+            ps.setTimestamp(5, Timestamp.valueOf(p.getStartDate()));
+            ps.setTimestamp(6, Timestamp.valueOf(p.getEndDate()));
+            ps.setString(7, p.getImageUrl());
+            ps.setInt(8, p.getId());
+
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
