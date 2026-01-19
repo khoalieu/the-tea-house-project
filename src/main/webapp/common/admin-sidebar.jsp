@@ -28,7 +28,7 @@
       </li>
 
       <li class="nav-item ${param.activePage == 'banners' ? 'active' : ''}">
-        <a href="${ctx}/admin/admin-banners.jsp">
+        <a href="${ctx}/admin/banner">
           <i class="fas fa-images"></i>
           <span>Quản lý Banner</span>
         </a>

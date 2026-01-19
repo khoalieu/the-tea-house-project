@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 public class CategoryDAO {
 
@@ -28,5 +29,19 @@ public class CategoryDAO {
             e.printStackTrace();
         }
         return list;
+    }
+    public Map<Integer, String> getActiveCategories() {
+        Map<Integer, String> map = new LinkedHashMap<>();
+        String sql = "SELECT id, name FROM categories WHERE is_active = 1 ORDER BY parent_id IS NULL DESC, parent_id ASC, name ASC";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) map.put(rs.getInt("id"), rs.getString("name"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return map;
     }
 }
