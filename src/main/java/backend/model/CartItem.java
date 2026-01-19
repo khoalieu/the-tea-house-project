@@ -3,40 +3,36 @@ package backend.model;
 import java.time.LocalDateTime;
 
 public class CartItem {
-    private Integer id;
-    private Integer userId;
-    private Integer productId;
-    private Integer quantity;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Product product;
+    private int quantity;
 
-    public CartItem() {}
-
-    public CartItem(Integer id, Integer userId, Integer productId, Integer quantity,
-                    LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.userId = userId;
-        this.productId = productId;
-        this.quantity = quantity;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+    public CartItem() {
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public CartItem(Product product, int quantity) {
+        this.product = product;
+        this.quantity = quantity;
+    }
 
-    public Integer getUserId() { return userId; }
-    public void setUserId(Integer userId) { this.userId = userId; }
+    public double getTotalPrice() {
+        if (product == null) return 0;
+        double price = (product.getSalePrice() > 0) ? product.getSalePrice() : product.getPrice();
+        return price * quantity;
+    }
 
-    public Integer getProductId() { return productId; }
-    public void setProductId(Integer productId) { this.productId = productId; }
+    public Product getProduct() {
+        return product;
+    }
 
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public int getQuantity() {
+        return quantity;
+    }
 
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

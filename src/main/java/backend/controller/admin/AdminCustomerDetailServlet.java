@@ -73,7 +73,7 @@ public class AdminCustomerDetailServlet extends HttpServlet {
                             "fa-shopping-cart",
                             "Đã đặt đơn hàng mới",
                             desc,
-                            o.getCreatedAt()
+                            o.getCreatedAt().toLocalDateTime()
                     ));
                 }
             }

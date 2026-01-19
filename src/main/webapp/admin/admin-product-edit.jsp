@@ -1,13 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cập nhật sản phẩm - Mộc Trà Admin</title> <link rel="stylesheet" href="../assets/css/base.css">
-    <link rel="stylesheet" href="../assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/admin.css">
-    <link rel="stylesheet" href="assets/css/admin-add-product.css">
+    <title>Cập nhật sản phẩm - Mộc Trà Admin</title>
+
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/base.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/components.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/assets/css/admin.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/assets/css/admin-add-product.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -18,7 +24,7 @@
     <aside class="admin-sidebar">
         <div class="sidebar-header">
             <div class="admin-logo">
-                <img src="../assets/images/logoweb.png" alt="Mộc Trà">
+                <img src="${pageContext.request.contextPath}/assets/images/logoweb.png" alt="Mộc Trà">
                 <h2>Mộc Trà Admin</h2>
             </div>
         </div>
@@ -26,31 +32,28 @@
         <nav class="admin-nav">
             <ul>
                 <li class="nav-item">
-                    <a href="admin-dashboard.jsp"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+                    <a href="${pageContext.request.contextPath}/admin/dashboard.jsp"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a href="admin-products.jsp"><i class="fas fa-box"></i><span>Tất cả Sản phẩm</span></a>
+                    <a href="${pageContext.request.contextPath}/admin/products"><i class="fas fa-box"></i><span>Tất cả Sản phẩm</span></a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin-banners.jsp">
-                        <i class="fas fa-images"></i>
-                        <span>Quản lý Banner</span>
-                    </a>
+                    <a href="${pageContext.request.contextPath}/admin/banners.jsp"><i class="fas fa-images"></i><span>Quản lý Banner</span></a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin-categories.jsp"><i class="fas fa-sitemap"></i><span>Danh mục Sản phẩm</span></a>
+                    <a href="${pageContext.request.contextPath}/admin/categories.jsp"><i class="fas fa-sitemap"></i><span>Danh mục Sản phẩm</span></a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin-orders.jsp"><i class="fas fa-shopping-cart"></i><span>Đơn hàng</span></a>
+                    <a href="${pageContext.request.contextPath}/admin/orders.jsp"><i class="fas fa-shopping-cart"></i><span>Đơn hàng</span></a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin-customers.jsp"><i class="fas fa-users"></i><span>Khách hàng</span></a>
+                    <a href="${pageContext.request.contextPath}/admin/customers.jsp"><i class="fas fa-users"></i><span>Khách hàng</span></a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin-blog.jsp"><i class="fas fa-newspaper"></i><span>Tất cả Bài viết</span></a>
+                    <a href="${pageContext.request.contextPath}/admin/blog.jsp"><i class="fas fa-newspaper"></i><span>Tất cả Bài viết</span></a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin-blog-categories.jsp"><i class="fas fa-folder"></i><span>Danh mục Blog</span></a>
+                    <a href="${pageContext.request.contextPath}/admin/blog-categories.jsp"><i class="fas fa-folder"></i><span>Danh mục Blog</span></a>
                 </li>
             </ul>
         </nav>
@@ -59,10 +62,10 @@
     <main class="admin-main">
         <header class="admin-header">
             <div class="header-left">
-                <h1>Cập nhật sản phẩm</h1> </div>
-
+                <h1>Cập nhật sản phẩm</h1>
+            </div>
             <div class="header-right">
-                <a href="admin-products.jsp" class="btn btn-outline">
+                <a href="${pageContext.request.contextPath}/admin/products" class="btn btn-outline">
                     <i class="fas fa-arrow-left"></i>
                     <span>Quay lại danh sách</span>
                 </a>
@@ -70,10 +73,14 @@
         </header>
 
         <div class="admin-content">
-            <form class="form-container" action="#" method="POST" enctype="multipart/form-data">
+            <form class="form-container" action="${pageContext.request.contextPath}/admin/product/edit" method="POST" enctype="multipart/form-data">
+
+                <input type="hidden" name="id" value="${product.id}">
+                <input type="hidden" name="current_image" value="${product.imageUrl}">
+
                 <div class="form-header">
                     <h2>Chỉnh sửa thông tin</h2>
-                    <p>Cập nhật thông tin chi tiết cho sản phẩm: <strong>Trà Bạc Hà Premium</strong></p>
+                    <p>Cập nhật thông tin chi tiết cho sản phẩm: <strong><c:out value="${product.name}"/></strong></p>
                 </div>
 
                 <div class="form-content">
@@ -84,22 +91,22 @@
 
                                 <div class="form-group">
                                     <label for="product_name">Tên sản phẩm <span class="required">*</span></label>
-                                    <input type="text" id="product_name" name="name" class="form-control" value="Trà Bạc Hà Premium" required>
+                                    <input type="text" id="product_name" name="name" class="form-control" value="${product.name}" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="product_slug">Slug</label>
-                                    <input type="text" id="product_slug" name="slug" class="form-control" value="tra-bac-ha-premium">
+                                    <input type="text" id="product_slug" name="slug" class="form-control" value="${product.slug}">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="short_description">Mô tả ngắn</label>
-                                    <textarea id="short_description" name="short_description" class="form-control textarea" rows="4">Hương vị thanh mát, sảng khoái từ lá bạc hà tươi nguyên chất. Giúp thư giãn và hỗ trợ tiêu hóa.</textarea>
+                                    <textarea id="short_description" name="short_description" class="form-control textarea" rows="4">${product.shortDescription}</textarea>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="description">Mô tả chi tiết</label>
-                                    <textarea id="description" name="description" class="form-control textarea large" rows="8">Trà Bạc Hà Premium của Mộc Trà được tuyển chọn từ những lá bạc hà tươi ngon nhất...</textarea>
+                                    <textarea id="description" name="description" class="form-control textarea large" rows="8">${product.description}</textarea>
                                 </div>
                             </div>
 
@@ -108,12 +115,12 @@
 
                                 <div class="form-group">
                                     <label for="ingredients">Thành phần nguyên liệu</label>
-                                    <textarea id="ingredients" name="ingredients" class="form-control textarea" rows="4">100% lá bạc hà sấy lạnh.</textarea>
+                                    <textarea id="ingredients" name="ingredients" class="form-control textarea" rows="4">${product.ingredients}</textarea>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="usage_instructions">Hướng dẫn sử dụng</label>
-                                    <textarea id="usage_instructions" name="usage_instructions" class="form-control textarea" rows="4">Pha 1 túi lọc với 200ml nước sôi, ủ trong 3-5 phút.</textarea>
+                                    <textarea id="usage_instructions" name="usage_instructions" class="form-control textarea" rows="4">${product.usageInstructions}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -125,21 +132,25 @@
                                 <div class="form-group">
                                     <label for="status">Trạng thái <span class="required">*</span></label>
                                     <select id="status" name="status" class="form-control" required>
-                                        <option value="active" selected>Hoạt động</option> <option value="inactive">Không hoạt động</option>
-                                        <option value="out_of_stock">Hết hàng</option>
+                                        <option value="active" ${product.status == 'ACTIVE' ? 'selected' : ''}>Hoạt động</option>
+                                        <option value="inactive" ${product.status == 'INACTIVE' ? 'selected' : ''}>Không hoạt động</option>
+                                        <option value="out_of_stock" ${product.status == 'OUT_OF_STOCK' ? 'selected' : ''}>Hết hàng</option>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="category_id">Danh mục <span class="required">*</span></label>
                                     <select id="category_id" name="category_id" class="form-control" required>
-                                        <option value="1">Trà sữa nguyên liệu</option>
-                                        <option value="2" selected>Trà thảo mộc</option> <option value="3">Nguyên liệu pha chế</option>
+                                        <option value="">-- Chọn danh mục --</option>
+                                        <c:forEach var="cat" items="${categories}">
+                                            <option value="${cat.id}" ${product.categoryId == cat.id ? 'selected' : ''}>${cat.name}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
 
                                 <div class="checkbox-group">
-                                    <input type="checkbox" id="is_bestseller" name="is_bestseller" value="1" checked> <label for="is_bestseller">Sản phẩm bán chạy</label>
+                                    <input type="checkbox" id="is_bestseller" name="is_bestseller" value="1" ${product.bestseller ? 'checked' : ''}>
+                                    <label for="is_bestseller">Sản phẩm bán chạy</label>
                                 </div>
                             </div>
 
@@ -148,23 +159,25 @@
 
                                 <div class="form-group">
                                     <label for="price">Giá bán (VNĐ) <span class="required">*</span></label>
-                                    <input type="number" id="price" name="price" class="form-control" value="85000" required>
+                                    <input type="number" id="price" name="price" class="form-control"
+                                           value="<fmt:formatNumber value="${product.price}" pattern="###"/>" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="sale_price">Giá khuyến mãi (VNĐ)</label>
-                                    <input type="number" id="sale_price" name="sale_price" class="form-control" value="">
+                                    <input type="number" id="sale_price" name="sale_price" class="form-control"
+                                           value="<fmt:formatNumber value="${product.salePrice}" pattern="###"/>">
                                 </div>
 
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="sku">Mã SKU</label>
-                                        <input type="text" id="sku" name="sku" class="form-control" value="TBH001">
+                                        <input type="text" id="sku" name="sku" class="form-control" value="${product.sku}">
                                     </div>
 
                                     <div class="form-group">
                                         <label for="stock_quantity">Số lượng tồn kho</label>
-                                        <input type="number" id="stock_quantity" name="stock_quantity" class="form-control" value="156">
+                                        <input type="number" id="stock_quantity" name="stock_quantity" class="form-control" value="${product.stockQuantity}">
                                     </div>
                                 </div>
                             </div>
@@ -175,7 +188,8 @@
                                 <div class="form-group">
                                     <label>Hình ảnh chính hiện tại</label>
                                     <div style="margin-bottom: 15px;">
-                                        <img src="../assets/images/san-pham-tra-bac-ha.jpg" alt="Main Img" style="width: 100%; border-radius: 8px; border: 1px solid #ddd;">
+                                        <img src="${pageContext.request.contextPath}/${product.imageUrl}" alt="${product.name}"
+                                             style="width: 100%; border-radius: 8px; border: 1px solid #ddd; object-fit: contain; height: 200px;">
                                     </div>
 
                                     <label for="image_url">Thay đổi ảnh chính</label>
@@ -192,7 +206,7 @@
 
                 <div class="form-actions">
                     <div class="btn-group">
-                        <a href="admin-products.jsp" class="btn btn-outline">
+                        <a href="${pageContext.request.contextPath}/admin/products" class="btn btn-outline">
                             <i class="fas fa-times"></i> Hủy bỏ
                         </a>
 

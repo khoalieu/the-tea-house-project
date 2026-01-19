@@ -3,9 +3,12 @@ package backend.dao;
 import backend.db.DBConnect;
 import backend.model.CustomerDTO;
 import backend.model.User;
+import backend.model.UserAddress;
 import backend.model.enums.UserGender;
 import backend.model.enums.UserRole;
 import org.mindrot.jbcrypt.BCrypt; // Import thư viện BCrypt
+import backend.model.GooglePojo;
+import java.util.UUID;
 
 import java.sql.*;
 import java.util.*;
@@ -581,6 +584,113 @@ public class UserDAO {
             e.printStackTrace();
         }
         return list;
+    }
+    public int addAddressAndGetId(UserAddress addr) {
+        String sql = "INSERT INTO user_addresses (user_id, full_name, phone_number, label, province, ward, street_address, is_default) VALUES (?,?,?,?,?,?,?,?)";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, addr.getUserId());
+            ps.setString(2, addr.getFullName());
+            ps.setString(3, addr.getPhoneNumber());
+            ps.setString(4, addr.getLabel());
+            ps.setString(5, addr.getProvince());
+            ps.setString(6, addr.getWard());
+            ps.setString(7, addr.getStreetAddress());
+            ps.setBoolean(8, addr.getIsDefault());
+
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) return rs.getInt(1); // Trả về ID mới tạo
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return -1;
+    }
+    public boolean updateUserByAdmin(User u) {
+        String sql = "UPDATE users SET first_name=?, last_name=?, phone=?, role=?, is_active=? WHERE id=?";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, u.getFirstName());
+            ps.setString(2, u.getLastName());
+            ps.setString(3, u.getPhone());
+            ps.setString(4, u.getRole().name());
+            ps.setBoolean(5, u.getIsActive());
+            ps.setInt(6, u.getId());
+
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public User loginWithGoogle(GooglePojo googleData) {
+        // 1. Kiểm tra email đã tồn tại chưa
+        String queryFind = "SELECT * FROM users WHERE email = ?";
+        try {
+            conn = new DBConnect().getConnection();
+            ps = conn.prepareStatement(queryFind);
+            ps.setString(1, googleData.getEmail());
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // Email đã tồn tại -> Trả về User để đăng nhập
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setUsername(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setLastName(rs.getString("last_name"));
+                user.setAvatar(rs.getString("avatar"));
+                // Set role và các thông tin khác tương tự hàm checkLogin
+                try {
+                    user.setRole(UserRole.valueOf(rs.getString("role").toUpperCase()));
+                } catch (Exception e) {
+                    user.setRole(UserRole.CUSTOMER);
+                }
+                return user;
+            } else {
+                // Email chưa tồn tại -> Đăng ký mới
+                // Vì bảng users yêu cầu password_hash NOT NULL, ta tạo password ngẫu nhiên
+                String randomPassword = UUID.randomUUID().toString();
+                String hashedPassword = BCrypt.hashpw(randomPassword, BCrypt.gensalt(12));
+                // Username lấy từ email (bỏ phần @domain) hoặc random
+                String newUsername = googleData.getEmail().split("@")[0];
+
+                // Kiểm tra trùng username, nếu trùng thì append số random
+                if(checkUserExist(newUsername, "")) {
+                    newUsername += "_" + (int)(Math.random() * 1000);
+                }
+
+                String queryInsert = "INSERT INTO users (username, email, password_hash, first_name, last_name, avatar, role, is_active, created_at) VALUES (?, ?, ?, ?, ?, ?, 'customer', 1, NOW())";
+
+                ps = conn.prepareStatement(queryInsert, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, newUsername);
+                ps.setString(2, googleData.getEmail());
+                ps.setString(3, hashedPassword);
+                ps.setString(4, googleData.getFirstName());
+                ps.setString(5, googleData.getLastName());
+                ps.setString(6, googleData.getPicture());
+
+                ps.executeUpdate();
+                ResultSet generatedKeys = ps.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    User newUser = new User();
+                    newUser.setId(generatedKeys.getInt(1));
+                    newUser.setEmail(googleData.getEmail());
+                    newUser.setUsername(newUsername);
+                    newUser.setFirstName(googleData.getFirstName());
+                    newUser.setLastName(googleData.getLastName());
+                    newUser.setAvatar(googleData.getPicture());
+                    newUser.setRole(UserRole.CUSTOMER);
+                    return newUser;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

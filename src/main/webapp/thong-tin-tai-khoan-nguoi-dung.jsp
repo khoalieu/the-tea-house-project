@@ -32,7 +32,7 @@
                     <c:remove var="msg" scope="session"/>
                 </c:if>
 
-                <form action="update-profile-info" method="post" class="profile-form" style="margin-bottom: 40px; border-bottom: 1px solid #eee; padding-bottom: 20px;">
+                <form action="tai-khoan-cua-toi" method="post" class="profile-form" style="margin-bottom: 40px; border-bottom: 1px solid #eee; padding-bottom: 20px;">
                     <input type="hidden" name="action" value="update_info">
 
                     <div class="form-row">

@@ -74,9 +74,10 @@
                 </div>
                 <div class="social-login">
                     <a href="#" class="social fb"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="social gg"><i class="fa-brands fa-google"></i></a>
+                    <a href="${googleUrl}" class="social gg">
+                            <i class="fa-brands fa-google"></i>
+                    </a>
                 </div>
-
                 <div class="signup">
                     Chưa có tài khoản? <a href="signup">Đăng ký</a>
                 </div>

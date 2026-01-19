@@ -10,60 +10,77 @@ import java.util.List;
 
 public class ProductDAO {
     public ProductDAO() {
-
     }
 
+    // --- PHẦN 1: HÀM CŨ CỦA ĐỒNG ĐỘI (Giữ nguyên để tương thích trang chủ) ---
+    // (Lưu ý: Hàm này chỉ lấy sản phẩm ACTIVE mặc định)
     public List<Product> getProducts(Integer categoryId, Integer promotionId, String sort, Double maxPrice, int index, int size) {
+        // Gọi sang hàm đầy đủ của bạn với status = "active" để tái sử dụng logic Subquery (tránh lặp sản phẩm)
+        return getProducts(categoryId, promotionId, sort, maxPrice, index, size, "active");
+    }
+
+    // --- PHẦN 2: HÀM MỚI CỦA BẠN (Đầy đủ chức năng cho Admin & Client) ---
+    public List<Product> getProducts(Integer categoryId, Integer promotionId, String sort, Double maxPrice, int index, int size, String status) {
         List<Product> list = new ArrayList<>();
 
-        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE status = 'active' ");
-        if (categoryId != null) {
-            sql.append(" AND category_id = ? ");
-        }
-        if (maxPrice != null) {
-            sql.append(" AND (CASE WHEN sale_price > 0 THEN sale_price ELSE price END) <= ? ");
-        }
-        if (promotionId != null) sql.append(" AND pi.promotion_id = ? ");
+        // Sử dụng Subquery để lấy promotion_id -> Tránh lỗi lặp dòng khi JOIN
+        StringBuilder sql = new StringBuilder(
+                "SELECT p.*, " +
+                        "(SELECT promotion_id FROM promotion_items pi WHERE pi.product_id = p.id LIMIT 1) AS current_promo_id " +
+                        "FROM products p "
+        );
 
+        sql.append(" WHERE 1=1 ");
+
+        if (categoryId != null) {
+            sql.append(" AND p.category_id = ? ");
+        }
+
+        if (maxPrice != null) {
+            sql.append(" AND (CASE WHEN p.sale_price > 0 THEN p.sale_price ELSE p.price END) <= ? ");
+        }
+
+        // Lọc theo Promotion ID (Dùng Subquery trong WHERE)
+        if (promotionId != null) {
+            sql.append(" AND p.id IN (SELECT product_id FROM promotion_items WHERE promotion_id = ?) ");
+        }
+
+        // Lọc theo Status (Nâng cao)
+        if (status != null && !status.isEmpty()) {
+            if ("active".equals(status)) sql.append(" AND p.status = 'active' ");
+            else if ("inactive".equals(status)) sql.append(" AND p.status = 'inactive' ");
+            else if ("out-of-stock".equals(status)) sql.append(" AND p.stock_quantity = 0 ");
+        }
+
+        // Sắp xếp
         if (sort != null) {
             switch (sort) {
-                case "price-asc":
-                    sql.append(" ORDER BY price ASC ");
-                    break;
-                case "price-desc":
-                    sql.append(" ORDER BY price DESC ");
-                    break;
-                case "name-asc":
-                    sql.append(" ORDER BY name ASC ");
-                    break;
-                case "newest":
-                    sql.append(" ORDER BY created_at DESC ");
-                    break;
-                default:
-                    sql.append(" ORDER BY created_at DESC ");
+                case "price-asc": sql.append(" ORDER BY p.price ASC "); break;
+                case "price-desc": sql.append(" ORDER BY p.price DESC "); break;
+                case "name-asc": sql.append(" ORDER BY p.name ASC "); break;
+                case "newest": sql.append(" ORDER BY p.created_at DESC "); break;
+                default: sql.append(" ORDER BY p.created_at DESC ");
             }
         } else {
-            sql.append(" ORDER BY created_at DESC ");
+            sql.append(" ORDER BY p.created_at DESC ");
         }
 
         sql.append(" LIMIT ? OFFSET ?");
-
 
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
             int paramIndex = 1;
-            if (categoryId != null) {
-                ps.setInt(paramIndex++, categoryId);
-            }
+
+            if (categoryId != null) ps.setInt(paramIndex++, categoryId);
             if (maxPrice != null) ps.setDouble(paramIndex++, maxPrice);
+            if (promotionId != null) ps.setInt(paramIndex++, promotionId);
 
             int offset = (index - 1) * size;
             ps.setInt(paramIndex++, size);
             ps.setInt(paramIndex++, offset);
 
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
                 Product p = new Product();
                 p.setId(rs.getInt("id"));
@@ -78,6 +95,9 @@ public class ProductDAO {
                 p.setCategoryId(rs.getInt("category_id"));
                 p.setImageUrl(rs.getString("image_url"));
                 p.setBestseller(rs.getBoolean("is_bestseller"));
+
+                p.setCurrentPromotionId(rs.getInt("current_promo_id"));
+
                 String statusStr = rs.getString("status");
                 if (statusStr != null) {
                     try {
@@ -86,36 +106,57 @@ public class ProductDAO {
                         p.setStatus(ProductStatus.ACTIVE);
                     }
                 }
-
-                p.setIngredients(rs.getString("ingredients"));
-                p.setUsageInstructions(rs.getString("usage_instructions"));
-
-                if (rs.getTimestamp("created_at") != null) {
-                    p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-                }
                 list.add(p);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
     }
 
+    // Hàm đếm của đồng đội (Overload) -> Gọi sang hàm đầy đủ của bạn
     public int countProducts(Integer categoryId, Integer promotionId, Double maxPrice) throws SQLException {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM products WHERE status = 'active' ");
+        return countProducts(categoryId, promotionId, maxPrice, "active");
+    }
+
+    // Hàm đếm đầy đủ (Của bạn)
+    public int countProducts(Integer categoryId, Integer promotionId, Double maxPrice, String status) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM products p ");
+
+        // Dùng JOIN nếu cần lọc theo promotion (cách cũ) hoặc Subquery đều được
+        // Ở đây dùng JOIN như code của bạn để đếm chính xác
+        if (promotionId != null) {
+            sql.append(" JOIN promotion_items pi ON p.id = pi.product_id ");
+        }
+
+        sql.append(" WHERE 1=1 ");
+
         if (categoryId != null) {
-            sql.append(" AND category_id = ? ");
+            sql.append(" AND p.category_id = ? ");
         }
+
         if (maxPrice != null) {
-            sql.append(" AND (CASE WHEN sale_price > 0 THEN sale_price ELSE price END) <= ? ");
+            sql.append(" AND (CASE WHEN p.sale_price > 0 THEN p.sale_price ELSE p.price END) <= ? ");
         }
-        if (promotionId != null) sql.append(" AND pi.promotion_id = ? ");
+
+        if (promotionId != null) {
+            sql.append(" AND pi.promotion_id = ? ");
+        }
+
+        if (status != null && !status.isEmpty()) {
+            if ("active".equals(status)) sql.append(" AND p.status = 'active' ");
+            else if ("inactive".equals(status)) sql.append(" AND p.status = 'inactive' ");
+            else if ("out-of-stock".equals(status)) sql.append(" AND p.stock_quantity = 0 ");
+        }
+
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
             int paramIndex = 1;
+
             if (categoryId != null) ps.setInt(paramIndex++, categoryId);
             if (maxPrice != null) ps.setDouble(paramIndex++, maxPrice);
+            if (promotionId != null) ps.setInt(paramIndex++, promotionId);
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getInt(1);
@@ -125,6 +166,8 @@ public class ProductDAO {
         }
         return 0;
     }
+
+    // --- CÁC HÀM CRUD & HELPER ---
 
     public Product getProductById(int id) {
         String sql = "SELECT * FROM products WHERE id = ?";
@@ -168,6 +211,7 @@ public class ProductDAO {
         }
         return null;
     }
+
     public List<Product> getRelatedProducts(int categoryId, int currentProductId) {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM products WHERE category_id = ? AND id != ? AND status = 'active' ORDER BY RAND() LIMIT 4";
@@ -191,6 +235,7 @@ public class ProductDAO {
         }
         return list;
     }
+
     public int insertProduct(Product p) {
         String sql = "INSERT INTO products (name, slug, description, short_description, price, sale_price, " +
                 "sku, stock_quantity, category_id, image_url, is_bestseller, status, " +
@@ -222,7 +267,7 @@ public class ProductDAO {
             int rows = ps.executeUpdate();
             if (rows > 0) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if (rs.next()) return rs.getInt(1); // Trả về ID mới
+                    if (rs.next()) return rs.getInt(1);
                 }
             }
         } catch (SQLException e) {
@@ -230,6 +275,7 @@ public class ProductDAO {
         }
         return -1;
     }
+
     public void insertProductImage(int productId, String imageUrl, String altText, int sortOrder) {
         String sql = "INSERT INTO product_images (product_id, image_url, alt_text, sort_order) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnect.getConnection();
@@ -238,57 +284,70 @@ public class ProductDAO {
             ps.setInt(1, productId);
             ps.setString(2, imageUrl);
             ps.setString(3, altText);
-            ps.setInt(4, sortOrder);    // Lưu thứ tự sắp xếp
+            ps.setInt(4, sortOrder);
 
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    // ProductDAO.java
-    public List<Product> getTopSellingByParentCategory(int parentId, int limit) {
-        List<Product> list = new ArrayList<>();
 
-        String sql = "SELECT p.*, IFNULL(SUM(IF(o.status = 'completed', oi.quantity, 0)), 0) AS sold_qty " +
-                        "FROM products p " +
-                        "JOIN categories c ON c.id = p.category_id " +
-                        "LEFT JOIN order_items oi ON oi.product_id = p.id " +
-                        "LEFT JOIN orders o ON o.id = oi.order_id " +
-                        "WHERE p.status = 'active' AND c.parent_id = ? " +
-                        "GROUP BY p.id " +
-                        "ORDER BY sold_qty DESC, p.created_at DESC " +
-                        "LIMIT ?";
+    public void softDeleteProduct(int id) {
+        String sql = "UPDATE products SET status = 'inactive' WHERE id = ?";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean updateProduct(Product p) {
+        String sql = "UPDATE products SET name=?, slug=?, description=?, short_description=?, price=?, sale_price=?, " +
+                "sku=?, stock_quantity=?, category_id=?, is_bestseller=?, status=?, ingredients=?, usage_instructions=?, " +
+                "image_url=? WHERE id=?";
 
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, parentId);
-            ps.setInt(2, limit);
+            ps.setString(1, p.getName());
+            ps.setString(2, p.getSlug());
+            ps.setString(3, p.getDescription());
+            ps.setString(4, p.getShortDescription());
+            ps.setDouble(5, p.getPrice());
+            ps.setDouble(6, p.getSalePrice());
+            ps.setString(7, p.getSku());
+            ps.setInt(8, p.getStockQuantity());
 
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Product p = new Product();
-                    p.setId(rs.getInt("id"));
-                    p.setName(rs.getString("name"));
-                    p.setSlug(rs.getString("slug"));
-                    p.setPrice(rs.getDouble("price"));
-                    p.setSalePrice(rs.getDouble("sale_price"));
-                    p.setSku(rs.getString("sku"));
-                    p.setStockQuantity(rs.getInt("stock_quantity"));
+            if (p.getCategoryId() != null) ps.setInt(9, p.getCategoryId());
+            else ps.setNull(9, java.sql.Types.INTEGER);
 
-                    int catId = rs.getInt("category_id");
-                    p.setCategoryId(rs.wasNull() ? null : catId);
+            ps.setBoolean(10, p.isBestseller());
+            ps.setString(11, p.getStatus() != null ? p.getStatus().name().toLowerCase() : "active");
+            ps.setString(12, p.getIngredients());
+            ps.setString(13, p.getUsageInstructions());
+            ps.setString(14, p.getImageUrl());
+            ps.setInt(15, p.getId());
 
-                    p.setImageUrl(rs.getString("image_url"));
-                    list.add(p);
-                }
-            }
-        } catch (Exception e) {
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return list;
+        return false;
     }
 
-}
 
+    public void decreaseStock(int productId, int quantityPurchased) {
+        String sql = "UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ?";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, quantityPurchased);
+            ps.setInt(2, productId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}

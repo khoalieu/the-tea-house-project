@@ -23,7 +23,7 @@
 
             <div class="dashboard-grid">
                 
-                <a href="thong-tin-tai-khoan-nguoi-dung.jsp" class="grid-card">
+                <a href="thong-tin-nguoi-dung.jsp" class="grid-card">
                     <i class="fa-regular fa-user"></i>
                     <span>Tài khoản của tôi</span>
                 </a>

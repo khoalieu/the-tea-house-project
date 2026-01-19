@@ -1,6 +1,9 @@
 package backend.controller;
 
+import backend.dao.CartDAO; // Import mới
 import backend.dao.UserDAO;
+import backend.model.Cart; // Import mới
+import backend.model.CartItem; // Import mới
 import backend.model.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -16,6 +19,8 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect("index.jsp");
             return;
         }
+        String googleLoginUrl = backend.utils.GoogleUtils.getGoogleAuthUrl();
+        request.setAttribute("googleUrl", googleLoginUrl);
         request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
@@ -32,15 +37,22 @@ public class LoginServlet extends HttpServlet {
             // Đăng nhập thành công -> Tạo Session
             HttpSession session = request.getSession();
             session.setAttribute("user", account); // Lưu object User vào session
-
-            // Phân quyền (nếu cần)
-            if(account.getRole().name().equalsIgnoreCase("ADMIN")){
+            CartDAO cartDAO = new CartDAO();
+            Cart sessionCart = (Cart) session.getAttribute("cart");
+            if (sessionCart != null && sessionCart.getItems().size() > 0) {
+                for (CartItem item : sessionCart.getItems()) {
+                    // lưu giỏ hàng vào database
+                    cartDAO.addToCart(account.getId(), item.getProduct().getId(), item.getQuantity());
+                }
+            }
+            Cart userCartFromDB = cartDAO.getCartByUserId(account.getId());
+            session.setAttribute("cart", userCartFromDB);
+            if(account.getRole() != null && account.getRole().name().equalsIgnoreCase("ADMIN")){
                 response.sendRedirect("admin/admin-dashboard.jsp");
             } else {
                 response.sendRedirect("index.jsp");
             }
         } else {
-            // Thất bại
             request.setAttribute("errorMessage", "Sai tên đăng nhập hoặc mật khẩu!");
             request.setAttribute("username", user); // Gửi lại username để điền vào ô input
             request.getRequestDispatcher("login.jsp").forward(request, response);

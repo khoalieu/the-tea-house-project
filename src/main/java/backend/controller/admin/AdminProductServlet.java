@@ -21,7 +21,7 @@ import backend.model.Category;
 import java.util.Collection;
 import java.util.List;
 
-@WebServlet(name = "AdminProductServlet", urlPatterns = {"/admin/product/add"})
+@WebServlet(name = "AdminProductServlet", urlPatterns = {"/admin/product/add", "/admin/product/delete"})
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 2, // 2MB
         maxFileSize = 1024 * 1024 * 10,      // 10MB
@@ -52,6 +52,11 @@ public class AdminProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        String servletPath = request.getServletPath();
+        if ("/admin/product/delete".equals(servletPath)) {
+            deleteProduct(request, response);
+            return;
+        }
         try {
             String relativeDir = "assets" + File.separator + "images";
             String uploadPath = getServletContext().getRealPath("") + File.separator + relativeDir;
@@ -163,5 +168,21 @@ public class AdminProductServlet extends HttpServlet {
     private int parseIntSafe(String value) {
         if (value == null || value.trim().isEmpty()) return 0;
         try { return Integer.parseInt(value); } catch (NumberFormatException e) { return 0; }
+    }
+    private void deleteProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String idStr = request.getParameter("id");
+        if (idStr != null) {
+            try {
+                int id = Integer.parseInt(idStr);
+                // Gọi hàm softDeleteProduct bạn đã thêm vào DAO lúc nãy
+                productDAO.softDeleteProduct(id);
+                response.setStatus(200); // Báo thành công cho JS
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.setStatus(500); // Báo lỗi server
+            }
+        } else {
+            response.setStatus(400); // Báo lỗi thiếu ID
+        }
     }
 }

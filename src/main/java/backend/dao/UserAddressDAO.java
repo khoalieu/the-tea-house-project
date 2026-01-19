@@ -91,4 +91,33 @@ public class UserAddressDAO {
         }
         return false;
     }
+    public int addAddressAndGetId(UserAddress addr) {
+        String sql = "INSERT INTO user_addresses (user_id, full_name, phone_number, label, province, ward, street_address, is_default) VALUES (?,?,?,?,?,?,?,?)";
+
+        // Thêm tham số Statement.RETURN_GENERATED_KEYS để lấy ID vừa tạo
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setInt(1, addr.getUserId());
+            ps.setString(2, addr.getFullName());
+            ps.setString(3, addr.getPhoneNumber());
+            ps.setString(4, addr.getLabel());
+            ps.setString(5, addr.getProvince());
+            ps.setString(6, addr.getWard());
+            ps.setString(7, addr.getStreetAddress());
+            ps.setBoolean(8, addr.getIsDefault());
+
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        return rs.getInt(1);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1; // Trả về -1 nếu lỗi
+    }
 }
