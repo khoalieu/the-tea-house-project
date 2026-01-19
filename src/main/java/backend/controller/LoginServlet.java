@@ -19,6 +19,8 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect("index.jsp");
             return;
         }
+        String googleLoginUrl = backend.utils.GoogleUtils.getGoogleAuthUrl();
+        request.setAttribute("googleUrl", googleLoginUrl);
         request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
