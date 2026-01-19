@@ -1,8 +1,10 @@
 package backend.controller;
 
+import backend.dao.BannerDAO;
 import backend.dao.BlogPostDAO;
 import backend.dao.ProductDAO;
 import backend.dao.PromotionDAO;
+import backend.model.Banner;
 import backend.model.BlogPost;
 import backend.model.Product;
 import backend.model.Promotion;
@@ -24,9 +26,11 @@ public class HomeServlet extends HttpServlet {
         PromotionDAO promoDAO = new PromotionDAO();
         ProductDAO productDAO = new ProductDAO();
         BlogPostDAO blogDAO = new BlogPostDAO();
+        BannerDAO bannerDAO = new BannerDAO();
 
-        // Active promotions (slider trên cùng)
-        List<Promotion> activePromotions = promoDAO.getActivePromotions();
+        // Banner home (slider)
+        List<Banner> homeBanners = bannerDAO.getHomeActive();
+//        List<Promotion> activePromotions = promoDAO.getActivePromotions();
 
         // top 4 bán chạy theo parent category (1: trà thảo mộc, 2: nguyên liệu)
         List<Product> topHerbalTea = productDAO.getTopSellingByParentCategory(1, 4);
@@ -35,7 +39,8 @@ public class HomeServlet extends HttpServlet {
         // Top 3 blog view cao nhất
         List<BlogPost> topBlogs = blogDAO.getTopViewedPublished(3);
 
-        request.setAttribute("activePromotions", activePromotions);
+        request.setAttribute("activePromotions", homeBanners);
+//        request.setAttribute("activePromotions", activePromotions);
         request.setAttribute("topHerbalTea", topHerbalTea);
         request.setAttribute("topMilkTeaIngredients", topMilkTeaIngredients);
         request.setAttribute("topBlogs", topBlogs);

@@ -174,5 +174,25 @@ public class BannerDAO {
         if (u != null) b.setUpdatedAt(u.toLocalDateTime());
         return b;
     }
+    public List<Banner> getHomeActive() {
+        List<Banner> list = new ArrayList<>();
+        String sql =
+                "SELECT * FROM banners " +
+                        "WHERE is_active = 1 AND section = 'home' " +
+                        "ORDER BY " +
+                        "  CASE WHEN sort_order IS NULL THEN 1 ELSE 0 END ASC, " +
+                        "  sort_order ASC, " +
+                        "  created_at DESC";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) list.add(map(rs));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
 }

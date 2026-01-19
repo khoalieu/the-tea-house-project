@@ -23,15 +23,27 @@
 
         <c:choose>
             <c:when test="${not empty activePromotions}">
-                <c:forEach var="promo" items="${activePromotions}" varStatus="st">
+                <c:forEach var="b" items="${activePromotions}" varStatus="st">
                     <div class="hero-slide fade ${st.first ? 'active' : ''}"
-                         style="background-image: url('${pageContext.request.contextPath}/${promo.imageUrl}');">
+                         style="background-image: url('${pageContext.request.contextPath}/${b.imageUrl}');">
                         <div class="hero-content">
-                            <h1>${promo.name}</h1>
-                            <p>${promo.description}</p>
-                            <a href="${pageContext.request.contextPath}/san-pham?promotionId=${promo.id}" class="hero-btn">
-                                Xem Khuyến Mãi
-                            </a>
+                            <c:if test="${not empty b.title}">
+                                <h1>${b.title}</h1>
+                            </c:if>
+
+                            <c:if test="${not empty b.subtitle}">
+                                <p>${b.subtitle}</p>
+                            </c:if>
+
+                            <c:if test="${not empty b.buttonLink}">
+                                <a href="${pageContext.request.contextPath}/${b.buttonLink}"
+                                   class="hero-btn">
+                                    <c:choose>
+                                        <c:when test="${not empty b.buttonText}">${b.buttonText}</c:when>
+                                        <c:otherwise>Xem ngay</c:otherwise>
+                                    </c:choose>
+                                </a>
+                            </c:if>
                         </div>
                     </div>
                 </c:forEach>
