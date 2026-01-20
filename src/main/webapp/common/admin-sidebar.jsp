@@ -35,7 +35,7 @@
       </li>
 
       <li class="nav-item ${param.activePage == 'categories' ? 'active' : ''}">
-        <a href="${ctx}/admin/admin-categories.jsp">
+        <a href="${ctx}/admin/categories">
           <i class="fas fa-sitemap"></i>
           <span>Danh mục Sản phẩm</span>
         </a>
