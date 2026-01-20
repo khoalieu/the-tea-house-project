@@ -12,10 +12,9 @@ public class ProductDAO {
     public ProductDAO() {
     }
 
-    // --- PHẦN 1: HÀM CŨ CỦA ĐỒNG ĐỘI (Giữ nguyên để tương thích trang chủ) ---
-    // (Lưu ý: Hàm này chỉ lấy sản phẩm ACTIVE mặc định)
+
     public List<Product> getProducts(Integer categoryId, Integer promotionId, String sort, Double maxPrice, int index, int size) {
-        // Gọi sang hàm đầy đủ của bạn với status = "active" để tái sử dụng logic Subquery (tránh lặp sản phẩm)
+
         return getProducts(categoryId, promotionId, sort, maxPrice, index, size, "active");
     }
 
@@ -349,6 +348,33 @@ public class ProductDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+    }
+    public boolean updateProductStatus(List<Integer> productIds, String newStatus) {
+        if (productIds == null || productIds.isEmpty()) return false;
+
+        // Tạo chuỗi "?,?,?" động dựa trên số lượng ID
+        StringBuilder sql = new StringBuilder("UPDATE products SET status = ? WHERE id IN (");
+        for (int i = 0; i < productIds.size(); i++) {
+            sql.append(i == 0 ? "?" : ",?");
+        }
+        sql.append(")");
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            ps.setString(1, newStatus); // 'ACTIVE' hoặc 'INACTIVE'
+
+            // Gán các ID vào tham số
+            for (int i = 0; i < productIds.size(); i++) {
+                ps.setInt(i + 2, productIds.get(i));
+            }
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public List<Product> getTopSellingByParentCategory(int parentId, int limit) {

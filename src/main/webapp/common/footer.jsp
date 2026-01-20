@@ -34,10 +34,11 @@
         <div class="right-footer footer-section">
             <h2>Chính sách bán hàng</h2>
             <ul>
-                <li><a href="chinh-sach-ban-hang.jsp">Chính sách bán hàng</a></li>
-                <li><a href="chinh-sach-thanh-toan.jsp">Chính sách thanh toán</a></li>
-                <li><a href="chinh-sach-bao-hanh.jsp">Chính sách bảo hành</a></li>
-                <li><a href="dieu-khoan-dich-vu.jsp">Điều khoản dịch vụ</a></li>
+                <li><a href="${pageContext.request.contextPath}/chinh-sach-ban-hang">Chính sách bán hàng</a></li>
+                <li><a href="${pageContext.request.contextPath}/chinh-sach-thanh-toan">Chính sách thanh toán</a></li>
+                <li><a href="${pageContext.request.contextPath}/chinh-sach-bao-hanh">Chính sách bảo hành</a></li>
+                <li><a href="${pageContext.request.contextPath}/dieu-khoan-dich-vu">Điều khoản dịch vụ</a></li>
+                <li><a href="${pageContext.request.contextPath}/ve-chung-toi">Về chúng tôi</a></li>
             </ul>
         </div>
     </div>

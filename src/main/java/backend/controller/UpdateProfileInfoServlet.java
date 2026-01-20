@@ -13,13 +13,11 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-// Mapping URL mới
 @WebServlet(name = "UpdateProfileInfoServlet", value = "/tai-khoan-cua-toi")
 public class UpdateProfileInfoServlet extends HttpServlet {
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 1. Check login
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 
@@ -29,9 +27,9 @@ public class UpdateProfileInfoServlet extends HttpServlet {
         }
         request.getRequestDispatcher("thong-tin-tai-khoan-nguoi-dung.jsp").forward(request, response);
     }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 1. Cấu hình UTF-8 để nhận tiếng Việt
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 
@@ -42,36 +40,43 @@ public class UpdateProfileInfoServlet extends HttpServlet {
             response.sendRedirect("login.jsp");
             return;
         }
+
         String firstName = request.getParameter("firstname");
         String lastName = request.getParameter("lastname");
         String phone = request.getParameter("phone");
         String dobStr = request.getParameter("dob");
-
         String genderRaw = request.getParameter("gender");
-        String gender = (genderRaw != null) ? genderRaw.toLowerCase() : "other";
+
+        String genderForDb = (genderRaw != null) ? genderRaw.toLowerCase() : "other";
+
         UserDAO dao = new UserDAO();
         boolean isUpdated = false;
         try {
-            isUpdated = dao.updateProfile(firstName, lastName, phone, dobStr, gender, user.getId());
+            isUpdated = dao.updateProfile(firstName, lastName, phone, dobStr, genderForDb, user.getId());
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         if (isUpdated) {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setPhone(phone);
+
             if (dobStr != null && !dobStr.isEmpty()) {
                 try {
                     user.setDateOfBirth(LocalDate.parse(dobStr).atStartOfDay());
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
-            try {
-                if (genderRaw != null) {
-                    user.setGender(UserGender.valueOf(genderRaw.toLowerCase()));
+            if (genderRaw != null && !genderRaw.isEmpty()) {
+                try {
+                    user.setGender(UserGender.valueOf(genderRaw.toUpperCase()));
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {}
+            }
 
             session.setAttribute("user", user);
             session.setAttribute("msg", "Cập nhật thông tin thành công!");

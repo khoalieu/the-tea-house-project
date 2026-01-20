@@ -5,35 +5,49 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import java.io.IOException;
-import jakarta.servlet.annotation.WebServlet;
+import java.util.regex.Pattern;
 
-// Dòng này rất quan trọng: Nó định nghĩa đường dẫn URL cho Servlet
 @WebServlet(name = "RegisterServlet", value = "/signup")
 public class RegisterServlet extends HttpServlet {
 
+    private static final String USERNAME_REGEX = "^[a-zA-Z0-9]{6,}$";
+    private static final String EMAIL_REGEX = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+    private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$";
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Khi người dùng gõ link /signup trực tiếp -> Chuyển hướng về trang form đăng ký
         request.getRequestDispatcher("signup.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Xử lý tiếng Việt
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 
-        // Lấy dữ liệu từ form
-        String user = request.getParameter("username");
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
+        String user = request.getParameter("username").trim();
+        String email = request.getParameter("email").trim();
+        String phone = request.getParameter("phone").trim();
         String pass = request.getParameter("password");
         String rePass = request.getParameter("confirmPassword");
 
-        // Validate cơ bản
-        if (pass == null || !pass.equals(rePass)) {
-            request.setAttribute("errorMessage", "Mật khẩu xác nhận không khớp!");
-            // Giữ lại thông tin cũ để người dùng không phải nhập lại
+        String error = null;
+
+        if (user == null || !Pattern.matches(USERNAME_REGEX, user)) {
+            error = "Tên đăng nhập phải từ 6 ký tự trở lên, không chứa dấu cách hoặc ký tự đặc biệt!";
+        }
+        else if (email == null || !Pattern.matches(EMAIL_REGEX, email)) {
+            error = "Email không hợp lệ! (Ví dụ: abc@gmail.com)";
+        }
+        else if (pass == null || !Pattern.matches(PASSWORD_REGEX, pass)) {
+            error = "Mật khẩu phải từ 6 ký tự trở lên, bao gồm cả CHỮ và SỐ!";
+        }
+        else if (!pass.equals(rePass)) {
+            error = "Mật khẩu xác nhận không khớp!";
+        }
+
+        if (error != null) {
+            request.setAttribute("errorMessage", error);
+
             request.setAttribute("username", user);
             request.setAttribute("email", email);
             request.setAttribute("phone", phone);
@@ -43,18 +57,15 @@ public class RegisterServlet extends HttpServlet {
         }
 
         UserDAO dao = new UserDAO();
-        // Kiểm tra tồn tại
         if (dao.checkUserExist(user, email)) {
-            request.setAttribute("errorMessage", "Tên đăng nhập hoặc Email đã tồn tại!");
+            request.setAttribute("errorMessage", "Tên đăng nhập hoặc Email đã tồn tại trong hệ thống!");
             request.setAttribute("username", user);
             request.setAttribute("email", email);
             request.setAttribute("phone", phone);
 
             request.getRequestDispatcher("signup.jsp").forward(request, response);
         } else {
-            // Đăng ký thành công
             dao.register(user, email, pass, phone);
-            // Chuyển hướng sang login
             response.sendRedirect("login.jsp");
         }
     }

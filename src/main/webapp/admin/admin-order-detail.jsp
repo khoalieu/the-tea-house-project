@@ -1,60 +1,28 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chi tiết đơn hàng #DH001 - Mộc Trà Admin</title>
-    <link rel="stylesheet" href="../assets/css/base.css">
-    <link rel="stylesheet" href="../assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/admin.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <title>Chi tiết đơn hàng #${order.orderNumber}</title>
+
+    <base href="${pageContext.request.contextPath}/">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="admin/assets/css/admin.css">
+    <link rel="stylesheet" href="admin/assets/css/admin-order-detail.css">
 </head>
 <body>
-<div class="admin-container">
-    <aside class="admin-sidebar">
-        <div class="sidebar-header">
-            <div class="admin-logo">
-                <img src="../assets/images/logoweb.png" alt="Mộc Trà">
-                <h2>Mộc Trà Admin</h2>
-            </div>
-        </div>
 
-        <nav class="admin-nav">
-            <ul>
-                <li class="nav-item">
-                    <a href="admin-dashboard.jsp"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-products.jsp"><i class="fas fa-box"></i><span>Tất cả Sản phẩm</span></a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-banners.jsp">
-                        <i class="fas fa-images"></i>
-                        <span>Quản lý Banner</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-categories.jsp"><i class="fas fa-sitemap"></i><span>Danh mục Sản phẩm</span></a>
-                </li>
-                <li class="nav-item active">
-                    <a href="admin-orders.jsp"><i class="fas fa-shopping-cart"></i><span>Đơn hàng</span></a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-customers.jsp"><i class="fas fa-users"></i><span>Khách hàng</span></a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-blog.jsp"><i class="fas fa-newspaper"></i><span>Tất cả Bài viết</span></a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-blog-categories.jsp"><i class="fas fa-folder"></i><span>Danh mục Blog</span></a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
+<div class="admin-container">
+    <jsp:include page="/common/admin-sidebar.jsp">
+        <jsp:param name="activePage" value="orders" />
+    </jsp:include>
 
     <main class="admin-main">
         <header class="admin-header">
@@ -62,133 +30,84 @@
                 <h1>Chi tiết đơn hàng</h1>
             </div>
             <div class="header-right">
-                <a href="admin-orders.jsp" class="btn btn-outline">
-                    <i class="fas fa-arrow-left"></i> Quay lại
+                <a href="admin/orders" class="view-site-btn" style="background: white; color: #333; border: 1px solid #ddd;">
+                    <i class="fa-solid fa-arrow-left"></i> Quay lại
                 </a>
             </div>
         </header>
 
         <div class="admin-content">
-
             <div class="order-detail-header">
                 <div class="order-meta">
-                    <h2>Đơn hàng #DH001</h2>
-                    <span>Đặt ngày: 15/11/2025 lúc 10:30</span>
-                    <span class="status-badge status-pending" style="margin-left: 10px;">Chờ xử lý</span>
+                    <h2>Đơn hàng #${order.orderNumber}</h2>
+                    <span>Đặt ngày: <fmt:formatDate value="${order.createdAt}" pattern="dd/MM/yyyy HH:mm"/></span>
+
+                    <c:choose>
+                        <c:when test="${order.status == 'PENDING'}"><span class="status-badge status-pending">Chờ xử lý</span></c:when>
+                        <c:when test="${order.status == 'COMPLETED'}"><span class="status-badge status-active">Hoàn tất</span></c:when>
+                        <c:when test="${order.status == 'CANCELLED'}"><span class="status-badge status-inactive">Đã hủy</span></c:when>
+                    </c:choose>
                 </div>
+
                 <div class="order-actions-top">
-                    <button class="btn btn-secondary" onclick="window.print()">
-                        <i class="fas fa-print"></i> In hóa đơn
+                    <button class="btn-sm btn-info" onclick="window.print()" style="cursor: pointer; padding: 10px 15px;">
+                        <i class="fa-solid fa-print"></i> In hóa đơn
                     </button>
 
-                    <button class="btn btn-danger">
-                        <i class="fas fa-times"></i> Hủy đơn
-                    </button>
-
-                    <button class="btn btn-success">
-                        <i class="fas fa-check"></i> Xác nhận đơn
-                    </button>
+                    <c:if test="${order.status == 'PENDING'}">
+                        <button class="btn-sm btn-danger" onclick="updateSingleStatus(${order.id}, 'cancelled')" style="cursor: pointer; padding: 10px 15px;">
+                            <i class="fa-solid fa-ban"></i> Hủy đơn
+                        </button>
+                        <button class="btn-sm btn-success" onclick="updateSingleStatus(${order.id}, 'completed')" style="cursor: pointer; padding: 10px 15px;">
+                            <i class="fa-solid fa-check"></i> Hoàn tất
+                        </button>
+                    </c:if>
                 </div>
             </div>
 
             <div class="detail-grid">
-
                 <div class="left-column">
                     <div class="detail-card">
-                        <h3 class="card-title">Danh sách sản phẩm</h3>
+                        <h3 class="card-title">Sản phẩm đã đặt</h3>
                         <table class="order-items-table">
                             <thead>
-                            <tr>
-                                <th>Sản phẩm</th>
-                                <th>Đơn giá</th>
-                                <th>Số lượng</th>
-                                <th style="text-align: right;">Tổng</th>
-                            </tr>
+                            <tr><th>Sản phẩm</th><th>Đơn giá</th><th>SL</th><th style="text-align: right;">Thành tiền</th></tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>
-                                    <div class="item-info-cell">
-                                        <img src="../assets/images/san-pham-tra-bac-ha.jpg" class="item-thumb" alt="">
-                                        <div class="item-text">
-                                            <h4>Trà Bạc Hà Premium</h4>
-                                            <p>SKU: TBH001</p>
+                            <c:forEach var="item" items="${order.items}">
+                                <tr>
+                                    <td>
+                                        <div class="item-info-cell">
+                                            <img src="${item.product.imageUrl}" class="item-thumb" alt="">
+                                            <div class="item-text">
+                                                <h4>${item.product.name}</h4>
+                                                <p>ID: #${item.productId}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>80,000₫</td>
-                                <td>2</td>
-                                <td style="text-align: right;">160,000₫</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="item-info-cell">
-                                        <img src="../assets/images/san-pham-bot-milk-foam.jpg" class="item-thumb" alt="">
-                                        <div class="item-text">
-                                            <h4>Bột Milk Foam</h4>
-                                            <p>SKU: BMF003</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>85,000₫</td>
-                                <td>1</td>
-                                <td style="text-align: right;">85,000₫</td>
-                            </tr>
+                                    </td>
+                                    <td><fmt:formatNumber value="${item.price}" pattern="#,###"/>₫</td>
+                                    <td>${item.quantity}</td>
+                                    <td style="text-align: right; font-weight: 600;">
+                                        <fmt:formatNumber value="${item.price * item.quantity}" pattern="#,###"/>₫
+                                    </td>
+                                </tr>
+                            </c:forEach>
                             </tbody>
                         </table>
 
                         <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
-                            <div class="order-summary-row">
-                                <span>Tạm tính</span>
-                                <span>245,000₫</span>
-                            </div>
-                            <div class="order-summary-row">
-                                <span>Phí vận chuyển</span>
-                                <span>20,000₫</span>
-                            </div>
-                            <div class="order-summary-row total">
-                                <span>Tổng cộng</span>
-                                <span style="color: #107e84;">265,000₫</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="detail-card">
-                        <h3 class="card-title">Lịch sử đơn hàng</h3>
-                        <div class="status-timeline">
-                            <div class="timeline-item active">
-                                <div class="timeline-text">Đơn hàng đã được tạo</div>
-                                <div class="timeline-date">15/11/2025 - 10:30</div>
-                            </div>
+                            <div class="order-summary-row"><span>Tạm tính</span><span><fmt:formatNumber value="${order.totalAmount - order.shippingFee}" pattern="#,###"/>₫</span></div>
+                            <div class="order-summary-row"><span>Phí vận chuyển</span><span><fmt:formatNumber value="${order.shippingFee}" pattern="#,###"/>₫</span></div>
+                            <div class="order-summary-row total" style="color: #107e84;"><span>Tổng cộng</span><span><fmt:formatNumber value="${order.totalAmount}" pattern="#,###"/>₫</span></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="right-column">
                     <div class="detail-card">
-                        <h3 class="card-title">Thông tin khách hàng</h3>
+                        <h3 class="card-title">Khách hàng</h3>
                         <div class="info-row">
-                            <span class="info-label">Họ tên</span>
-                            <div class="info-value">Nguyễn Văn A</div>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Email</span>
-                            <div class="info-value"><a href="#">nguyenvana@gmail.com</a></div>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Số điện thoại</span>
-                            <div class="info-value">0901234567</div>
-                        </div>
-                    </div>
-
-                    <div class="detail-card">
-                        <h3 class="card-title">Địa chỉ giao hàng</h3>
-                        <div class="info-row">
-                            <div class="info-value" style="line-height: 1.5;">
-                                123 Đường ABC,<br>
-                                Phường XYZ, TP. Hồ Chí Minh<br>
-                                Việt Nam
-                            </div>
+                            <div class="info-value" style="line-height: 1.6; white-space: pre-line;">${order.notes}</div>
                         </div>
                     </div>
 
@@ -196,20 +115,46 @@
                         <h3 class="card-title">Thanh toán</h3>
                         <div class="info-row">
                             <span class="info-label">Phương thức</span>
-                            <div class="info-value">COD (Thanh toán khi nhận hàng)</div>
+                            <div class="info-value"><strong>${order.paymentMethod}</strong></div>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Trạng thái</span>
-                            <div class="info-value">
-                                <span class="status-badge status-pending">Chưa thanh toán</span>
+                            <div class="info-value" style="margin-top: 5px;">
+                                <c:if test="${order.paymentStatus == 'PAID'}">
+                                    <span class="status-badge status-active">Đã thanh toán</span>
+                                </c:if>
+                                <c:if test="${order.paymentStatus == 'PENDING'}">
+                                    <span class="status-badge status-pending" style="color: #856404; background: #fff3cd;">Chưa thanh toán</span>
+                                </c:if>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </main>
 </div>
+
+<script>
+    function updateSingleStatus(orderId, status) {
+        if(!confirm("Xác nhận thay đổi trạng thái?")) return;
+
+        const params = new URLSearchParams();
+        params.append('action', 'single');
+        params.append('orderId', orderId);
+        params.append('status', status);
+
+        // Đường dẫn API giữ nguyên (vì đã có base href hỗ trợ)
+        fetch('admin/order/update', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: params
+        }).then(res => {
+            if(res.ok) location.reload();
+            else alert("Lỗi cập nhật!");
+        });
+    }
+</script>
+
 </body>
 </html>

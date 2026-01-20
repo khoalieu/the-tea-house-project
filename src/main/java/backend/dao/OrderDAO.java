@@ -5,7 +5,6 @@ import backend.model.CartItem;
 import backend.model.Order;
 import backend.model.OrderItem;
 import backend.model.Product; // Cần import Product
-import backend.model.UserAddress;
 import backend.model.enums.OrderStatus;
 import backend.model.enums.PaymentStatus;
 
@@ -250,6 +249,128 @@ public class OrderDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return o;
+    }
+    public List<Order> getAllOrders(int index, int size, String status, String timeFilter, String sortOrder) {
+        List<Order> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder(
+                "SELECT o.*, a.full_name, a.phone_number FROM orders o " +
+                        "LEFT JOIN user_addresses a ON o.shipping_address_id = a.id " +
+                        "WHERE 1=1 ");
+
+        // 1. Lọc theo Trạng thái
+        if (status != null && !status.isEmpty()) {
+            sql.append(" AND o.status = ? ");
+        }
+
+        // 2. Lọc theo Thời gian (MySQL Syntax)
+        if ("this_month".equals(timeFilter)) {
+            sql.append(" AND MONTH(o.created_at) = MONTH(CURRENT_DATE()) AND YEAR(o.created_at) = YEAR(CURRENT_DATE()) ");
+        } else if ("last_month".equals(timeFilter)) {
+            sql.append(" AND MONTH(o.created_at) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH) ");
+        }
+
+        // 3. Sắp xếp
+        if ("price_asc".equals(sortOrder)) {
+            sql.append(" ORDER BY o.total_amount ASC ");
+        } else if ("price_desc".equals(sortOrder)) {
+            sql.append(" ORDER BY o.total_amount DESC ");
+        } else if ("oldest".equals(sortOrder)) {
+            sql.append(" ORDER BY o.created_at ASC ");
+        } else {
+            sql.append(" ORDER BY o.created_at DESC "); // Mặc định: Mới nhất
+        }
+
+        sql.append(" LIMIT ? OFFSET ?");
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            int paramIndex = 1;
+            if (status != null && !status.isEmpty()) {
+                ps.setString(paramIndex++, status.toLowerCase());
+            }
+
+            ps.setInt(paramIndex++, size);
+            ps.setInt(paramIndex++, (index - 1) * size);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Order o = mapRowToOrder(rs); // Hàm mapRowToOrder giữ nguyên như cũ
+                o.setItems(getOrderItems(o.getId()));
+                list.add(o);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // Hàm đếm tổng để phân trang (Cũng phải lọc tương ứng)
+    public int countAllOrders(String status, String timeFilter) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM orders WHERE 1=1 ");
+
+        if (status != null && !status.isEmpty()) {
+            sql.append(" AND status = ? ");
+        }
+        if ("this_month".equals(timeFilter)) {
+            sql.append(" AND MONTH(created_at) = MONTH(CURRENT_DATE()) AND YEAR(created_at) = YEAR(CURRENT_DATE()) ");
+        } else if ("last_month".equals(timeFilter)) {
+            sql.append(" AND MONTH(created_at) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH) ");
+        }
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            if (status != null && !status.isEmpty()) {
+                ps.setString(1, status.toLowerCase());
+            }
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) { e.printStackTrace(); }
+        return 0;
+    }
+
+    public boolean updateOrderStatus(int orderId, OrderStatus status) {
+        String sql = "UPDATE orders SET status = ? WHERE id = ?";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, status.name().toLowerCase());
+            ps.setInt(2, orderId);
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    private Order mapRowToOrder(ResultSet rs) throws SQLException {
+        Order o = new Order();
+        o.setId(rs.getInt("id"));
+        o.setUserId(rs.getInt("user_id"));
+        o.setOrderNumber(rs.getString("order_number"));
+        o.setTotalAmount(rs.getDouble("total_amount"));
+        o.setShippingFee(rs.getDouble("shipping_fee"));
+        o.setPaymentMethod(rs.getString("payment_method"));
+
+        Timestamp ts = rs.getTimestamp("created_at");
+        if(ts != null) o.setCreatedAt(ts);
+
+        try {
+            o.setStatus(OrderStatus.valueOf(rs.getString("status").toUpperCase()));
+        } catch (Exception e) { o.setStatus(OrderStatus.PENDING); }
+
+        try {
+            o.setPaymentStatus(PaymentStatus.valueOf(rs.getString("payment_status").toUpperCase()));
+        } catch (Exception e) { o.setPaymentStatus(PaymentStatus.PENDING); }
+
+        try {
+            String customerName = rs.getString("full_name");
+            if (customerName != null) o.setNotes(customerName);
+        } catch (Exception e) {}
+
         return o;
     }
 }
