@@ -39,7 +39,7 @@ public class UserDAO {
                     user.setFirstName(rs.getString("first_name"));
                     user.setLastName(rs.getString("last_name"));
                     user.setPhone(rs.getString("phone"));
-                    java.sql.Timestamp ts = rs.getTimestamp("dateOfBirth"); // Lưu ý: tên cột trong DB của bạn là 'dateOfBirth' (theo file SQL bạn gửi)
+                    java.sql.Timestamp ts = rs.getTimestamp("dateOfBirth");
                     if (ts != null) {
                         user.setDateOfBirth(ts.toLocalDateTime());
                     }

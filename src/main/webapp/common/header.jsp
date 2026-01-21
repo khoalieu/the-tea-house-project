@@ -58,23 +58,25 @@
                     <li><a href="${pageContext.request.contextPath}/blog">CÔNG THỨC & BLOG</a></li>
 
                     <li class="has-dropdown">
-                        <a href="${pageContext.request.contextPath}/ve-chung-toi.jsp">VỀ CHÚNG TÔI</a>
+                        <a href="${pageContext.request.contextPath}/ve-chung-toi">VỀ CHÚNG TÔI</a>
+
                         <div class="dropdown-menu">
                             <div class="dropdown-column">
                                 <h3>Câu Chuyện Về Trà</h3>
                                 <ul>
-                                    <li><a href="${pageContext.request.contextPath}/ve-chung-toi.jsp">Câu Chuyện Của Chúng Tôi</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/tra-thao-moc.jsp">Hành Trình Của Những Tách Trà</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/tra-sua-nguyen-lieu.jsp">Thông Tin Về Trà Sữa Nguyên Liệu</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/ve-chung-toi">Câu Chuyện Của Chúng Tôi</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/tra-thao-moc">Hành Trình Của Những Tách Trà</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/tra-sua-nguyen-lieu">Thông Tin Về Trà Sữa Nguyên Liệu</a></li>
                                 </ul>
                             </div>
+
                             <div class="dropdown-column">
                                 <h3>Thông Tin Và Chính Sách</h3>
                                 <ul>
-                                    <li><a href="${pageContext.request.contextPath}/chinh-sach-ban-hang.jsp">Chính Sách Bán Hàng</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/chinh-sach-thanh-toan.jsp">Chính Sách Thanh Toán</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/chinh-sach-bao-hanh.jsp">Chính Sách Bảo Hành</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/dieu-khoan-dich-vu.jsp">Điều Khoản Dịch Vụ</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/chinh-sach-ban-hang">Chính Sách Bán Hàng</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/chinh-sach-thanh-toan">Chính Sách Thanh Toán</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/chinh-sach-bao-hanh">Chính Sách Bảo Hành</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/dieu-khoan-dich-vu">Điều Khoản Dịch Vụ</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -180,6 +182,9 @@
                                 <div style="padding: 10px; border-bottom: 1px solid #eee;">
                                     Xin chào, <strong>${sessionScope.user.lastName} ${sessionScope.user.firstName}</strong>
                                 </div>
+                                <c:if test="${sessionScope.user.role == 'ADMIN'}">
+                                    <a href="${pageContext.request.contextPath}/admin/admin-dashboard.jsp">Trang quản trị</a>
+                                </c:if>
                                 <a href="${pageContext.request.contextPath}/tai-khoan-cua-toi">Tài khoản của tôi</a>
                                 <a href="${pageContext.request.contextPath}/don-hang">Đơn mua</a>
                                 <a href="${pageContext.request.contextPath}/logout" style="color: red;">Đăng xuất</a>
