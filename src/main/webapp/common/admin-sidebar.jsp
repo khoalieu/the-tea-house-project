@@ -28,14 +28,14 @@
       </li>
 
       <li class="nav-item ${param.activePage == 'banners' ? 'active' : ''}">
-        <a href="${ctx}/admin/admin-banners.jsp">
+        <a href="${ctx}/admin/banner">
           <i class="fas fa-images"></i>
           <span>Quản lý Banner</span>
         </a>
       </li>
 
       <li class="nav-item ${param.activePage == 'categories' ? 'active' : ''}">
-        <a href="${ctx}/admin/admin-categories.jsp">
+        <a href="${ctx}/admin/categories">
           <i class="fas fa-sitemap"></i>
           <span>Danh mục Sản phẩm</span>
         </a>
