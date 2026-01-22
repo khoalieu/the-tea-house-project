@@ -119,11 +119,23 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Danh mục <span class="required">*</span></label>
+                                    <label>Danh mục sản phẩm <span class="required">*</span></label>
                                     <select name="category_id" class="form-control" required>
                                         <option value="">-- Chọn danh mục --</option>
-                                        <c:forEach var="cat" items="${categories}">
-                                            <option value="${cat.id}" ${param.category_id == cat.id ? 'selected' : ''}>${cat.name}</option>
+
+                                        <c:forEach var="parent" items="${parentCategories}">
+                                            <option value="${parent.id}" ${product.categoryId == parent.id ? 'selected' : ''}
+                                                    style="font-weight: bold; background-color: #f0f0f0;">
+                                                    ${parent.name}
+                                            </option>
+
+                                            <c:if test="${not empty childrenMap[parent.id]}">
+                                                <c:forEach var="child" items="${childrenMap[parent.id]}">
+                                                    <option value="${child.id}" ${product.categoryId == child.id ? 'selected' : ''}>
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;└─ ${child.name}
+                                                    </option>
+                                                </c:forEach>
+                                            </c:if>
                                         </c:forEach>
                                     </select>
                                 </div>

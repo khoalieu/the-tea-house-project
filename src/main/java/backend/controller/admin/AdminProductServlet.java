@@ -3,7 +3,9 @@ package backend.controller.admin;
 import backend.dao.ProductDAO;
 import backend.model.Product;
 import backend.model.enums.ProductStatus;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -45,7 +47,30 @@ public class AdminProductServlet extends HttpServlet {
     }
 
     private void loadCategoriesToRequest(HttpServletRequest request) {
+        // 1. Lấy tất cả danh mục từ CSDL
         List<Category> listCategories = categoryDAO.getAllCategories();
+
+        // 2. Tạo 2 thùng chứa: 1 thùng cho Cha, 1 thùng cho Con
+        List<Category> parentCategories = new ArrayList<>();
+        Map<Integer, List<Category>> childrenMap = new HashMap<>();
+
+        // 3. Phân loại
+        for (Category c : listCategories) {
+            if (c.getParentId() == null || c.getParentId() == 0) {
+                // Nếu không có cha -> Nó là Cha
+                parentCategories.add(c);
+            } else {
+                // Nếu có cha -> Nó là Con
+                // Tìm danh sách con của cha này (nếu chưa có thì tạo mới) và thêm vào
+                childrenMap.computeIfAbsent(c.getParentId(), k -> new ArrayList<>()).add(c);
+            }
+        }
+
+        // 4. Gửi sang JSP
+        request.setAttribute("parentCategories", parentCategories);
+        request.setAttribute("childrenMap", childrenMap);
+
+        // (Giữ lại cái này phòng hờ các code cũ cần dùng)
         request.setAttribute("categories", listCategories);
     }
 
