@@ -1,6 +1,8 @@
 package backend.model;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Banner {
     private Integer id;
@@ -66,4 +68,13 @@ public class Banner {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public Date getCreatedAtDate() {
+        if (createdAt == null) return null;
+        return Timestamp.valueOf(createdAt);
+    }
+    public Date getUpdatedAtDate() {
+        if (updatedAt == null) return null;
+        return Timestamp.valueOf(updatedAt);
+    }
+
 }

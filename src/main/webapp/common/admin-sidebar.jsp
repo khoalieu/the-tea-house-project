@@ -27,19 +27,19 @@
                 </a>
             </li>
 
-            <li class="nav-item ${param.activePage == 'banners' ? 'active' : ''}">
-                <a href="${ctx}/admin/banners">
-                    <i class="fas fa-images"></i>
-                    <span>Quản lý Banner</span>
-                </a>
-            </li>
+      <li class="nav-item ${param.activePage == 'banners' ? 'active' : ''}">
+        <a href="${ctx}/admin/admin-banners.jsp">
+          <i class="fas fa-images"></i>
+          <span>Quản lý Banner</span>
+        </a>
+      </li>
 
-            <li class="nav-item ${param.activePage == 'categories' ? 'active' : ''}">
-                <a href="${ctx}/admin/categories">
-                    <i class="fas fa-sitemap"></i>
-                    <span>Danh mục Sản phẩm</span>
-                </a>
-            </li>
+      <li class="nav-item ${param.activePage == 'categories' ? 'active' : ''}">
+        <a href="${ctx}/admin/admin-categories.jsp">
+          <i class="fas fa-sitemap"></i>
+          <span>Danh mục Sản phẩm</span>
+        </a>
+      </li>
 
             <li class="nav-item ${param.activePage == 'orders' ? 'active' : ''}">
                 <a href="${ctx}/admin/orders">
