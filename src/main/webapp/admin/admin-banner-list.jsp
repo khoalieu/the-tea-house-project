@@ -35,7 +35,7 @@
             </div>
 
             <div class="header-right">
-                <a href="${pageContext.request.contextPath}/index.jsp" class="view-site-btn" target="_blank">
+                <a href="${pageContext.request.contextPath}/" class="view-site-btn" target="_blank" style="margin-left: 20px;">
                     <i class="fas fa-external-link-alt"></i>
                     <span>Xem trang web</span>
                 </a>
