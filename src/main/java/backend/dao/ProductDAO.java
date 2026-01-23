@@ -405,4 +405,63 @@ public class ProductDAO {
         }
         return list;
     }
+
+    public List<Product> getBestSellerProducts(int categoryId, int limit) {
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT * FROM products WHERE category_id = ? AND is_bestseller = 1 AND status = 'ACTIVE' LIMIT ?";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, categoryId);
+            ps.setInt(2, limit);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(mapRowToProduct(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    private Product mapRowToProduct(ResultSet rs) throws SQLException {
+        Product p = new Product();
+        p.setId(rs.getInt("id"));
+        p.setName(rs.getString("name"));
+        p.setSlug(rs.getString("slug"));
+        p.setDescription(rs.getString("description"));
+        p.setShortDescription(rs.getString("short_description"));
+        p.setPrice(rs.getDouble("price"));
+        p.setSalePrice(rs.getDouble("sale_price"));
+        p.setSku(rs.getString("sku"));
+        p.setStockQuantity(rs.getInt("stock_quantity"));
+        p.setCategoryId(rs.getInt("category_id"));
+
+        // Xử lý ảnh (nếu null thì để chuỗi rỗng hoặc ảnh mặc định)
+        String img = rs.getString("image_url");
+        p.setImageUrl(img != null ? img : "");
+
+        p.setBestseller(rs.getBoolean("is_bestseller"));
+
+        try {
+            String statusStr = rs.getString("status");
+            if (statusStr != null) {
+                p.setStatus(ProductStatus.valueOf(statusStr));
+            } else {
+                p.setStatus(ProductStatus.ACTIVE);
+            }
+        } catch (IllegalArgumentException e) {
+            p.setStatus(ProductStatus.ACTIVE);
+        }
+
+        p.setIngredients(rs.getString("ingredients"));
+        p.setUsageInstructions(rs.getString("usage_instructions"));
+
+        if (rs.getTimestamp("created_at") != null) {
+            p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+        }
+
+        return p;
+    }
 }

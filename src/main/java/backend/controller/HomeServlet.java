@@ -3,11 +3,9 @@ package backend.controller;
 import backend.dao.BannerDAO;
 import backend.dao.BlogPostDAO;
 import backend.dao.ProductDAO;
-import backend.dao.PromotionDAO;
 import backend.model.Banner;
 import backend.model.BlogPost;
 import backend.model.Product;
-import backend.model.Promotion;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,34 +14,31 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/index")
+@WebServlet(name = "HomeServlet", urlPatterns = {"/index", "/trang-chu", ""})
 public class HomeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        PromotionDAO promoDAO = new PromotionDAO();
+        BannerDAO bannerDAO = new BannerDAO();
         ProductDAO productDAO = new ProductDAO();
         BlogPostDAO blogDAO = new BlogPostDAO();
-        BannerDAO bannerDAO = new BannerDAO();
 
-        // Banner home (slider)
-        List<Banner> homeBanners = bannerDAO.getHomeActive();
-//        List<Promotion> activePromotions = promoDAO.getActivePromotions();
+        List<Banner> listBanners = bannerDAO.getHomeActive();
+        request.setAttribute("listBanners", listBanners);
 
-        // top 4 bán chạy theo parent category (1: trà thảo mộc, 2: nguyên liệu)
-        List<Product> topHerbalTea = productDAO.getTopSellingByParentCategory(1, 4);
-        List<Product> topMilkTeaIngredients = productDAO.getTopSellingByParentCategory(2, 4);
+        List<Product> topHerbalTea = productDAO.getBestSellerProducts(1, 4);
+        List<Product> topMilkTeaIngredients = productDAO.getBestSellerProducts(2, 4);
 
-        // Top 3 blog view cao nhất
-        List<BlogPost> topBlogs = blogDAO.getTopViewedPublished(3);
-
-        request.setAttribute("activePromotions", homeBanners);
-//        request.setAttribute("activePromotions", activePromotions);
         request.setAttribute("topHerbalTea", topHerbalTea);
         request.setAttribute("topMilkTeaIngredients", topMilkTeaIngredients);
-        request.setAttribute("topBlogs", topBlogs);
+
+        try {
+            List<BlogPost> topBlogs = blogDAO.getTopViewedPublished(3);
+            request.setAttribute("topBlogs", topBlogs);
+        } catch (Exception e) {
+        }
 
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
