@@ -5,6 +5,9 @@ import backend.model.User;
 import backend.model.enums.UserGender;
 import backend.model.enums.UserRole;
 import org.mindrot.jbcrypt.BCrypt; // Import thư viện BCrypt
+import backend.model.CustomerDTO;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.sql.*;
 import java.util.*;
@@ -294,4 +297,131 @@ public class UserDAO {
         return null;
     }
 
+    public List<CustomerDTO> getCustomers(String search, String status, String spendingRange, String orderRange, String sort, int index, int size) {
+        List<CustomerDTO> list = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT u.id, CONCAT(u.last_name, ' ', u.first_name) AS full_name, " +
+                        "u.email, u.phone, u.created_at, u.is_active, " +
+                        "ua.province, " +
+                        "COUNT(o.id) AS total_orders, " +
+                        "COALESCE(SUM(CASE WHEN o.status = 'completed' THEN o.total_amount ELSE 0 END), 0) AS total_spent, " +
+                        "MAX(o.created_at) AS last_order_date " +
+                        "FROM users u " +
+                        "LEFT JOIN user_addresses ua ON u.id = ua.user_id AND ua.is_default = 1 " +
+                        "LEFT JOIN orders o ON u.id = o.user_id " +
+                        "WHERE u.role = 'customer' "
+        );
+
+        // 1. Filter Search
+        if (search != null && !search.isEmpty()) {
+            sql.append(" AND (u.email LIKE ? OR u.phone LIKE ? OR CONCAT(u.last_name, ' ', u.first_name) LIKE ?) ");
+        }
+
+        // Group By trước khi Having
+        sql.append(" GROUP BY u.id HAVING 1=1 ");
+
+        // 2. Filter Spending (HAVING clause)
+        if (spendingRange != null && !spendingRange.isEmpty()) {
+            // Ví dụ value: "0-500000", "500000-1000000", "5000000+"
+            if (spendingRange.contains("-")) {
+                String[] parts = spendingRange.split("-");
+                sql.append(" AND total_spent BETWEEN ").append(parts[0]).append(" AND ").append(parts[1]);
+            } else if (spendingRange.endsWith("+")) {
+                String min = spendingRange.replace("+", "");
+                sql.append(" AND total_spent >= ").append(min);
+            }
+        }
+
+        // 3. Filter Status
+        if (status != null && !status.isEmpty()) {
+            switch (status) {
+                case "inactive":
+                    sql.append(" AND u.is_active = 0 "); // Lưu ý: Cần check lại alias trong HAVING hoặc chuyển lên WHERE nếu lỗi
+                    break;
+                case "vip":
+                    sql.append(" AND total_spent > 5000000 AND u.is_active = 1 ");
+                    break;
+                case "new":
+                    sql.append(" AND DATEDIFF(NOW(), u.created_at) < 30 AND u.is_active = 1 ");
+                    break;
+                case "active":
+                    sql.append(" AND u.is_active = 1 ");
+                    break;
+            }
+        }
+
+        // 4. Sorting
+        if (sort != null) {
+            switch (sort) {
+                case "spending-desc": sql.append(" ORDER BY total_spent DESC "); break;
+                case "spending-asc": sql.append(" ORDER BY total_spent ASC "); break;
+                case "orders-desc": sql.append(" ORDER BY total_orders DESC "); break;
+                case "oldest": sql.append(" ORDER BY u.created_at ASC "); break;
+                default: sql.append(" ORDER BY u.created_at DESC "); // Default newest
+            }
+        } else {
+            sql.append(" ORDER BY u.created_at DESC ");
+        }
+
+        // 5. Pagination
+        sql.append(" LIMIT ? OFFSET ?");
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            int paramIndex = 1;
+            if (search != null && !search.isEmpty()) {
+                String searchPattern = "%" + search + "%";
+                ps.setString(paramIndex++, searchPattern);
+                ps.setString(paramIndex++, searchPattern);
+                ps.setString(paramIndex++, searchPattern);
+            }
+
+            ps.setInt(paramIndex++, size);
+            ps.setInt(paramIndex++, (index - 1) * size);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CustomerDTO c = new CustomerDTO();
+                c.setId(rs.getInt("id"));
+                c.setFullName(rs.getString("full_name"));
+                c.setEmail(rs.getString("email"));
+                c.setPhone(rs.getString("phone"));
+                c.setJoinDate(rs.getTimestamp("created_at"));
+                c.setActive(rs.getBoolean("is_active"));
+                c.setProvince(rs.getString("province"));
+                c.setTotalOrders(rs.getInt("total_orders"));
+                c.setTotalSpent(rs.getDouble("total_spent"));
+                c.setLastOrderDate(rs.getTimestamp("last_order_date"));
+                list.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // Hàm đếm tổng số lượng (để phân trang)
+    public int countCustomers(String search, String status) {
+        // Để đơn giản, count theo search trước
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM users u WHERE u.role = 'customer'");
+        if (search != null && !search.isEmpty()) {
+            sql.append(" AND (u.email LIKE ? OR u.phone LIKE ? OR CONCAT(u.last_name, ' ', u.first_name) LIKE ?) ");
+        }
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            if (search != null && !search.isEmpty()) {
+                String searchPattern = "%" + search + "%";
+                ps.setString(1, searchPattern);
+                ps.setString(2, searchPattern);
+                ps.setString(3, searchPattern);
+            }
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }
