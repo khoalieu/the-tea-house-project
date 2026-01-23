@@ -82,7 +82,7 @@
                         </div>
                     </li>
 
-                    <li><a href="${pageContext.request.contextPath}/khuyen-mai.jsp">KHUYẾN MÃI</a></li>
+                    <li><a href="${pageContext.request.contextPath}/khuyen-mai">KHUYẾN MÃI</a></li>
                 </ul>
             </div>
         </nav>

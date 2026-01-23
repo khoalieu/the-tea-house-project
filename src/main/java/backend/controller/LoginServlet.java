@@ -48,9 +48,9 @@ public class LoginServlet extends HttpServlet {
             Cart userCartFromDB = cartDAO.getCartByUserId(account.getId());
             session.setAttribute("cart", userCartFromDB);
             if(account.getRole() != null && account.getRole().name().equalsIgnoreCase("ADMIN")){
-                response.sendRedirect("admin/admin-dashboard.jsp");
+                response.sendRedirect("admin/dashboard");
             } else {
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("/index");
             }
         } else {
             request.setAttribute("errorMessage", "Sai tên đăng nhập hoặc mật khẩu!");

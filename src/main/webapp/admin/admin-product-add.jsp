@@ -29,20 +29,9 @@
 </head>
 <body>
 <div class="admin-container">
-    <aside class="admin-sidebar">
-        <div class="sidebar-header">
-            <div class="admin-logo">
-                <img src="assets/images/logoweb.png" alt="Mộc Trà">
-                <h2>Mộc Trà Admin</h2>
-            </div>
-        </div>
-        <nav class="admin-nav">
-            <ul>
-                <li class="nav-item"><a href="admin/admin-dashboard.jsp"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                <li class="nav-item active"><a href="admin/admin-products.jsp"><i class="fas fa-box"></i><span>Sản phẩm</span></a></li>
-            </ul>
-        </nav>
-    </aside>
+    <jsp:include page="/common/admin-sidebar.jsp">
+        <jsp:param name="activePage" value="products" />
+    </jsp:include>
 
     <main class="admin-main">
         <header class="admin-header">

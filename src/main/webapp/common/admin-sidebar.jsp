@@ -28,14 +28,14 @@
             </li>
 
       <li class="nav-item ${param.activePage == 'banners' ? 'active' : ''}">
-        <a href="${ctx}/admin/admin-banners.jsp">
+        <a href="${ctx}/admin/banner">
           <i class="fas fa-images"></i>
           <span>Quản lý Banner</span>
         </a>
       </li>
 
       <li class="nav-item ${param.activePage == 'categories' ? 'active' : ''}">
-        <a href="${ctx}/admin/admin-categories.jsp">
+        <a href="${ctx}/admin/categories">
           <i class="fas fa-sitemap"></i>
           <span>Danh mục Sản phẩm</span>
         </a>
@@ -66,6 +66,12 @@
                 <a href="${ctx}/admin/blog-categories">
                     <i class="fas fa-folder"></i>
                     <span>Danh mục Blog</span>
+                </a>
+            </li>
+            <li class="nav-item ${param.activePage == 'promotions' ? 'active' : ''}">
+                <a href="${ctx}/admin/promotions">
+                    <i class="fa-solid fa-percent"></i>
+                    <span>Quản lý khuyến mãi</span>
                 </a>
             </li>
         </ul>

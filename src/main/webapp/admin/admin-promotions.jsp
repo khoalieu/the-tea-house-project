@@ -18,12 +18,9 @@
 <body>
 <div class="admin-container">
     <aside class="admin-sidebar">
-        <div class="sidebar-header">
-            <div class="admin-logo">
-                <img src="${pageContext.request.contextPath}/assets/images/logoweb.png" alt="Mộc Trà">
-                <h2>Mộc Trà Admin</h2>
-            </div>
-        </div>
+        <jsp:include page="/common/admin-sidebar.jsp">
+            <jsp:param name="activePage" value="promotions" />
+        </jsp:include>
         <nav class="admin-nav">
             <ul>
                 <li class="nav-item">

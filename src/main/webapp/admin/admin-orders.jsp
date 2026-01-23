@@ -27,7 +27,9 @@
 <body>
 
 <div class="admin-container">
-    <jsp:include page="/common/admin-sidebar.jsp" />
+    <jsp:include page="/common/admin-sidebar.jsp">
+        <jsp:param name="activePage" value="orders" />
+    </jsp:include>
 
     <main class="admin-main">
         <header class="admin-header">
