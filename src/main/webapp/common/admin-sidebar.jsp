@@ -50,12 +50,12 @@
         </a>
       </li>
 
-      <li class="nav-item ${param.activePage == 'customers' ? 'active' : ''}">
-        <a href="${ctx}/admin/admin-customers.jsp">
-          <i class="fas fa-users"></i>
-          <span>Khách hàng</span>
-        </a>
-      </li>
+        <li class="nav-item active">
+            <a href="customers">
+                <i class="fas fa-users"></i>
+                <span>Khách hàng</span>
+            </a>
+        </li>
 
       <li class="nav-item ${param.activePage == 'blog' ? 'active' : ''}">
         <a href="${ctx}/admin/blog">
