@@ -347,7 +347,7 @@
                                 </button>
 
                                 <!-- Delete comment -->
-                                <form method="post" action="${ctx}/admin/blog/comment" style="display:inline;"
+                                <form method="post" action="${ctx}/admin/blog/detail" style="display:inline;"
                                       onsubmit="return confirm('Xóa bình luận này?');">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="postId" value="${p.id}">
@@ -378,7 +378,7 @@
 
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = '${ctx}/admin/blog/comment';
+        form.action = '${ctx}/admin/blog/detail';
 
         form.innerHTML =
             '<input type="hidden" name="action" value="reply">' +

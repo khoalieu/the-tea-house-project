@@ -1,5 +1,4 @@
 package backend.controller.admin;
-
 import backend.dao.BlogCategoryDAO;
 import backend.model.BlogCategory;
 import backend.model.User;
@@ -9,108 +8,147 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet("/admin/blog-categories")
+@WebServlet(urlPatterns = {
+        "/admin/blog-categories",
+        "/admin/blog-categories/edit"
+})
 public class AdminBlogCategoryServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        if (!checkAdminAccess(request, response)) return;
+        User me = requireAdminOrEditor(request, response);
+        if (me == null) return;
 
+        String path = request.getServletPath();
         BlogCategoryDAO dao = new BlogCategoryDAO();
-        List<BlogCategory> categories = dao.getAllCategories();
 
-        request.setAttribute("categories", categories);
-        request.getRequestDispatcher("/admin/admin-blog-categories.jsp").forward(request, response);
+        if ("/admin/blog-categories".equals(path)) {
+            request.setAttribute("categories", dao.getAllCategories());
+            request.getRequestDispatcher("/admin/admin-blog-categories.jsp").forward(request, response);
+            return;
+        }
+
+        if ("/admin/blog-categories/edit".equals(path)) {
+            int id = parseInt(request.getParameter("id"));
+            if (id <= 0) {
+                response.sendRedirect(request.getContextPath() + "/admin/blog-categories");
+                return;
+            }
+
+            BlogCategory category = dao.getCategoryById(id);
+            if (category == null) {
+                response.sendError(404);
+                return;
+            }
+
+            request.setAttribute("category", category);
+            request.setAttribute("categories", dao.getAllCategories());
+            request.getRequestDispatcher("/admin/admin-edit-category-blog.jsp").forward(request, response);
+            return;
+        }
+
+        response.sendRedirect(request.getContextPath() + "/admin/blog-categories");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        User me = requireAdminOrEditor(request, response);
+        if (me == null) return;
+
         request.setCharacterEncoding("UTF-8");
 
-        if (!checkAdminAccess(request, response)) return;
+        String path = request.getServletPath();
+        BlogCategoryDAO dao = new BlogCategoryDAO();
 
-        String action = request.getParameter("action");
+        if ("/admin/blog-categories".equals(path)) {
+            String action = request.getParameter("action"); // add | delete
 
-        if ("add".equals(action)) {
-            handleAdd(request, response);
-        } else if ("delete".equals(action)) {
-            handleDelete(request, response);
-        } else {
+            if ("add".equalsIgnoreCase(action)) {
+                String name = trimOrNull(request.getParameter("name"));
+                String slugInput = trimOrNull(request.getParameter("slug"));
+                String description = trimOrNull(request.getParameter("description"));
+                String isActiveStr = request.getParameter("is_active");
+
+                if (name == null) {
+                    request.setAttribute("error", "Vui lòng nhập tên danh mục.");
+                    request.setAttribute("categories", dao.getAllCategories());
+                    request.getRequestDispatcher("/admin/admin-blog-categories.jsp").forward(request, response);
+                    return;
+                }
+
+                String finalSlug = (slugInput == null) ? slugify(name) : slugify(slugInput);
+                finalSlug = ensureUniqueSlug(dao, finalSlug, null);
+
+                BlogCategory c = new BlogCategory();
+                c.setName(name);
+                c.setSlug(finalSlug);
+                c.setDescription(description);
+                c.setIsActive("true".equals(isActiveStr));
+
+                int ok = dao.insertCategory(c);
+                response.sendRedirect(request.getContextPath() + "/admin/blog-categories?msg=added");
+                return;
+            }
+
+            if ("delete".equalsIgnoreCase(action)) {
+                int id = parseInt(request.getParameter("id"));
+                if (id > 0) dao.deleteCategory(id);
+                response.sendRedirect(request.getContextPath() + "/admin/blog-categories?msg=deleted");
+                return;
+            }
+
             response.sendRedirect(request.getContextPath() + "/admin/blog-categories");
-        }
-    }
-
-    private void handleAdd(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        String name = trimOrNull(request.getParameter("name"));
-        String slugInput = trimOrNull(request.getParameter("slug"));
-        String description = trimOrNull(request.getParameter("description"));
-        String isActiveStr = request.getParameter("is_active");
-
-        if (name == null || name.isEmpty()) {
-            BlogCategoryDAO dao = new BlogCategoryDAO();
-            request.setAttribute("error", "Vui lòng nhập tên danh mục.");
-            request.setAttribute("categories", dao.getAllCategories());
-            request.setAttribute("inputName", "");
-            request.setAttribute("inputSlug", slugInput);
-            request.setAttribute("inputDescription", description);
-            request.setAttribute("inputIsActive", isActiveStr);
-            request.getRequestDispatcher("/admin/admin-blog-categories.jsp").forward(request, response);
             return;
         }
 
-        BlogCategoryDAO dao = new BlogCategoryDAO();
-        String finalSlug = ensureUniqueSlug(dao, slugInput != null ? slugInput : name, null);
+        if ("/admin/blog-categories/edit".equals(path)) {
+            int id = parseInt(request.getParameter("id"));
+            if (id <= 0) { response.sendRedirect(request.getContextPath() + "/admin/blog-categories"); return; }
 
-        BlogCategory cat = new BlogCategory();
-        cat.setName(name);
-        cat.setSlug(finalSlug);
-        cat.setDescription(description);
-        cat.setIsActive("true".equals(isActiveStr));
+            BlogCategory old = dao.getCategoryById(id);
+            if (old == null) { response.sendError(404); return; }
 
-        int newId = dao.insertCategory(cat);
-        if (newId > 0) {
-            response.sendRedirect(request.getContextPath() + "/admin/blog-categories?msg=added");
-        } else {
-            response.sendRedirect(request.getContextPath() + "/admin/blog-categories");
-        }
-    }
+            String name = trimOrNull(request.getParameter("name"));
+            String slugInput = trimOrNull(request.getParameter("slug"));
+            String description = trimOrNull(request.getParameter("description"));
+            String isActiveStr = request.getParameter("is_active");
 
-    private void handleDelete(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-
-        String idStr = request.getParameter("id");
-        if (idStr != null) {
-            try {
-                int id = Integer.parseInt(idStr);
-                BlogCategoryDAO dao = new BlogCategoryDAO();
-                dao.deleteCategory(id);
-                response.sendRedirect(request.getContextPath() + "/admin/blog-categories?msg=deleted");
+            if (name == null) {
+                request.setAttribute("error", "Vui lòng nhập tên danh mục.");
+                request.setAttribute("category", old);
+                request.setAttribute("categories", dao.getAllCategories());
+                request.getRequestDispatcher("/admin/admin-edit-category-blog.jsp").forward(request, response);
                 return;
-            } catch (NumberFormatException ignored) {}
+            }
+
+            String finalSlug = (slugInput == null) ? slugify(name) : slugify(slugInput);
+            finalSlug = ensureUniqueSlug(dao, finalSlug, id);
+
+            BlogCategory updated = new BlogCategory();
+            updated.setId(id);
+            updated.setName(name);
+            updated.setSlug(finalSlug);
+            updated.setDescription(description);
+            updated.setIsActive("true".equals(isActiveStr));
+
+            dao.updateCategory(updated);
+            response.sendRedirect(request.getContextPath() + "/admin/blog-categories?msg=updated");
+            return;
         }
+
         response.sendRedirect(request.getContextPath() + "/admin/blog-categories");
     }
 
-    private boolean checkAdminAccess(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return false;
-        }
-        User u = (User) session.getAttribute("user");
-        if (u.getRole() == null || !(u.getRole() == UserRole.ADMIN || u.getRole() == UserRole.EDITOR)) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return false;
-        }
-        return true;
+    private int parseInt(String s) {
+        try {
+            return Integer.parseInt(s);
+    } catch (Exception e) {
+        return -1; }
     }
 
     private String trimOrNull(String s) {
@@ -119,9 +157,8 @@ public class AdminBlogCategoryServlet extends HttpServlet {
         return s.isEmpty() ? null : s;
     }
 
-    private String ensureUniqueSlug(BlogCategoryDAO dao, String raw, Integer excludeId) {
-        String base = slugify(raw);
-        if (base.isEmpty()) base = "category";
+    private String ensureUniqueSlug(BlogCategoryDAO dao, String base, Integer excludeId) {
+        if (base == null || base.isEmpty()) base = "category";
 
         String candidate = base;
         int i = 2;
@@ -137,13 +174,26 @@ public class AdminBlogCategoryServlet extends HttpServlet {
     private String slugify(String input) {
         if (input == null) return "";
         String s = input.trim().toLowerCase();
-
         s = java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD);
         s = s.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
         s = s.replace("đ", "d");
-
         s = s.replaceAll("[^a-z0-9]+", "-");
         s = s.replaceAll("(^-+|-+$)", "");
         return s;
     }
+
+    private User requireAdminOrEditor(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || !(session.getAttribute("user") instanceof User)) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return null;
+        }
+        User u = (User) session.getAttribute("user");
+        if (u.getRole() == null || !(u.getRole() == UserRole.ADMIN || u.getRole() == UserRole.EDITOR)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return null;
+        }
+        return u;
+    }
 }
+
