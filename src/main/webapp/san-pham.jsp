@@ -119,7 +119,7 @@
                                     <fmt:setLocale value="vi_VN"/>
                                     <fmt:formatNumber value="${p.price}" type="currency" currencySymbol=""/> VNĐ
                                 </p>
-                                <a href="chi-tiet-san-pham.jsp?id=${p.id}" class="cta-button">Xem Chi Tiết</a>
+                                <a href="chi-tiet-san-pham?id=${p.id}" class="cta-button">Xem Chi Tiết</a>
                             </div>
                         </c:forEach>
 
