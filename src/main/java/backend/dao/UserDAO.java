@@ -1,13 +1,11 @@
 package backend.dao;
 
 import backend.db.DBConnect;
+import backend.model.CustomerDTO;
 import backend.model.User;
 import backend.model.enums.UserGender;
 import backend.model.enums.UserRole;
 import org.mindrot.jbcrypt.BCrypt; // Import thư viện BCrypt
-import backend.model.CustomerDTO;
-import java.util.ArrayList;
-import java.util.List;
 
 import java.sql.*;
 import java.util.*;
@@ -297,6 +295,48 @@ public class UserDAO {
         return null;
     }
 
+    public User getUserDetailById(int id) {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    User u = new User();
+                    u.setId(rs.getInt("id"));
+                    u.setUsername(rs.getString("username"));
+                    u.setEmail(rs.getString("email"));
+                    u.setFirstName(rs.getString("first_name"));
+                    u.setLastName(rs.getString("last_name"));
+                    u.setPhone(rs.getString("phone"));
+                    u.setAvatar(rs.getString("avatar"));
+
+                    try {
+                        String roleStr = rs.getString("role");
+                        if(roleStr != null) u.setRole(UserRole.valueOf(roleStr.toUpperCase()));
+                    } catch (Exception e) { u.setRole(UserRole.CUSTOMER); }
+
+                    try {
+                        String genderStr = rs.getString("gender");
+                        if(genderStr != null) u.setGender(UserGender.valueOf(genderStr.toUpperCase()));
+                    } catch (Exception e) { u.setGender(UserGender.OTHER); }
+
+                    if (rs.getTimestamp("dateOfBirth") != null)
+                        u.setDateOfBirth(rs.getTimestamp("dateOfBirth").toLocalDateTime());
+
+                    if (rs.getTimestamp("created_at") != null)
+                        u.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+
+                    u.setIsActive(rs.getBoolean("is_active"));
+                    return u;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public List<CustomerDTO> getCustomers(String search, String status, String spendingRange, String orderRange, String sort, int index, int size) {
         List<CustomerDTO> list = new ArrayList<>();
 
@@ -542,5 +582,7 @@ public class UserDAO {
         }
         return list;
     }
+
+
 
 }

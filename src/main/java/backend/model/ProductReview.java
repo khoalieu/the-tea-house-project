@@ -9,7 +9,7 @@ public class ProductReview {
     private Integer rating;
     private String commentText;
     private LocalDateTime createdAt;
-
+    private String productName;
     public ProductReview() {}
 
     public ProductReview(Integer id, Integer productId, Integer userId, Integer rating,
@@ -39,4 +39,6 @@ public class ProductReview {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getProductName() { return productName; }
+    public void setProductName(String productName) { this.productName = productName; }
 }
