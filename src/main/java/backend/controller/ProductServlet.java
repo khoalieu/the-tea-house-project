@@ -24,23 +24,26 @@ public class ProductServlet extends HttpServlet {
         String sortParam = request.getParameter("sort");
         String pageParam = request.getParameter("page");
         String priceParam = request.getParameter("price");
-        Integer categoryId = null;
         String promoParam = request.getParameter("promotionId");
-        if(categoryParam != null && !categoryParam.isEmpty()) {
+
+        Integer categoryId = null;
+        if (categoryParam != null && !categoryParam.isEmpty()) {
             try {
                 categoryId = Integer.parseInt(categoryParam);
             } catch (NumberFormatException e) {
                 categoryId = null;
             }
         }
+
         int page = 1;
-        if(pageParam !=null && !pageParam.isEmpty()){
-            try{
+        if (pageParam != null && !pageParam.isEmpty()) {
+            try {
                 page = Integer.parseInt(pageParam);
-            } catch (Exception e){
+            } catch (Exception e) {
                 page = 1;
             }
         }
+
         Double maxPrice = null;
         if (priceParam != null && !priceParam.isEmpty()) {
             try {
@@ -51,40 +54,47 @@ public class ProductServlet extends HttpServlet {
         }
 
         Integer promotionId = null;
-        if (promoParam != null) {
-            try { promotionId = Integer.parseInt(promoParam); } catch (Exception e) {}
+        if (promoParam != null && !promoParam.isEmpty()) {
+            try {
+                promotionId = Integer.parseInt(promoParam);
+            } catch (Exception e) {
+            }
         }
+
         int pageSize = 12;
         List<Product> products = null;
-        products = productDAO.getProducts(categoryId,promotionId, sortParam, maxPrice, page, pageSize);
+
+        products = productDAO.getProducts(categoryId, promotionId, sortParam, maxPrice, page, pageSize, "active");
+
         int totalProducts = 0;
-        try {
-            totalProducts = productDAO.countProducts(categoryId, promotionId,maxPrice);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        totalProducts = productDAO.countProducts(categoryId, promotionId, maxPrice, "active");
+
         int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+
         String categoryName = "Tất Cả Sản Phẩm";
+
         if (promotionId != null) {
             PromotionDAO promoDAO = new PromotionDAO();
             categoryName = promoDAO.getPromotionName(promotionId);
-        }
-        if (categoryId != null) {
 
-             if (categoryId == 1) {
+        } else if (categoryId != null) {
+            if (categoryId == 1) {
                 categoryName = "Trà Thảo Mộc";
             } else if (categoryId == 2) {
                 categoryName = "Nguyên Liệu Trà Sữa";
             }
         }
+
         request.setAttribute("categoryName", categoryName);
         request.setAttribute("products", products);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+
         request.setAttribute("currentCategory", categoryId);
         request.setAttribute("currentSort", sortParam);
         request.setAttribute("currentPrice", maxPrice);
         request.setAttribute("currentPromotion", promotionId);
+
         request.getRequestDispatcher("/san-pham.jsp").forward(request, response);
     }
 }
