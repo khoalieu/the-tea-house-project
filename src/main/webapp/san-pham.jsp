@@ -32,20 +32,44 @@
                             <a href="san-pham">Tất Cả Sản Phẩm</a>
                         </li>
 
-                        <li class="category-parent ${currentCategory == 1 ? 'active' : ''}">
-                            <a href="san-pham?category=1">Trà Thảo Mộc (12)</a>
-                        </li>
+                        <c:forEach var="p" items="${parentCategories}">
+                            <c:if test="${categoryCountMap[p.id] > 0}">
 
-                        <li class="category-parent ${currentCategory == 2 ? 'active' : ''}">
-                            <a href="san-pham?category=2">Nguyên Liệu Trà Sữa (17)</a>
+                                <c:set var="isActiveParent" value="${currentCategory == p.id}" />
+                                <c:if test="${not isActiveParent}">
+                                    <c:forEach var="child" items="${childrenMap[p.id]}">
+                                        <c:if test="${currentCategory == child.id}">
+                                            <c:set var="isActiveParent" value="true"/>
+                                        </c:if>
+                                    </c:forEach>
+                                </c:if>
 
-                            <ul class="category-child-list">
-                                <li><a href="#">Trà Nền Pha Chế (5)</a></li>
-                                <li><a href="#">Bột Pha Chế (4)</a></li>
-                                <li><a href="#">Topping & Trân Châu (4)</a></li>
-                                <li><a href="#">Khác... (4)</a></li>
-                            </ul>
-                        </li>
+                                <li class="category-parent ${isActiveParent ? 'active' : ''}">
+                                    <a href="san-pham?category=${p.id}">
+                                            ${p.name}
+                                        (<c:out value="${categoryCountMap[p.id]}" default="0" />)
+                                    </a>
+
+                                    <c:if test="${not empty childrenMap[p.id]}">
+                                        <ul class="category-child-list">
+                                            <c:forEach var="c" items="${childrenMap[p.id]}">
+
+                                                <c:if test="${categoryCountMap[c.id] > 0}">
+                                                    <li class="${currentCategory == c.id ? 'active-child' : ''}">
+                                                        <a href="san-pham?category=${c.id}">
+                                                                ${c.name}
+                                                            (<c:out value="${categoryCountMap[c.id]}" default="0" />)
+                                                        </a>
+                                                    </li>
+                                                </c:if>
+
+                                            </c:forEach>
+                                        </ul>
+                                    </c:if>
+                                </li>
+                            </c:if>
+                        </c:forEach>
+
                     </ul>
                 </div>
                 <div class="filter-group">
