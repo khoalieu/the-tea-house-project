@@ -1630,3 +1630,155 @@
     from { transform: translateY(-50px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Roboto', sans-serif; background: #f8f9fa; color: #333; font-size: 14px; }
+a { text-decoration: none; }
+ul { list-style: none; }
+
+/* 2. LAYOUT */
+.admin-container { display: flex; min-height: 100vh; }
+.admin-main { margin-left: 280px; flex: 1; display: flex; flex-direction: column; }
+.admin-content { padding: 30px; flex: 1; }
+
+/* 3. SIDEBAR (Fix Icon) */
+.admin-sidebar {
+    width: 280px; background: #fff; box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+    position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+}
+.sidebar-header { padding: 25px 20px; border-bottom: 1px solid #f0f0f0; }
+.admin-logo { display: flex; align-items: center; gap: 12px; }
+.admin-logo img { width: 40px; height: 40px; border-radius: 8px; }
+.admin-logo h2 { font-size: 18px; font-weight: 700; color: #107e84; margin: 0; }
+
+.admin-nav { padding: 20px 0; }
+.nav-item { margin-bottom: 5px; }
+.nav-item a {
+    display: flex; align-items: center; padding: 12px 25px;
+    color: #555; font-weight: 500; transition: all 0.3s;
+}
+/* Quan trọng: Fix kích thước icon để nó hiện ra */
+.nav-item i {
+    width: 24px; text-align: center; margin-right: 12px;
+    font-size: 16px; color: #888;
+}
+.nav-item a:hover, .nav-item.active a {
+    background: #e6f7f8; color: #107e84; border-right: 3px solid #107e84;
+}
+.nav-item.active i, .nav-item a:hover i { color: #107e84; }
+
+/* 4. HEADER */
+.admin-header {
+    background: #fff; height: 70px; padding: 0 30px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 99;
+}
+.header-left h1 { font-size: 22px; font-weight: 700; color: #333; margin: 0; }
+.header-search { position: relative; }
+.header-search input {
+    padding: 10px 15px 10px 35px; border: 1px solid #ddd;
+    border-radius: 20px; width: 300px; outline: none; transition: 0.3s;
+}
+.header-search input:focus { border-color: #107e84; }
+.header-search i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #999; }
+.header-right { display: flex; align-items: center; gap: 20px; }
+
+/* 5. COMPONENTS (Buttons, Badges) */
+.btn-sm { padding: 6px 12px; border-radius: 6px; border: none; font-size: 12px; cursor: pointer; color: white; display: inline-flex; align-items: center; gap: 5px; }
+.btn-success { background: #28a745; }
+.btn-danger { background: #dc3545; }
+.btn-info { background: #17a2b8; }
+.status-badge { padding: 5px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+.status-pending { background: #fff3cd; color: #856404; }
+.status-active { background: #d4edda; color: #155724; } /* Completed */
+.status-inactive { background: #f8d7da; color: #721c24; } /* Cancelled */
+
+/* 6. ORDERS PAGE SPECIFIC */
+.filters-section { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+.filters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+.filter-group label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 13px; }
+.form-select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; outline: none; }
+
+.orders-container { background: #fff; border-radius: 8px; border: 1px solid #eee; overflow: hidden; }
+.orders-table { width: 100%; border-collapse: collapse; }
+.orders-table th { background: #f8f9fa; padding: 15px; text-align: left; font-weight: 600; color: #555; border-bottom: 1px solid #eee; }
+.orders-table td { padding: 15px; border-bottom: 1px solid #f9f9f9; vertical-align: middle; }
+.order-id { font-weight: 700; color: #107e84; }
+.order-amount { font-weight: 700; color: #333; }
+
+.bulk-actions-bar:not(.full-width) {
+    left: 50%;
+    transform: translateX(-40%); /* Căn chỉnh lại cho cân với Sidebar */
+    padding: 10px 25px;
+    border-radius: 50px;
+    gap: 20px;
+}
+
+/* KIỂU 2: FULL WIDTH (Thanh dài) - Dùng cho trang Sản phẩm */
+/* Cần thêm class "full-width" vào thẻ div */
+.bulk-actions-bar.full-width {
+    left: 310px;
+    right: 30px;
+    border-radius: 8px;
+    padding: 12px 20px;
+    justify-content: space-between;
+
+    /* ĐỔI MÀU: Dùng nền tối thay vì màu vàng */
+    background: #2c3e50;
+    color: white;
+    border: 1px solid #34495e;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+}
+
+/* Nội dung bên trong */
+.bulk-actions-info {
+    font-weight: 500;
+    font-size: 14px;
+    padding-right: 15px;
+    border-right: 1px solid rgba(255,255,255,0.2);
+    color: #ecf0f1; /* Màu trắng xám nhẹ */
+}
+
+.bulk-actions-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap; /* Cho phép xuống dòng nếu quá nhiều nút */
+}
+
+/* Style cho các nút bấm */
+.btn-bulk {
+    padding: 8px 14px;
+    border-radius: 6px; /* Bo góc vuông hơn cho hợp với thanh dài */
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    color: white;
+}
+
+/* Màu sắc các nút */
+.btn-bulk-activate { background: #28a745; }
+.btn-bulk-activate:hover { background: #218838; }
+
+.btn-bulk-deactivate { background: #ffc107; color: #333; }
+.btn-bulk-deactivate:hover { background: #e0a800; }
+
+.btn-bulk-delete { background: #dc3545; }
+.btn-bulk-delete:hover { background: #c82333; }
+
+.btn-bulk-promo { background: #6f42c1; } /* Tím mộng mơ cho Promo */
+.btn-bulk-promo:hover { background: #5a32a3; }
+
+.btn-bulk-quick-discount { background: #17a2b8; } /* Xanh cyan */
+.btn-bulk-quick-discount:hover { background: #138496; }
+
+.btn-bulk-cancel { background: rgba(255,255,255,0.2); }
+.btn-bulk-cancel:hover { background: rgba(255,255,255,0.3); }
+
+/* Riêng nút cho kiểu Viên thuốc thì bo tròn hơn */
+.bulk-actions-bar:not(.full-width) .btn-bulk {
+    border-radius: 20px;
+}

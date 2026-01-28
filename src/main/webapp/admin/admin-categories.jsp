@@ -57,7 +57,6 @@
                     <a href="admin-orders.jsp">
                         <i class="fas fa-shopping-cart"></i>
                         <span>Đơn hàng</span>
-                        <span class="badge">23</span>
                     </a>
                 </li>
 

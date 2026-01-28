@@ -45,8 +45,6 @@
         <a href="${ctx}/admin/admin-orders.jsp">
           <i class="fas fa-shopping-cart"></i>
           <span>Đơn hàng</span>
-          <%-- nếu sau này có count động thì thay 23 bằng biến --%>
-          <span class="badge">23</span>
         </a>
       </li>
 

@@ -1,172 +1,122 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Blog - Mộc Trà Admin</title>
-    <link rel="stylesheet" href="../assets/css/base.css">
-    <link rel="stylesheet" href="../assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/admin.css">
-    <link rel="stylesheet" href="assets/css/admin-add-product.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <title>Quản lý Đơn hàng - Mộc Trà Admin</title>
+
+    <base href="${pageContext.request.contextPath}/">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="admin/assets/css/admin.css">
+
+    <link rel="stylesheet" href="admin/assets/css/admin-orders.css">
+
+    <style>
+        /* CSS chỉnh checkbox thẳng hàng */
+        .check-col { width: 40px; text-align: center; }
+        .product-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: #107e84; }
+    </style>
 </head>
 <body>
+
 <div class="admin-container">
-    <!-- Sidebar -->
-    <aside class="admin-sidebar">
-        <div class="sidebar-header">
-            <div class="admin-logo">
-                <img src="../assets/images/logoweb.png" alt="Mộc Trà">
-                <h2>Mộc Trà Admin</h2>
-            </div>
-        </div>
-
-        <nav class="admin-nav">
-            <ul>
-                <li class="nav-item">
-                    <a href="admin-dashboard.jsp">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-products.jsp">
-                        <i class="fas fa-box"></i>
-                        <span>Tất cả Sản phẩm</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-banners.jsp">
-                        <i class="fas fa-images"></i>
-                        <span>Quản lý Banner</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-categories.jsp">
-                        <i class="fas fa-sitemap"></i>
-                        <span>Danh mục Sản phẩm</span>
-                    </a>
-                </li>
-
-                <li class="nav-item active">
-                    <a href="admin-orders.html">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Đơn hàng</span>
-                        <span class="badge">23</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-customers.jsp">
-                        <i class="fas fa-users"></i>
-                        <span>Khách hàng</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="admin-blog.jsp">
-                        <i class="fas fa-newspaper"></i>
-                        <span>Tất cả Bài viết</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="admin-blog-categories.jsp">
-                        <i class="fas fa-folder"></i>
-                        <span>Danh mục Blog</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
+    <jsp:include page="/common/admin-sidebar.jsp" />
 
     <main class="admin-main">
         <header class="admin-header">
             <div class="header-left">
-                <h1>Quản lý Đơn hàng</h1>
+                <h1>Đơn hàng</h1>
             </div>
-
             <div class="header-right">
                 <div class="header-search">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Tìm kiếm đơn hàng...">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" placeholder="Tìm kiếm đơn hàng, khách hàng...">
                 </div>
-
-                <a href="../index.jsp" class="view-site-btn" target="_blank">
-                    <i class="fas fa-external-link-alt"></i>
-                    <span>Xem trang web</span>
-                </a>
             </div>
         </header>
 
         <div class="admin-content">
+
             <div class="page-header">
                 <div class="page-title">
                     <h2>Danh sách đơn hàng</h2>
-                    <p>Quản lý và theo dõi tất cả đơn hàng</p>
+                    <p>Quản lý và xử lý các đơn đặt hàng từ khách hàng</p>
                 </div>
             </div>
 
             <div class="filters-section">
-                <div class="filters-grid">
-                    <div class="filter-group">
-                        <label for="status-filter">Trạng thái</label>
+                <form id="filterForm" action="admin/orders" method="GET">
+                    <div class="filters-grid">
+                        <div class="filter-group">
+                            <label>Trạng thái</label>
+                            <select name="status" class="form-select" onchange="this.form.submit()">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="PENDING" ${status == 'PENDING' ? 'selected' : ''}>Chờ xử lý</option>
+                                <option value="COMPLETED" ${status == 'COMPLETED' ? 'selected' : ''}>Hoàn tất</option>
+                                <option value="CANCELLED" ${status == 'CANCELLED' ? 'selected' : ''}>Đã hủy</option>
+                            </select>
+                        </div>
 
-                        <select id="status-filter" class="form-select">
-                            <option value="">Tất cả trạng thái</option>
-                            <option value="pending">Chờ xử lý</option>
-                            <option value="completed">Đã hoàn tất</option>
-                            <option value="cancelled">Đã hủy</option>
-                        </select>
-                    </div>
+                        <div class="filter-group">
+                            <label>Thời gian</label>
+                            <select name="time" class="form-select" onchange="this.form.submit()">
+                                <option value="">Toàn thời gian</option>
+                                <option value="this_month" ${time == 'this_month' ? 'selected' : ''}>Tháng này</option>
+                                <option value="last_month" ${time == 'last_month' ? 'selected' : ''}>Tháng trước</option>
+                            </select>
+                        </div>
 
-                    <div class="filter-group">
-                        <label for="date-filter">Thời gian</label>
-                        <select id="date-filter" class="form-select">
-                            <option value="">Tất cả thời gian</option>
-                            <option value="today">Hôm nay</option>
-                            <option value="yesterday">Hôm qua</option>
-                            <option value="week">Tuần này</option>
-                            <option value="month">Tháng này</option>
-                        </select>
+                        <div class="filter-group">
+                            <label>Sắp xếp</label>
+                            <select name="sort" class="form-select" onchange="this.form.submit()">
+                                <option value="newest" ${sort == 'newest' ? 'selected' : ''}>Mới nhất</option>
+                                <option value="oldest" ${sort == 'oldest' ? 'selected' : ''}>Cũ nhất</option>
+                                <option value="price_desc" ${sort == 'price_desc' ? 'selected' : ''}>Tổng tiền: Cao - Thấp</option>
+                                <option value="price_asc" ${sort == 'price_asc' ? 'selected' : ''}>Tổng tiền: Thấp - Cao</option>
+                            </select>
+                        </div>
                     </div>
+                </form>
+            </div>
 
-                    <div class="filter-group">
-                        <label for="amount-filter">Tổng tiền</label>
-                        <select id="amount-filter" class="form-select">
-                            <option value="">Tất cả</option>
-                            <option value="0-100000">Dưới 100.000₫</option>
-                            <option value="100000-500000">100.000₫ - 500.000₫</option>
-                            <option value="500000+">Trên 500.000₫</option>
-                        </select>
-                    </div>
+            <div class="bulk-actions-bar" id="bulkBar">
+                <div class="bulk-actions-info">
+                    Đã chọn <span id="countSelected">0</span> đơn hàng
+                </div>
+                <div class="bulk-actions-buttons">
+                    <a href="#" id="btnSingleView" class="btn-bulk btn-bulk-cancel" style="display: none; background: rgba(255,255,255,0.1);">
+                        <i class="fa-regular fa-eye"></i> Xem
+                    </a>
 
-                    <div class="filter-group">
-                        <label for="sort-filter">Sắp xếp</label>
-                        <select id="sort-filter" class="form-select">
-                            <option value="newest">Mới nhất</option>
-                            <option value="oldest">Cũ nhất</option>
-                            <option value="amount-desc">Giá trị cao</option>
-                            <option value="amount-asc">Giá trị thấp</option>
-                        </select>
-                    </div>
+                    <button class="btn-bulk btn-bulk-activate" onclick="bulkAction('completed')">
+                        <i class="fa-solid fa-check"></i> Hoàn tất
+                    </button>
+                    <button class="btn-bulk btn-bulk-delete" onclick="bulkAction('cancelled')">
+                        <i class="fa-solid fa-ban"></i> Hủy đơn
+                    </button>
                 </div>
             </div>
 
             <div class="orders-container">
                 <div class="table-header">
-                    <div class="orders-count">Tổng cộng: <strong>236 đơn hàng</strong></div>
+                    <div class="orders-count">Tổng cộng: <strong>${totalOrders}</strong> đơn hàng</div>
                 </div>
 
                 <div class="table-responsive">
                     <table class="orders-table">
                         <thead>
                         <tr>
-                            <th>Mã đơn hàng</th>
+                            <th class="check-col">
+                                <input type="checkbox" id="selectAll" class="product-checkbox">
+                            </th>
+                            <th>Mã đơn</th>
                             <th>Khách hàng</th>
                             <th>Sản phẩm</th>
                             <th>Tổng tiền</th>
@@ -176,182 +126,153 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>
-                                <div class="order-id">#DH001</div>
-                            </td>
-                            <td>
-                                <div class="customer-info">
-                                    <div class="customer-name">Nguyễn Văn A</div>
-                                    <div class="customer-phone">0901234567</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="order-items">
-                                    <div class="order-item">2x Trà Bạc Hà Premium</div>
-                                    <div class="order-item">1x Bột Milk Foam</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="order-amount">245,000₫</div>
-                            </td>
-                            <td>
-                                <span class="status-badge status-pending">Chờ xử lý</span>
-                            </td>
-                            <td>
-                                <div class="order-date">
-                                    <div>15/11/2025</div>
-                                    <small>10:30</small>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <a href="admin-order-detail.jsp" class="btn-action" title="Xem chi tiết" style="display:flex; align-items:center; justify-content:center; text-decoration:none;">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <button class="btn-action" title="Chuyển sang 'Hoàn tất'">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                    <button class="btn-action danger" title="Hủy đơn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <div class="order-id">#DH002</div>
-                            </td>
-                            <td>
-                                <div class="customer-info">
-                                    <div class="customer-name">Trần Thị B</div>
-                                    <div class="customer-phone">0912345678</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="order-items">
-                                    <div class="order-item">3x Trà Gừng Mật Ong</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="order-amount">225,000₫</div>
-                            </td>
-                            <td>
-                                <span class="status-badge status-delivered">Đã hoàn tất</span>
-                            </td>
-                            <td>
-                                <div class="order-date">
-                                    <div>15/11/2025</div>
-                                    <small>09:15</small>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn-action" title="Xem chi tiết">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <div class="order-id">#DH003</div>
-                            </td>
-                            <td>
-                                <div class="customer-info">
-                                    <div class="customer-name">Lê Văn C</div>
-                                    <div class="customer-phone">0923456789</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="order-items">
-                                    <div class="order-item">1x Trà Atiso Đà Lạt</div>
-                                    <div class="order-item">2x Trân Châu Đen</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="order-amount">155,000₫</div>
-                            </td>
-                            <td>
-                                <span class="status-badge status-delivered">Đã hoàn tất</span>
-                            </td>
-                            <td>
-                                <div class="order-date">
-                                    <div>14/11/2025</div>
-                                    <small>16:45</small>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn-action" title="Xem chi tiết">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <div class="order-id">#DH005</div>
-                            </td>
-                            <td>
-                                <div class="customer-info">
-                                    <div class="customer-name">Hoàng Văn E</div>
-                                    <div class="customer-phone">0945678901</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="order-items">
-                                    <div class="order-item">4x Trà Bạc Hà Premium</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="order-amount">340,000₫</div>
-                            </td>
-                            <td>
-                                <span class="status-badge status-cancelled">Đã hủy</span>
-                            </td>
-                            <td>
-                                <div class="order-date">
-                                    <div>13/11/2025</div>
-                                    <small>14:30</small>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn-action" title="Xem chi tiết">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                        <c:forEach var="o" items="${orders}">
+                            <tr>
+                                <td class="check-col">
+                                    <input type="checkbox" class="product-checkbox order-check" value="${o.id}">
+                                </td>
+                                <td>
+                                    <span class="order-id">#${o.orderNumber}</span>
+                                </td>
+                                <td>
+                                    <div class="customer-info">
+                                        <span class="customer-name">${o.notes.split('-')[0]}</span>
+                                        <span class="customer-phone" style="font-size: 12px; color: #888;">${o.notes.split('-')[1]}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="order-items">
+                                        <c:forEach var="item" items="${o.items}" end="0">
+                                            <div class="order-item">
+                                                <strong>${item.quantity}x</strong> ${item.product.name}
+                                            </div>
+                                        </c:forEach>
+                                        <c:if test="${o.items.size() > 1}">
+                                            <small style="color: #107e84;">+${o.items.size() - 1} món khác</small>
+                                        </c:if>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="order-amount">
+                                        <fmt:formatNumber value="${o.totalAmount}" pattern="#,###"/>₫
+                                    </div>
+                                </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${o.status == 'PENDING'}"><span class="status-badge status-pending">Chờ xử lý</span></c:when>
+                                        <c:when test="${o.status == 'COMPLETED'}"><span class="status-badge status-active">Hoàn tất</span></c:when>
+                                        <c:when test="${o.status == 'CANCELLED'}"><span class="status-badge status-inactive">Đã hủy</span></c:when>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <div class="order-date">
+                                        <div><fmt:formatDate value="${o.createdAt}" pattern="dd/MM/yyyy"/></div>
+                                        <small><fmt:formatDate value="${o.createdAt}" pattern="HH:mm"/></small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="admin/order/detail?id=${o.id}" class="btn-action" title="Xem chi tiết">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </a>
+                                        <c:if test="${o.status == 'PENDING'}">
+                                            <button class="btn-action danger" title="Hủy nhanh" onclick="if(confirm('Hủy đơn này?')) updateStatus(${o.id}, 'cancelled')">
+                                                <i class="fa-solid fa-xmark"></i>
+                                            </button>
+                                        </c:if>
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
                 </div>
 
                 <div class="pagination-container">
                     <div class="pagination-info">
-                        Hiển thị <strong>1-4</strong> trong tổng số <strong>236</strong> đơn hàng
+                        Trang ${currentPage}/${totalPages}
                     </div>
                     <div class="pagination">
-                        <a href="#" class="page-btn disabled">
-                            <i class="fas fa-chevron-left"></i>
-                        </a>
-                        <a href="#" class="page-btn active">1</a>
-                        <a href="#" class="page-btn">2</a>
-                        <a href="#" class="page-btn">3</a>
-                        <a href="#" class="page-btn">...</a>
-                        <a href="#" class="page-btn">47</a>
-                        <a href="#" class="page-btn">
-                            <i class="fas fa-chevron-right"></i>
-                        </a>
+                        <c:forEach begin="1" end="${totalPages}" var="i">
+                            <a href="admin/orders?page=${i}&status=${status}&time=${time}&sort=${sort}" class="page-btn ${currentPage == i ? 'active' : ''}">${i}</a>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 </div>
+
+<script>
+    const checkboxes = document.querySelectorAll('.order-check');
+    const selectAll = document.getElementById('selectAll');
+    const bulkBar = document.getElementById('bulkBar');
+    const countSpan = document.getElementById('countSelected');
+    const btnSingleView = document.getElementById('btnSingleView');
+
+    function toggleBulkBar() {
+        const selectedCount = document.querySelectorAll('.order-check:checked').length;
+        countSpan.innerText = selectedCount;
+
+        if (selectedCount > 0) {
+            bulkBar.classList.add('active');
+
+            // Logic nút Xem chi tiết
+            if(selectedCount === 1) {
+                btnSingleView.style.display = 'inline-flex';
+                const id = document.querySelector('.order-check:checked').value;
+                btnSingleView.href = 'admin/order/detail?id=' + id;
+            } else {
+                btnSingleView.style.display = 'none';
+            }
+        } else {
+            bulkBar.classList.remove('active');
+        }
+    }
+
+    selectAll.addEventListener('change', function() {
+        checkboxes.forEach(cb => cb.checked = this.checked);
+        toggleBulkBar();
+    });
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', toggleBulkBar);
+    });
+
+    // Bulk Action Fetch
+    function bulkAction(status) {
+        const selected = document.querySelectorAll('.order-check:checked');
+        if (selected.length === 0) return;
+
+        if(!confirm("Cập nhật trạng thái cho " + selected.length + " đơn hàng?")) return;
+
+        const ids = Array.from(selected).map(cb => cb.value).join(',');
+        updateStatus(ids, status, 'bulk');
+    }
+
+    // Unified Update Function
+    function updateStatus(idOrIds, status, action = 'single') {
+        const params = new URLSearchParams();
+        params.append('action', action);
+        params.append('status', status);
+
+        if (action === 'bulk') params.append('orderIds', idOrIds);
+        else params.append('orderId', idOrIds);
+
+        fetch('admin/order/update', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: params
+        }).then(res => {
+            if(res.ok) {
+                alert("Cập nhật thành công!");
+                location.reload();
+            } else {
+                alert("Lỗi cập nhật!");
+            }
+        });
+    }
+</script>
+
 </body>
 </html>
