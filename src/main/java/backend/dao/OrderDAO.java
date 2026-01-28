@@ -373,4 +373,25 @@ public class OrderDAO {
 
         return o;
     }
+    public List<Order> getRecentOrders(int limit) {
+        List<Order> list = new ArrayList<>();
+        String sql = "SELECT o.*, a.full_name FROM orders o " +
+                "LEFT JOIN user_addresses a ON o.shipping_address_id = a.id " +
+                "ORDER BY o.created_at DESC LIMIT ?";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, limit);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Order o = mapRowToOrder(rs);
+                list.add(o);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

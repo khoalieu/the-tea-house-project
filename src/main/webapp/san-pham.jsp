@@ -137,12 +137,39 @@
 
                         <c:forEach var="p" items="${products}">
                             <div class="product-card">
-                                <img src="${p.imageUrl}" alt="${p.name}">
+                                <div class="product-image-wrapper">
+                                    <img src="${p.imageUrl}" alt="${p.name}">
+
+                                    <c:if test="${p.salePrice > 0 && p.salePrice < p.price}">
+                                        <span class="badge-sale">Giảm giá</span>
+                                    </c:if>
+                                </div>
+
                                 <h3>${p.name}</h3>
+
                                 <p class="price">
                                     <fmt:setLocale value="vi_VN"/>
-                                    <fmt:formatNumber value="${p.price}" type="currency" currencySymbol=""/> VNĐ
+
+                                    <c:choose>
+                                        <%-- Case 1: Product is on sale --%>
+                                        <c:when test="${p.salePrice > 0 && p.salePrice < p.price}">
+                                            <span class="new-price">
+                                                <fmt:formatNumber value="${p.salePrice}" type="currency" currencySymbol=""/>₫
+                                            </span>
+                                            <span class="old-price">
+                                                <fmt:formatNumber value="${p.price}" type="currency" currencySymbol=""/>₫
+                                            </span>
+                                        </c:when>
+
+                                        <%-- Case 2: No sale, standard price --%>
+                                        <c:otherwise>
+                                            <span class="normal-price">
+                                                <fmt:formatNumber value="${p.price}" type="currency" currencySymbol=""/>₫
+                                            </span>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </p>
+
                                 <a href="chi-tiet-san-pham?id=${p.id}" class="cta-button">Xem Chi Tiết</a>
                             </div>
                         </c:forEach>
